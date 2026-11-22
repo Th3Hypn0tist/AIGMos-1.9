@@ -159,16 +159,16 @@
     },
     {
       "id": "NEW-016",
-      "feature": "EXP dynamic ? / eval",
-      "owner": "EXP System Lib",
-      "disposition": "optional",
+      "feature": "EXP minimal: exact named definition → validated CS execution → CSo → ? result",
+      "owner": "EXP (optional System Lib, depends on HC.CS)",
+      "disposition": "optional, slim/read-oriented; no own parser/dispatcher or # tables",
       "status": "UNLOCKED"
     },
     {
       "id": "NEW-017",
-      "feature": "EXP authored resources / export / reload",
-      "owner": "EXP / FILE",
-      "disposition": "optional",
+      "feature": "EXP definition source selected by config and explicit reload/export tooling",
+      "owner": "EXP + owner-specific FILE/config",
+      "disposition": "definition source required when EXP selected; exact schema and reload/export tool semantics OPEN, NOT imported from archive automatically",
       "status": "UNLOCKED"
     },
     {
@@ -325,7 +325,7 @@
     "SQLite automatic persistence differs from 1.9 MEM volatile + explicit FILE; retain user-visible durable behavior through explicit owner storage.",
     "Archive #OSC/#REST/#UM trees conflict with #less minimal MP and restricted INPUT $I / optional #I.",
     "Archive layout module vs 1.9 Panel primitive needs mapping; archive 'four module kinds' help is out of date vs 5-kind source.",
-    "Archive heavy # table EXP is optional, not part of minimal 1.9 EXP.",
+    "EXP minimum is ONLY exact-definition validated CS evaluation and CSo→? result; archive's heavy # table/spreadsheet pipeline, independent parser/dispatcher, and export/reload feature bundle are NOT granted as minimal EXP. Any parity-retained extras need separate optional modules and contracts.",
     "REST 2.0 only # mode must adapt to agreed 1.9 $ GET-only and # GET/POST modes.",
     "Source trigger cron helpers coexist with different trig expression UI: prove 1.8 cron parity.",
     "Removing bot.py alone is insufficient: system/lib/contracts/__init__.py exports trainer; compliance.py maps trainer and #MODE to trainer tests; help/command registries include trainer.",
@@ -340,5 +340,32 @@
     "CCF_CW": "NOT_RUN",
     "status": "UNLOCKED"
   },
-  "next": "Convert each retained feature into versioned 1.9 contract + deps/libs/target closure + acceptance tests, excluding trainer."
+  "next": "Convert each retained feature into versioned 1.9 contract + deps/libs/target closure + acceptance tests, excluding trainer.",
+  "exp_scope_correction": {
+    "status": "user_reconfirmed_existing_A19_025_to_A19_031",
+    "source": "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+    "requirements": [
+      "EXP is optional System Lib, not Hardcore or Core Module",
+      "Depends on existing HC.CS execution, no separate parser, dispatcher or mandatory table engine",
+      "Resolve an exact named validated definition; no implicit nearest ancestor/descendant",
+      "Expose evaluated result via CSo and ?; ? does not store definition",
+      "Normal execution read/compute/result-oriented with restricted effect context",
+      "No full # table/spreadsheet pipelines in minimal EXP",
+      "Config-selected definition source; exact schema/adapter/reload behavior still OPEN"
+    ],
+    "non_requirements": [
+      "Independent eval language",
+      "Heavy table/spreadsheet engine",
+      "Automatic EXP resource export/reload module from new.zip"
+    ],
+    "decision_ids": [
+      "A19-025",
+      "A19-026",
+      "A19-027",
+      "A19-028",
+      "A19-029",
+      "A19-030",
+      "A19-031"
+    ]
+  }
 }
