@@ -6,7 +6,7 @@
 
 ## Päätavoite
 
-SYSTEM-moduuleilla on yksi looginen sijoituspaikka sekä sama viiden primitiivin **moduuliluokittelu** kuin USER-moduuleilla: `command`, `input`, `output`, `adapter`, `view`.
+SYSTEM-moduuleilla on yksi looginen sijoituspaikka ja USER-moduulien kanssa yhteensopiva luokittelu. **View on kokonainen deklaratiivinen näkymäkompositio (nykyinen template), ei pienmoduuli.** Pienemmälle UI-moduulille ehdotetaan nimeä `widget`; tyyppimuutoksen lopullinen nimi ja sopimus ovat vielä avoinna. Ks. [VIEW_NAMING.md](VIEW_NAMING.md).
 
 **SYSTEM ja USER erotetaan omistajuuden ja oikeuksien mukaan, ei viemällä niiden moduulirakenteita eri periaatteilla toteutettuihin järjestelmiin.** SYSTEM-moduuli voi tarvita rajatumpia tai laajempia järjestelmäoikeuksia kuin USER-moduuli; USER-moduulin rajoituksia ei poisteta, eikä SYSTEM saa oikeuksia pelkän tiedostopolun perusteella.
 
@@ -19,8 +19,8 @@ Tämä on vanhojen SYSTEM-moduulien järjestely ja latausmekanismien selkeytys. 
 | CS-komentototeutukset | `system/cs/commands/*.py` | `system/cs/command_registry.py` lataa kiinteät Python-paketit `system.cs.commands` ja `extensions.commands`. |
 | Input-lähteet | `system/inputs/*.py` | `system/inputs/registry.py` tuntee paketit `system.inputs` ja `extensions.inputs`. |
 | State-adapterit | `system/adapters/*.py` | `system/adapters/registry.py` tuntee paketit `system.adapters` ja `extensions.adapters`. Kaikki adapterit eivät välttämättä ole valinnaisia. |
-| View/layout-osien toteutukset | `system/layout/modules/*.py` | `system/layout/loader.py` etsii moduuleja `system/layout/modules`- ja `extensions/layout/modules`-hakemistoista. |
-| View/layout-templatet | `system/library/layout/*.tmpl` | `system/layout/definitions.py` etsii templateja erillisestä hakemistosta (`extensions/layout` on toinen). |
+| Pienet UI-moduulit (nimiehdotus: Widget) | `system/layout/modules/*.py` | `system/layout/loader.py` etsii moduuleja `system/layout/modules`- ja `extensions/layout/modules`-hakemistoista. |
+| View-kompositiot (nykyiset templatet) | `system/library/layout/*.tmpl` | `system/layout/definitions.py` etsii templateja erillisestä hakemistosta (`extensions/layout` on toinen). |
 | View/layout-ajomoottori | `system/layout/*.py` | Erillinen runtime/engine, **ei** sama asia kuin View-moduuli tai sen template. |
 | Komentoparseri ja rekisteröinti | `system/cs/*.py` | Core-infrastruktuuria; ei siirretä pelkän järjestelytyön vuoksi. |
 | STATE ja TER | `system/state/*.py`, `system/runtime/*.py` | Core-rajaan kuuluvat toiminnot erotetaan ennen uudelleensijoittelua. |
@@ -30,7 +30,7 @@ Tämä on vanhojen SYSTEM-moduulien järjestely ja latausmekanismien selkeytys. 
 
 ## 2. Ehdotettu hakemistorakenne
 
-Käytetään valmiiden USER-sopimusten SYSTEM-referenssijuuren mukaista mallia `system/library/<type>/<module_id>/`. Näin 1.9:n ehdotus ei vaihda aiemmin tehdyn moduulisopimustyön polkumallia ilman syytä.
+Käytetään valmiiden USER-sopimusten SYSTEM-referenssijuuren mukaista yleistä mallia `system/library/<type>/<module_id>/`, mutta erotetaan View-kompositio sen pienmoduuleista. Ehdotettu `widget`-nimi on vielä auki ja vaatii aiemman locked USER-view-sopimuksen eksplisiittisen 1.9-migraation.
 
 ```text
 AIGMos-1.9/
@@ -38,7 +38,7 @@ AIGMos-1.9/
 │   ├── cs/                  # CS parser, dispatch, registry: ei komentomoduulien varasto
 │   ├── state/               # Minimal Coren state-infrastruktuuri
 │   ├── runtime/             # TER- ja muut erikseen arvioitavat runtime-osat
-│   ├── layout/              # Valinnaisen View-ajomoottorin infrastruktuuri
+│   ├── view/                # ehdotettu valinnaisen View Engine -ajomoottorin uusi nimi (nykyinen layout/)
 │   └── library/
 │       ├── commands/
 │       │   └── <module_id>/
@@ -51,11 +51,13 @@ AIGMos-1.9/
 │       │   └── <module_id>/...
 │       ├── adapters/
 │       │   └── <module_id>/...
-│       ├── views/
+│       ├── widgets/              # ehdotettu pienmoduulin nimi
 │       │   └── <module_id>/
 │       │       ├── module.json
-│       │       ├── ...      # View'n toteutus + siihen kuuluvat .tmpl:t
+│       │       ├── ...      # Widgetin toteutus ja testit
 │       │       └── tests/
+│       ├── views/
+│       │   └── <view_id>/... # deklaratiivinen View-kompositio
 │       ├── help/            # ei moduuli: tukiaineisto
 │       ├── docs/            # ei moduuli: tukiaineisto
 │       ├── prompts/         # ei moduuli: tukiaineisto
@@ -66,7 +68,8 @@ AIGMos-1.9/
     ├── inputs/<module_id>/...
     ├── outputs/<module_id>/...
     ├── adapters/<module_id>/...
-    └── views/<module_id>/...
+    ├── widgets/<module_id>/...
+    └── views/<view_id>/...
 ```
 
 Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista. USER-kirjaston lopullinen sijoitus varmistetaan osana 1.8:n siirtoa. Esimerkin `module.json` ei tarkoita, että 1.8:n SYSTEM-moduuleilla olisi jo manifestit.
@@ -74,10 +77,10 @@ Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista
 ### Vastuunjako
 
 - **Runtime-ydin:** CS-parseri, tilamoottori, TER ja mahdollinen View-ajomoottori toteuttavat mekanismin.
-- **SYSTEM-moduulit:** järjestelmän mukana toimitetut, rajatusti rekisteröidyt toiminnallisuuspaketit — samat viisi luokkaa kuin USER-moduuleissa.
+- **SYSTEM-moduulit:** järjestelmän mukana toimitetut, rajatusti rekisteröidyt toiminnallisuuspaketit — vastaava toiminnallisten moduulien luokittelu kuin USER-puolella, mutta View-kompositio ei ole pieni UI-moduuli.
 - **USER-moduulit:** erilliset käyttäjän paketit; eivät saa SYSTEM-oikeuksia SYSTEM-rakenteen kaltaisuudesta.
 - **Resurssit:** yksi moduuli omistaa omat erikoisresurssinsa ja template-sidontansa; yleinen käyttöapu/help tai yhteinen alustaomisteinen ajomoottori voi olla yhteinen resurssi.
-- **View-primitiivi:** aiemmin lukitun viiden USER-tyypin `view`, ei kuudes `layout`-moduulityyppi. Nykyisten `system/layout/modules/*.py`-tiedostojen rooli selvitetään yksilöittäin: osa voi olla View'n sisäisiä widget-toteutuksia eikä erillisiä View-moduuleja.
+- **View ja Widget:** 1.9:n View tarkoittaa kokonaisen näkymän deklaratiivista kompositiota. `system/layout/modules/*.py` sisältää pienempiä UI-moduuleita, joiden ehdotettu nimi on Widget. Aiemman lukitun `type=view`-sopimuksen muuttamista ei piiloteta polkusiirtoon; tarvitaan oma versioitu 1.9-päätös.
 
 ## 3. Siirtosäännöt
 
@@ -93,21 +96,21 @@ Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista
 ## 4. Migraatiojärjestys (P0)
 
 - [ ] Pinnaa 1.8:n lähtörevisio ja tallenna toiminta-/import-/startup-regressiot.
-- [ ] Laadi todellinen inventory: command/input/output/adapter/view + engine/runtime/resurssit.
+- [ ] Laadi todellinen inventory: command/input/output/adapter + pienet UI-moduulit (Widget-ehdotus) + View-kompositiot + engine/runtime/resurssit.
 - [ ] Päätä jokaisen inventoidun komponentin Core-, USE-, SYSTEM-, USER- tai resurssivastuu. Erota **moduulityyppi** ja **auktoriteetti**.
 - [ ] Lukitse SYSTEM-moduulin manifesti- ja discovery-sopimus niin, että se on yhteensopiva viiden primitiivin kanssa eikä tulkitse USER-oikeuksia uusiksi.
 - [ ] Muodosta uudet pakettijuuret sekä yhtenäiset resolvointi-, rekisteröinti- ja reload-rajapinnat.
 - [ ] Siirrä yksi ei-kriittinen komentomoduuli ja todenna register/help/dispatch/reload.
 - [ ] Siirrä muut luokitellut komentomoduulit; pidä CS-parseri ja dispatcher erillään.
 - [ ] Siirrä valinnaiset Input-/Adapter-/Output-paketit; säilytä Coren tarvitsemat state- ja IO-perusmekanismit.
-- [ ] Yhdistä View-moduulien koodi ja niiden omat templatet pakettikohtaisesti; erottele jaetut View-primitiivit.
+- [ ] Nimeä pienet UI-moduulit (Widget-ehdotus) erilleen View-kompositioista; siirrä koodi ja View-määritykset omiin vakioituihin luokkiinsa. Erota jaetut helperit ja moottori.
 - [ ] Poista vanhojen hakemistorakenteiden pakolliset runtime-riippuvuudet; päivitä testit, help ja dokumentaatio.
 - [ ] Varmista, ettei Minimal Coren käynnistyminen importoi valinnaisia SYSTEM- tai View-moduuleja.
 - [ ] Testaa toiminnallinen vastaavuus ja mittaa käynnistys, muisti sekä koodikoko CPythonissa ja ESP32-C6:lla.
 
 ## 5. Hyväksymiskriteerit
 
-- SYSTEM-moduulit löytyvät yhden vakioidun hakemistorakenteen alta, viiden primitiivityypin mukaan.
+- SYSTEM-moduulit löytyvät vakioidun hakemistorakenteen alta; View-kompositiot ja pienet UI-moduulit ovat eri tyyppejä.
 - Jokaisen paketin omistajuus, lataus ja riippuvuudet ovat jäljitettäviä.
 - Komento-, Input-, Adapter- ja View-toiminnallisuus toimii siirron jälkeen. Output-toiminnallisuuden todellinen 1.8-tilanne inventoidaan; sitä ei oleteta olevaksi.
 - `system/cs/`, `system/state/`, `system/runtime/` ja valinnaisen View-ajomoottorin koodi ovat edelleen infrastruktuuria, eivät modulaarisen pakkauksen perusteella automaattisia USER-tyyppejä.
@@ -119,6 +122,7 @@ Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista
 
 - Mitkä 1.8:n `system/cs/commands`-komennot ovat Coren minimikomentoja, mitkä siirrettäviä SYSTEM-moduuleita?
 - Mitkä `system/adapters`- ja `system/inputs`-toteutukset ovat alusta-IO:n minimiä, mitkä valinnaisia?
-- Miten vanhan `system/layout/modules`-widgetin ja `system/library/layout/*.tmpl`-templaten omistaja selvitetään ilman nimipohjaista arvailua?
+- Miten vanhan `system/layout/modules`-pienmoduulin ja `system/library/layout/*.tmpl`-View'n identiteetit ja sidonnat migroidaan ilman nimipohjaista arvailua?
+- Hyväksytäänkö pienmoduulin nimeksi Widget ja säilytetäänkö `.tmpl`-pääte vai vaihdetaanko `.view`-päätteeseen?
 - Mikä on Python-/MicroPython-yhteensopiva, resurssitehokas manifesti- ja discovery-toteutus? Tarvitaanko laitteelle vain build-vaiheessa resolvoitu lukittu pakettijoukko?
 - Missä siirtymävaiheessa vanhat polut poistetaan lopullisesti?
