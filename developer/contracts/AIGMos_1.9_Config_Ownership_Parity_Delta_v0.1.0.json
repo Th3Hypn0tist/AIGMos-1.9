@@ -1,0 +1,113 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_DECISION_DELTA",
+  "document_version": "0.1.0",
+  "date": "2026-11-23",
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "canonical_lock_eligible": false,
+  "base_decision_registry": "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+  "authority": "User-confirmed refinements on 2026-11-23; superseding intent must be incorporated into next complete decision baseline, not applied as unvalidated immutable schema.",
+  "decisions": [
+    {
+      "id": "CLEAN-001",
+      "area": "Parity",
+      "rule": "AIGMos 1.9 must preserve all demonstrated AIGMos 1.8 functional capabilities across the UNION of valid feature-selected builds. A single minimal MP image need not contain optional features. No 1.8 feature may disappear without explicitly accepted equivalent or replacement."
+    },
+    {
+      "id": "CLEAN-002",
+      "area": "Ownership",
+      "rule": "SYSTEM owns only SYSTEM's own data. TER owns trigger, event and runner definitions/runtime and queues. Q owns its profiles, queues, tasks and history. Layout owns keymap and instances. STATE is a storage service, not a semantic owner."
+    },
+    {
+      "id": "CLEAN-003",
+      "area": "KV symbol notation",
+      "rule": "Named KV-list root uses dot, e.g. $SYSTEM.boot, rather than colon, e.g. $SYSTEM:boot. A colon addresses keys inside that named list. Candidate per-owner list names remain UNLOCKED."
+    },
+    {
+      "id": "CLEAN-004",
+      "area": "MP",
+      "rule": "The standard minimal MP build contains no # structured facility. A selected structured Core Module may provide # in compatible other builds. No Hardcore/SYSTEM dependency may implicitly require #."
+    },
+    {
+      "id": "CLEAN-005",
+      "area": "Protected configuration",
+      "rule": "Component-owned configuration is placed under protected /config. BOOT loads it; CS reload command can request a privileged loader to read/validate/reload it. Ordinary CS cannot read raw /config or write raw /config, including through generic FILE/import/export operations. Do not mirror private configuration wholesale to STATE.",
+      "exceptions": [
+        "CLEAN-007"
+      ]
+    },
+    {
+      "id": "CLEAN-006",
+      "area": "Q",
+      "rule": "Q is optional at build time. EVERY Q-containing build must include a valid q.default profile; boot must fail if absent or invalid. A Q-free build must not require Q configuration, Q code, Q validators or Q-exclusive dependencies. Q-specific config/validation is Q-owned."
+    },
+    {
+      "id": "CLEAN-007",
+      "area": "AccessCore one write exception",
+      "rule": "The ONLY runtime/CS-triggered modification permitted inside protected /config is the internal AC activation operation changing ac.enabled false->true. It is a narrow atomic write, not general CS filesystem privilege. CS cannot deactivate AC; deactivation requires configuration edit outside CS and restart. Authorization, exact physical path and transactional error semantics remain open."
+    },
+    {
+      "id": "CLEAN-008",
+      "area": "Build semantics",
+      "rule": "Build Tool physically prunes unselected modules, conditional hooks, associated validators/config requirements and exclusive dependencies; external AI interoperability via generic INPUT/EXPOSE does not make AI/Q code part of that build."
+    },
+    {
+      "id": "CLEAN-009",
+      "area": "Future instance link",
+      "rule": "Any future direct AIGMos-to-AIGMos transport shall be encrypted, but link protocol and implementation are OUT OF SCOPE for current 1.9 cleanup."
+    }
+  ],
+  "confirmed_scope": [
+    "ownership",
+    "conditional Q default requirement",
+    "protected configuration read/write boundary",
+    "AC sole write exception",
+    "functional parity union",
+    "MP without structured #"
+  ],
+  "unresolved": [
+    {
+      "id": "U01",
+      "topic": "Exact /config file names, root config.json migration, per-module schema, boot ordering and loader ABI",
+      "reconcile": [
+        "A19-016",
+        "A19-077"
+      ]
+    },
+    {
+      "id": "U02",
+      "topic": "Config reload consistency, atomicity, validation and applied-configuration read-only visibility"
+    },
+    {
+      "id": "U03",
+      "topic": "AC activation exact path, authorization, permission checks, commit failure behavior",
+      "reconcile": [
+        "A19-073",
+        "A19-074",
+        "A19-075",
+        "A19-076"
+      ]
+    },
+    {
+      "id": "U04",
+      "topic": "All 1.8 source capabilities, exact owner, target eligibility, parity tests and accepted behavior-equivalence changes"
+    },
+    {
+      "id": "U05",
+      "topic": "Q profile precedence/aliases, queue ownership, retention, streaming roles and UI, config secrets"
+    },
+    {
+      "id": "U06",
+      "topic": "Legacy #SYSTEM and automatic SQLite migration to 1.9 MEM+FILE; data retention/restore semantics"
+    },
+    {
+      "id": "U07",
+      "topic": "Global filesystem and symlink bypass guard across every CS and extension I/O command"
+    }
+  ],
+  "lock_policy": "UNLOCKED until CCF 2.4.2 + NodeTypes 1.15.1 + Dependency Rules 3.11.0 validator and test/semantic closure. No lock is claimed.",
+  "provenance": {
+    "source_1_8_commit": "20383e681dd49f3be33070dba41bbcdc4034ef63",
+    "source_1_9_prior_commit": "a7f912548bd0ee41c3e8073f4e8abb92c53387fe"
+  }
+}
