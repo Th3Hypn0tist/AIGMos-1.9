@@ -10,6 +10,7 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 
 - [ ] Hanki/tarkasta AIGMos 1.8:n lähtökoodi ja määritä siirrettävä lähtöversio.
 - [ ] Kirjaa 1.8:n nykyiset käyttäytymiset, käytössä olevat komennot, rajapinnat ja regressiotestien lähtötaso.
+- [ ] Korjaa tai validoi `RISKS.md`-auditoinnin R-01–R-08 riskit ennen laajaa tiedostojen siirtoa (View/Panel-sopimus, bootstrap-importit, loader-polut, template-semanttiikka, UI-dispatch, moduuli-identiteetit, MicroPython-discovery, polkurajat).
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
 - [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
