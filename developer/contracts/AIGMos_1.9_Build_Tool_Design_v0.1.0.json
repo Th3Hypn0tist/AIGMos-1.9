@@ -272,5 +272,142 @@
     "build_tool_implementation_after": "Hardcore, needed Core/System module registration and dependency header scanner foundations are available; follows A19-003 order.",
     "builder_lock_when": "Complete Build Tool contract passes canonical CCF 2.4.2, NodeTypes 1.15.1, Rules 3.11.0 and structural/behavioral test gates.",
     "no_runtime_code_modified": true
+  },
+  "lmts_ui_reference": {
+    "source_repo": "Th3Hypn0tist/LMTS",
+    "source_branch": "main",
+    "status": "REFERENCE_ONLY_NOT_PORTED",
+    "note": "LMTS has host-neutral view composition and a practical Curses host implementation; it is not an already canonical 1.9 Panel ABI. Use separation of concerns, not an unconditional dependency or copy.",
+    "inspected": [
+      {
+        "path": "lmts/lib/view/layout.py",
+        "purpose": "Immutable LayoutPane specification: slot, label, render callback, primary/visibility/follow_tail semantics"
+      },
+      {
+        "path": "lmts/lib/view/tab_registry.py",
+        "purpose": "TabDefinition / recursive TabRegistry with parent/shortcut/sorting and cycle/duplicate checks"
+      },
+      {
+        "path": "lmts/lib/view/shortcut_registry.py",
+        "purpose": "Scope-based Shortcuts and detection of prefix/sequence collisions"
+      },
+      {
+        "path": "lmts/lib/view/model.py",
+        "purpose": "ViewFrame / ViewItem projection of application data into renderer-neutral content"
+      },
+      {
+        "path": "lmts/lib/view/events.py",
+        "purpose": "Synchronous in-process UIEventBus; reference pattern only, not a new mandatory runtime bus"
+      },
+      {
+        "path": "lmts/lib/view/registry_split_host.py",
+        "purpose": "Curses host consumes LayoutPane, scopes and command binding; display implementation is CP-side optional"
+      },
+      {
+        "path": "lmts/view/registries.py",
+        "purpose": "Real nested UI navigation, scoped shortcut declarations"
+      },
+      {
+        "path": "lmts/view/tui_render.py",
+        "purpose": "TUIRenderer builds logical LayoutPane compositions per page"
+      },
+      {
+        "path": "lmts/view/tui_app.py",
+        "purpose": "Composition root separates services/controller, rendering, actions, and host"
+      },
+      {
+        "path": "lmts/view/aigmos.py",
+        "purpose": "AIGMosViewAdapter shows view target |lmts:view, metadata, actions, and explicit render-owner boundary"
+      },
+      {
+        "path": "lmts/view/projector.py",
+        "purpose": "App state projected to ViewFrame without curses"
+      },
+      {
+        "path": "tests/test_tui_architecture_contract.py",
+        "purpose": "Architecture constraints tested at source boundary"
+      },
+      {
+        "path": "tests/test_view_registries.py",
+        "purpose": "Tests recursive tab, scoped shortcuts, collision detection"
+      },
+      {
+        "path": "tests/test_view.py",
+        "purpose": "Tests host-neutral projection and AIGMos integration adapter"
+      }
+    ],
+    "conceptual_mapping": [
+      {
+        "lmts": "LayoutPane",
+        "aigmos_1_9": "Panel primitive / panel declaration (ABI OPEN)"
+      },
+      {
+        "lmts": "TabDefinition + TabRegistry",
+        "aigmos_1_9": "Declarative |BUILD View navigation composition (optional UI layout details)"
+      },
+      {
+        "lmts": "ViewFrame / ViewItem / Projector",
+        "aigmos_1_9": "Renderer-neutral panel/view projection from CS-visible data and CSo results"
+      },
+      {
+        "lmts": "ShortcutRegistry",
+        "aigmos_1_9": "Optional host-level scoped keyboard routing; not an HC mechanism"
+      },
+      {
+        "lmts": "Action classes + controller",
+        "aigmos_1_9": "Build System commands through HC.CS/CSi; panel actions are command requests, never direct privileged build operations"
+      },
+      {
+        "lmts": "CursesViewHost / RegistrySplitCursesViewHost",
+        "aigmos_1_9": "Optional CP terminal host; must not make any MP/Hardcore or Build composition require curses"
+      },
+      {
+        "lmts": "UIEventBus",
+        "aigmos_1_9": "UI-local notification technique only; not a new AIGMos runtime TER mechanism"
+      },
+      {
+        "lmts": "AIGMosViewAdapter",
+        "aigmos_1_9": "Boundary example, not 1:1 contract; 1.9 defines Panel as primitive, View as composition"
+      }
+    ],
+    "suggested_build_view": {
+      "view": "|BUILD",
+      "status": "PROPOSAL_ONLY",
+      "panels": [
+        {
+          "id": "target",
+          "label": "Target / Profile",
+          "shows": "MP/CP + target resources + hardware shim profile"
+        },
+        {
+          "id": "selection",
+          "label": "Modules / Features",
+          "shows": "Available modules, selection, optional feature capabilities, reasons for inclusion"
+        },
+        {
+          "id": "dependencies",
+          "label": "Dependencies",
+          "shows": "Declared/derived edges, closure, MP/CP compatibility, removable extras"
+        },
+        {
+          "id": "validation",
+          "label": "Validation",
+          "shows": "Failures, warnings, missing commands, AC pruning, /config guard and runtime tests"
+        },
+        {
+          "id": "artifact",
+          "label": "Output / Deploy",
+          "shows": "Preview of generated target files, provenance report, provisioning and optional interface stripping"
+        }
+      ],
+      "action_flow": "UI intent → System command (CSi) → Build functions using module registry/validated deps → CSo result → renderer-neutral Panel projection → optional host",
+      "question": "Whether the UI is tab/page navigation with switchable panes like LMTS, or primarily a one-screen multi-pane builder."
+    },
+    "module_dependency_policy": [
+      "No lmts package dependency in AIGMos 1.9 from this reference.",
+      "Host-neutral rendering and command dispatch remain separated; no direct /config filesystem operation from Panel actions.",
+      "Actual LMTS Curses host is CP-specific optional UI, not a mandatory part of MP runtime.",
+      "Build Tool source scanner and graph validation should run independently of UI host and projectors."
+    ]
   }
 }
