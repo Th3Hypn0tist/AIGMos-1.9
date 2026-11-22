@@ -35,7 +35,10 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 **Päätös:** Aiemmista 2.0-määrityksistä tuodaan AIGMos 1.9:ään **vain** (1) USER-moduulien järkeistetty viiden primitiivin malli sopimuksineen ja (2) Expose-kokonaisuus (nanoCMS + NetworkService). Näiden valmista määrittelytyötä ei toisteta. Lähdespesifikaatioiden sisältö ja Git-revisio on dokumentoitu [REUSED_SPECS.md](REUSED_SPECS.md). Kaikki muut 2.0-määritykset jäävät pois 1.9:n kehitysscopesta. Lähteen locked-tila ei tarkoita, että 1.9-integraatio olisi tehty.
 
 ### D-011 — SYSTEM-moduulien yhtenäinen hakemistorakenne
-**Päätös:** 1.8:n hajallaan olevat SYSTEM-moduulien toteutukset ja omat resurssit kootaan samaan viiden primitiivin luokitteluun kuin USER-moduulit, yhteen `system/library/{commands,inputs,outputs,adapters,views}/<module_id>/`-hakemistomalliin. Core-/engine-koodi ei muutu moduuleiksi pelkän polkusiirron vuoksi. SYSTEM- ja USER-moduulien oikeudet pidetään eksplisiittisesti erillään. Todelliset vanhat polut, lataajat sekä migraatio on kuvattu [SYSTEM_MODULES.md](SYSTEM_MODULES.md). Hakemistorakenne on sovittu tavoite; migraatio on vielä toteuttamatta.
+**Päätös:** 1.8:n hajallaan olevat SYSTEM-moduulien toteutukset ja omat resurssit kootaan yhden `system/library/`-juuren alle. View tarkoittaa jatkossa nykyistä deklaratiivista näkymätemplatea; sen pienemmät toteutusmoduulit saavat erillisen nimen (ehdotus: widget). Alustavat juuret: `system/library/{commands,inputs,outputs,adapters,widgets}/<module_id>/` ja `system/library/views/<view_id>/`. Core-/engine-koodi ei muutu moduuleiksi pelkän polkusiirron vuoksi. SYSTEM- ja USER-moduulien oikeudet pidetään eksplisiittisesti erillään. Todelliset vanhat polut, lataajat sekä migraatio on kuvattu [SYSTEM_MODULES.md](SYSTEM_MODULES.md). Yhdenmukaistaminen on sovittu tavoite; lopullinen pienmoduulin nimi ja tiedostomuoto ovat avoimia ja migraatio on vielä toteuttamatta.
+
+### D-012 — View tarkoittaa kompositiota, ei pienmoduulia
+**Päätös:** 1.9:n **View** on nykyistä View-templatea vastaava kokonainen, deklaratiivinen näkymä, joka koostuu pienemmistä UI-moduuleista. Näiden UI-moduulien uusi nimi on vielä avoin; **Widget** on ehdotus. Nykyinen `system/layout/modules/*.py` ja `system/library/layout/*.tmpl` erotetaan omiin tehtäviinsä. Mahdollinen `view → widget` -tyyppimuutos poikkeaa aiemmasta lukitusta USER-sopimuksesta ja tehdään vain eksplisiittisenä, versionhallittuna 1.9-muutoksena. Ks. [VIEW_NAMING.md](VIEW_NAMING.md).
 
 ## Avoimet päätökset
 
@@ -50,6 +53,8 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 - **O-009:** USER-view-primitiivin ja USE-tason LMTS View -toteutuksen rajapinnan yhteensovitus ilman Core-riippuvuutta.
 - **O-010:** Expose-omistajuuksien käytännön sovittaminen nykyisen 1.8:n olemassa oleviin verkko-/web-/UI-pintoihin.
 - **O-011:** Mitkä vanhat SYSTEM-toteutukset ovat oikeasti moduuleita ja mitkä Core-/View-engine-komponentteja, ja miten yhteinen discovery toteutetaan ESP32-C6:ssa resurssitehokkaasti?
+- **O-012:** Hyväksytäänkö UI-pienmoduulin nimeksi Widget ja miten erotetaan sen manifesti View-kompositiosta?
+- **O-013:** Vaihdetaanko vanha `.tmpl`-pääte `.view`-päätteeksi vai pidetäänkö tiedostomuoto erillisenä päätöksenä?
 
 ## Kehitysehdotus vs. toteutettu
 
