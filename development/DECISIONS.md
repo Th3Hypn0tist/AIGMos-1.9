@@ -25,6 +25,12 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 ### D-007 — Standardi ja toteutus erillään
 **Päätös:** AIGM on alustariippumaton standardi; AIGMos on referenssitoteutus. TER on AIGMos:n mekanismi eikä AIGM-yhteensopivuuden ehto.
 
+### D-008 — Nykyinen kehitysfokus on 1.8-pohjainen optimointi ja modularisointi
+**Päätös:** 1.9 rakennetaan nykyisen AIGMos 1.8 -toteutuksen pohjalta. Ensimmäinen ja ainoa aktiivinen vaihe on 1.8:n riippuvuuksien kartoitus, Coren modulaarinen irrotus ja mitattava optimointi ESP32-C6-N16-tavoitetta varten. Uudelleenkirjoitus ei ole itseisarvo. LMTS View ja Build Engine jäävät myöhemmiksi 1.9-vaiheiksi.
+
+### D-009 — Vain 1.9:n toteutustarpeet ohjaavat nykyistä kehitystä
+**Päätös:** Ei oteta tulevien tuoteversioiden uusia moduleita, domain-kompositioita tai arkkitehtuurivaatimuksia tämänhetkiseen työlistaan. Valmis 1.9-modularisointi tuottaa myöhemmin uudelleenkäytettävän pohjan ilman ennakoivaa laajentamista.
+
 ## Avoimet päätökset
 
 - **O-001:** `#`-puutilan sijoitus: Core vai USE? Lähtöhypoteesi on USE, ei vielä lukittu.
