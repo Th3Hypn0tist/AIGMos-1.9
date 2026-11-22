@@ -84,7 +84,7 @@ Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista
 
 ## Ehdoton riippuvuusraja
 
-SYSTEM- ja USER-moduulien sijaintien yhdenmukaistaminen ei saa jättää piiloriippuvuuksia. Jokainen moduulien välinen import, ilmoitettu rajapinta, template/Panel-viittaus, resurssi ja alustavaatimukset on kirjattava eksplisiittisesti. Resolver muodostaa riippuvuuksien sulkeuman, ja ilmoittamaton reuna johtaa kovaan virheeseen. [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) on pakollinen validointiehto.
+SYSTEM- ja USER-moduulien sijaintien yhdenmukaistaminen ei saa jättää piiloriippuvuuksia. Core-moduulit saavat käyttää vain Core-perustan palveluita (esim. `# → CORE.STATE`), eivät toisia Core-moduuleita. System-moduulit saavat riippua Coresta, AIGM User Coresta ja Systemistä ilman ulkoisia riippuvuuksia, ja vapaat User-moduulit voivat käyttää ulkoisia riippuvuuksia. Jokainen moduulien välinen import, ilmoitettu rajapinta, template/Panel-viittaus, resurssi ja alustavaatimus on kirjattava **moduulin manifestiin**. Resolver muodostaa riippuvuuksien sulkeuman, ja ilmoittamaton reuna johtaa kovaan virheeseen. [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) on pakollinen validointiehto.
 
 ## 3. Siirtosäännöt
 
