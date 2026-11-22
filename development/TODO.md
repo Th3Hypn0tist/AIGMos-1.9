@@ -12,6 +12,10 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Kirjaa 1.8:n nykyiset käyttäytymiset, käytössä olevat komennot, rajapinnat ja regressiotestien lähtötaso.
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
+- [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
+- [ ] Yhtenäistä SYSTEM-moduulipakettien sijainnit `system/library/{commands,inputs,outputs,adapters,views}/<module_id>/` ja pidä moduulin metadata, koodi, omat templatet ja testit yhdessä.
+- [ ] Päivitä moduulien discovery, importit, reload, template-resoluutio ja polkuviittaukset hallitusti; todenna regressiot.
+- [ ] Selvitä ja erota Core-/engine-infrastruktuuri varsinaisista SYSTEM-moduuleista. SYSTEM-/USER-identiteetti ei yksin anna runtime-valtuuksia.
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
 - [ ] Erottele pakolliset Core-toiminnot: INPUT, STATE, TER, CS, Runnerin `&`.
 - [ ] Luokittele muu toiminnallisuus valinnaiseksi USE- tai USER-moduuliksi; kirjaa perustelut.
@@ -33,6 +37,8 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Todenna C6-Minimal Coren hyväksymiskriteerit.
 
 ## P1 — LMTS UI → AIGMos View
+
+Edellytys: P0:n SYSTEM-view-paketointirajaus ja template-discovery on toteutettu ja testattu.
 
 - [ ] Tarkasta LMTS:n UI-palikan nykyinen koodi ja jo suunniteltu irrotettava rajapinta.
 - [ ] Määritä View-moduulin rajapinta ja riippuvuudet ilman Coreen tehtävää View-sidosta; vertaa USER-view-sopimukseen ja Expose-rajaukseen.
