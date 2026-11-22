@@ -34,6 +34,9 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 ### D-010 — Aiemmista määrityksistä säilytetään vain USER ja Expose
 **Päätös:** Aiemmista 2.0-määrityksistä tuodaan AIGMos 1.9:ään **vain** (1) USER-moduulien järkeistetty viiden primitiivin malli sopimuksineen ja (2) Expose-kokonaisuus (nanoCMS + NetworkService). Näiden valmista määrittelytyötä ei toisteta. Lähdespesifikaatioiden sisältö ja Git-revisio on dokumentoitu [REUSED_SPECS.md](REUSED_SPECS.md). Kaikki muut 2.0-määritykset jäävät pois 1.9:n kehitysscopesta. Lähteen locked-tila ei tarkoita, että 1.9-integraatio olisi tehty.
 
+### D-011 — SYSTEM-moduulien yhtenäinen hakemistorakenne
+**Päätös:** 1.8:n hajallaan olevat SYSTEM-moduulien toteutukset ja omat resurssit kootaan samaan viiden primitiivin luokitteluun kuin USER-moduulit, yhteen `system/library/{commands,inputs,outputs,adapters,views}/<module_id>/`-hakemistomalliin. Core-/engine-koodi ei muutu moduuleiksi pelkän polkusiirron vuoksi. SYSTEM- ja USER-moduulien oikeudet pidetään eksplisiittisesti erillään. Todelliset vanhat polut, lataajat sekä migraatio on kuvattu [SYSTEM_MODULES.md](SYSTEM_MODULES.md). Hakemistorakenne on sovittu tavoite; migraatio on vielä toteuttamatta.
+
 ## Avoimet päätökset
 
 - **O-001:** `#`-puutilan sijoitus: Core vai USE? Lähtöhypoteesi on USE, ei vielä lukittu.
@@ -46,6 +49,7 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 - **O-008:** CPythonin ja MicroPythonin yhteisen koodipohjan tosiasialliset rajat.
 - **O-009:** USER-view-primitiivin ja USE-tason LMTS View -toteutuksen rajapinnan yhteensovitus ilman Core-riippuvuutta.
 - **O-010:** Expose-omistajuuksien käytännön sovittaminen nykyisen 1.8:n olemassa oleviin verkko-/web-/UI-pintoihin.
+- **O-011:** Mitkä vanhat SYSTEM-toteutukset ovat oikeasti moduuleita ja mitkä Core-/View-engine-komponentteja, ja miten yhteinen discovery toteutetaan ESP32-C6:ssa resurssitehokkaasti?
 
 ## Kehitysehdotus vs. toteutettu
 
