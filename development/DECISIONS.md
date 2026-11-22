@@ -46,6 +46,9 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 ### D-014 — Ei piiloriippuvuuksia (ehdoton arkkitehtuurisääntö)
 **Päätös:** AIGMos 1.9 ei saa sisältää piiloriippuvuuksia. Kaikki moduulien, ajomoottorien ja Coren suorat riippuvuudet (koodi, palvelut, alusta, resurssit ja ehdolliset ominaisuudet) on määriteltävä eksplisiittisesti. Resolverin on voitava muodostaa koko transitiivinen riippuvuusverkko ja validoida kompositio ennen käynnistystä/buildiä. Ilmoittamaton tai ratkaisematon riippuvuus on **hard fail**, ei varoitus; valinnainen moduuli ei saa latautua tai tulla pakettiin valitsematta. SYSTEM-/USER-oikeudet eivät synny polusta. Yksityiskohdat ja verifiointi: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md). Päätös on vahvistettu; toteutus on vielä avoin.
 
+### D-015 — Neljä moduulien riippuvuusluokkaa ja Core-perustan rajaus
+**Päätös:** **Core-perusta** sisältää yhteiset julkiset palvelut (esim. `CORE.STATE`); **Core-moduuli** saa riippua vain tästä perustasta, ei toisesta Core-moduulista. `# → CORE.STATE` on sallittu. **System-moduuli** saa riippua Coresta. **AIGM User -moduuli** saa riippua Coresta ja Systemistä, mutta ei ulkoisista. **User-moduuli** saa riippua mistä tahansa, myös ulkoisista kirjastoista/palveluista. **Kaikki riippuvuudet ilmoitetaan kunkin moduulin manifestissa**, myös silloin kun luokka sallii ulkoiset riippuvuudet. Riippuvuus ei itsessään myönnä käyttöoikeuksia. Tarkka kerrosmatriisi ja validaattorin fail-ehdot: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md). Kirjattu sääntö ei tarkoita vielä toteutettua validointia.
+
 ## Avoimet päätökset
 
 - **O-001:** `#`-puutilan sijoitus: Core vai USE? Lähtöhypoteesi on USE, ei vielä lukittu.
