@@ -8,6 +8,8 @@ AIGMos 1.8:n **olemassa oleva toteutus** optimoidaan ja modularisoidaan niin, et
 
 **Tavoite:** ajaa mahdollisimman pieni, toimiva AIGMos samalla yhteisellä Core-arkkitehtuurilla myös rajoitetulla laitteella. Lähtökohta on **1.8-koodin refaktorointi ja mitattu optimointi**, ei uuden Coren suunnittelu tyhjästä.
 
+**Rakenneperiaate:** SYSTEM-moduulit yhtenäistetään USER-primitiivien kanssa samankaltaiseen viiden luokan hakemistorakenteeseen: `system/library/{commands,inputs,outputs,adapters,views}/<module_id>/`. CS-parseri, STATE, TER sekä valinnaiset ajomoottorit erotetaan moduulipaketeista. Moduulin omat View-toteutukset ja templatet pidetään yhdessä. [SYSTEM_MODULES.md](SYSTEM_MODULES.md).
+
 **Työperiaate:** ensin 1.8:n nykytilan kartoitus ja käyttäytymisen regressiotestit, sitten riippuvuuksien irrotus ja resurssien optimointi. Toimiva käytös säilytetään, ellei muutosta päätetä erikseen.
 
 Pakollinen Core:
@@ -20,6 +22,7 @@ Pakollinen Core:
 Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välittää yhden CS-komennon. Runner suorittaa komennon/rutiinin CS:n kautta. Yllä oleva on suunnittelutavoite, jonka vastaavuus nykyiseen 1.8-toteutukseen on tutkittava.
 
 **Alustava hyväksymisnäyttö:**
+- SYSTEM-moduulit löytyvät vakioidun `system/library/`-rakenteen alta; kunkin paketin toteutus, manifesti ja omat resurssit ovat yhdessä. Yhteiset ajomoottorit eivät muutu implisiittisesti moduuleiksi.
 - 1.8:n olennaiset toiminnallisuudet ja rajapinnat on kartoitettu ja niiden säilyminen tai tarkoituksellinen siirto moduuliin on osoitettu.
 - Optimointia edeltävä resurssitaso ja optimoinnin jälkeinen taso on mitattu vertailukelpoisesti.
 - C6-N16 käynnistää Minimal Coren ilman PSRAMia.
