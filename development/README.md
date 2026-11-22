@@ -8,6 +8,7 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 - [TODO.md](TODO.md) — toteutettava työ vaiheittain
 - [DECISIONS.md](DECISIONS.md) — vahvistetut linjaukset ja avoimet päätökset
 - [REUSED_SPECS.md](REUSED_SPECS.md) — ainoat aiemmista 2.0-määrityksistä säilytettävät kokonaisuudet: USER ja Expose
+- [SYSTEM_MODULES.md](SYSTEM_MODULES.md) — 1.8:n hajallaan olevien SYSTEM-moduulien yhtenäistämis- ja migraatiomalli
 
 ## Roadmap (järjestys)
 
@@ -34,6 +35,7 @@ Vaiheet toteutetaan tässä järjestyksessä. Uusia ominaisuuksia ei saa käytt�
 - Muutokset, jotka muuttavat Coren rajoja, moduulivastuita tai roadmapia, kirjataan DECISIONS.md-tiedostoon.
 - Nykyisen toteutuksen toimivuus varmennetaan regressiotestein ennen optimointia ja sen jälkeen. Vältetään tarpeetonta uudelleenkirjoitusta.
 - Kehitystehtävät rajataan **AIGMos 1.9:n** tarpeisiin: nykyinen 1.8-koodipohja, optimointi, modularisointi, myöhemmin View ja Build.
+- SYSTEM-moduulit organisoidaan samojen viiden moduulityypin mukaan yhden `system/library/`-juuren alle; moduulirakenne ja SYSTEM/USER-oikeudet pidetään erillisinä kysymyksinä.
 - **Ainoa poikkeus aiemman 2.0-suunnittelun sivuuttamiseen:** säilytetään USER-moduulien viiden primitiivin malli sekä Expose-kokonaisuuden valmiit sopimukset. Katso REUSED_SPECS.md. Muuta 2.0-arkkitehtuuria ei tuoda mukaan.
 
 Lähtöaineisto: *AIGMos 1.9 — sisäinen kompositio- ja self-projection-build-järjestelmä*, kehitysehdotus v0.1.0 (ei toteutusraportti).
