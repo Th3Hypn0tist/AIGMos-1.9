@@ -31,6 +31,9 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 ### D-009 — Vain 1.9:n toteutustarpeet ohjaavat nykyistä kehitystä
 **Päätös:** Ei oteta tulevien tuoteversioiden uusia moduleita, domain-kompositioita tai arkkitehtuurivaatimuksia tämänhetkiseen työlistaan. Valmis 1.9-modularisointi tuottaa myöhemmin uudelleenkäytettävän pohjan ilman ennakoivaa laajentamista.
 
+### D-010 — Aiemmista määrityksistä säilytetään vain USER ja Expose
+**Päätös:** Aiemmista 2.0-määrityksistä tuodaan AIGMos 1.9:ään **vain** (1) USER-moduulien järkeistetty viiden primitiivin malli sopimuksineen ja (2) Expose-kokonaisuus (nanoCMS + NetworkService). Näiden valmista määrittelytyötä ei toisteta. Lähdespesifikaatioiden sisältö ja Git-revisio on dokumentoitu [REUSED_SPECS.md](REUSED_SPECS.md). Kaikki muut 2.0-määritykset jäävät pois 1.9:n kehitysscopesta. Lähteen locked-tila ei tarkoita, että 1.9-integraatio olisi tehty.
+
 ## Avoimet päätökset
 
 - **O-001:** `#`-puutilan sijoitus: Core vai USE? Lähtöhypoteesi on USE, ei vielä lukittu.
@@ -41,6 +44,8 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 - **O-006:** ESP32-C6:n firmware-tuki, suoritusympäristö ja mitatut resurssirajat.
 - **O-007:** Build-tuloksen muoto (MicroPython-paketti tai valmis firmware-image).
 - **O-008:** CPythonin ja MicroPythonin yhteisen koodipohjan tosiasialliset rajat.
+- **O-009:** USER-view-primitiivin ja USE-tason LMTS View -toteutuksen rajapinnan yhteensovitus ilman Core-riippuvuutta.
+- **O-010:** Expose-omistajuuksien käytännön sovittaminen nykyisen 1.8:n olemassa oleviin verkko-/web-/UI-pintoihin.
 
 ## Kehitysehdotus vs. toteutettu
 
