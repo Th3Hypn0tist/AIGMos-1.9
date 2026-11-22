@@ -82,6 +82,10 @@ Yllä oleva on **tavoite-esitys**, ei väite 1.9:ään jo tehdyistä muutoksista
 - **Resurssit:** yksi moduuli omistaa omat erikoisresurssinsa ja template-sidontansa; yleinen käyttöapu/help tai yhteinen alustaomisteinen ajomoottori voi olla yhteinen resurssi.
 - **View ja Panel:** 1.9:n View tarkoittaa kokonaisen näkymän deklaratiivista kompositiota. `system/layout/modules/*.py` sisältää pienempiä UI-moduuleita, joiden nimi on Panel. Aiemman lukitun `type=view`-sopimuksen muuttamista ei piiloteta polkusiirtoon; tarvitaan oma versioitu 1.9-päätös.
 
+## Ehdoton riippuvuusraja
+
+SYSTEM- ja USER-moduulien sijaintien yhdenmukaistaminen ei saa jättää piiloriippuvuuksia. Jokainen moduulien välinen import, ilmoitettu rajapinta, template/Panel-viittaus, resurssi ja alustavaatimukset on kirjattava eksplisiittisesti. Resolver muodostaa riippuvuuksien sulkeuman, ja ilmoittamaton reuna johtaa kovaan virheeseen. [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) on pakollinen validointiehto.
+
 ## 3. Siirtosäännöt
 
 1. **Luokittele ensin, siirrä vasta sitten.** Jokaiselle tiedostolle määritellään: Core-infrastruktuuri, valinnainen runtime-moottori, SYSTEM-moduuli, USER-moduuli tai resurssi. Pelkkä hakemistopolku ei ratkaise semantiikkaa.
