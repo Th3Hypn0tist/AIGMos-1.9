@@ -1,0 +1,344 @@
+{
+  "document_type": "AIGMOS_1_9_IMPORTED_SOURCE_FEATURE_CROSSWALK",
+  "version": "0.1.0",
+  "date": "2026-11-23",
+  "status": "UNLOCKED",
+  "source": {
+    "name": "new.zip",
+    "sha256": "9c4d1a0223549f501eca64e3cc35b01d9cb00cabee2710ee608504f5df5145f9",
+    "archive_root": "new/",
+    "source_describes_itself": "AIGMos 2.0 QA/release candidate",
+    "original_2_0_lock_status_not_inherited": true
+  },
+  "source_inventory": {
+    "non_cache_files": 548,
+    "python_files": 319,
+    "json_files": 71,
+    "json_contract_files": 50,
+    "command_modules": 47,
+    "test_python_files": 75,
+    "ast_errors": 0,
+    "json_parse_errors": 0,
+    "tests_executed": false
+  },
+  "comparison": {
+    "reference_repo": "Th3Hypn0tist/AIGMos",
+    "reference_commit": "20383e681dd49f3be33070dba41bbcdc4034ef63",
+    "prior_command_files": 35,
+    "zip_command_files": 47,
+    "additional_command_module_names": [
+      "bot",
+      "eval",
+      "export",
+      "import_table",
+      "math",
+      "osc",
+      "package",
+      "shopping",
+      "test",
+      "trig_reset",
+      "um",
+      "web"
+    ],
+    "excluded_from_1_9": [
+      "bot"
+    ],
+    "parity_claim": "Not yet test-proven"
+  },
+  "user_direction": {
+    "include": "All relevant source-archive functionality in 1.9 feature union subject to architectural adaptation. A feature-selected build physically omits unselected capabilities.",
+    "exclude": "Bot training, including bot.role.train, bot.role.validate, weight-training placeholders, trainer-specific #BOT candidate/report path, trainer-only contracts/tests/help. Training will be implemented completely differently.",
+    "preserve_unrelated": "Q/QC execution, runtime roles and prompts, bounded tools, security and MODE where independent of training.",
+    "core_requirements": "Exactly five Hardcore; # optional; /config protected with AC enable as the sole write exception; MEM volatile, FILE explicit."
+  },
+  "items": [
+    {
+      "id": "NEW-001",
+      "feature": "INPUT ingress",
+      "owner": "HC.INPUT",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-002",
+      "feature": "CS parser / command registry",
+      "owner": "HC.CS",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-003",
+      "feature": "STATE $ / & / optional #, MEM, adapters",
+      "owner": "HC.STATE",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-004",
+      "feature": "TER: triggers/events/runners, expressions, cron parity",
+      "owner": "HC.TER",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-005",
+      "feature": "EXPOSE interface ownership",
+      "owner": "HC.EXPOSE",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-006",
+      "feature": "Per-owner KV-list segmentation",
+      "owner": "HC.STATE + component owners",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-007",
+      "feature": "Protected /config and owner config loaders",
+      "owner": "SYSTEM / owners",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-008",
+      "feature": "Explicit FILE save, reload, boot recovery",
+      "owner": "FILE / TER / SYSTEM",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-009",
+      "feature": "Q and QC commands",
+      "owner": "Q",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-010",
+      "feature": "Q default profile / provider aliases",
+      "owner": "Q",
+      "disposition": "optional, q.default mandatory when present",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-011",
+      "feature": "Qcue queues, priority, failure cleanup",
+      "owner": "Q",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-012",
+      "feature": "Q streaming, thinking, samplers and prompt expansion",
+      "owner": "Q",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-013",
+      "feature": "Bounded scoped Q tool loop",
+      "owner": "Q + tool framework",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-014",
+      "feature": "Runtime roles, prompts, routines, MODE",
+      "owner": "Q / System Lib",
+      "disposition": "optional; not training",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-015",
+      "feature": "Q / Qmon / Qcue UI",
+      "owner": "Panel/View + Q",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-016",
+      "feature": "EXP dynamic ? / eval",
+      "owner": "EXP System Lib",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-017",
+      "feature": "EXP authored resources / export / reload",
+      "owner": "EXP / FILE",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-018",
+      "feature": "REST input + ?REST response",
+      "owner": "EXPOSE REST",
+      "disposition": "optional; 1.9 $/# modes",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-019",
+      "feature": "Static Web UI server / web commands",
+      "owner": "EXPOSE static web",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-020",
+      "feature": "OSC IN and native osc.send",
+      "owner": "EXPOSE OSC",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-021",
+      "feature": "math.* numeric commands",
+      "owner": "CS math",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-022",
+      "feature": "Import/export/CSV table pipeline",
+      "owner": "CS + structured if #",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-023",
+      "feature": "map.files/map.structure and & routines",
+      "owner": "CS / structured",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-024",
+      "feature": "User modules: command/input/output/adapter/layout",
+      "owner": "User Modules; panel adaptation",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-025",
+      "feature": "um.check/add/update/ls/info/rm/pack",
+      "owner": "User Modules / FILE",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-026",
+      "feature": "package.status/list/check/install/remove",
+      "owner": "System package manager",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-027",
+      "feature": "Layout/Panel/View template runtime",
+      "owner": "Layout",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-028",
+      "feature": "Hotkeys, | buffers, layout state",
+      "owner": "Layout",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-029",
+      "feature": "#T/#MCP tool registry and scoped capabilities",
+      "owner": "Tools / security",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-030",
+      "feature": "Secrets, redaction, error audit",
+      "owner": "Security policy",
+      "disposition": "core",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-031",
+      "feature": "Network deployment profiles",
+      "owner": "EXPOSE / Security",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-032",
+      "feature": "test contracts/system/exp/usermodules/tools/all",
+      "owner": "System test tooling",
+      "disposition": "optional development",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-033",
+      "feature": "Help command registry and reload sync",
+      "owner": "Help System Lib",
+      "disposition": "optional",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-034",
+      "feature": "Shopping/cart/inventory/price history",
+      "owner": "User app composition",
+      "disposition": "optional app",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-035",
+      "feature": "Calendar example/help surface",
+      "owner": "User app example",
+      "disposition": "documentation; runtime unverified",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-036",
+      "feature": "Speech intent validation",
+      "owner": "INPUT/EXPOSE adapter",
+      "disposition": "contract only; implementation unverified",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-037",
+      "feature": "bot.role.train/validate; #BOT trainer pipeline",
+      "owner": "EXCLUDED",
+      "disposition": "exclude; training redesigned",
+      "status": "UNLOCKED"
+    },
+    {
+      "id": "NEW-038",
+      "feature": "Trainer-specific MODE/help/certification coupling",
+      "owner": "EXCLUDED training parts",
+      "disposition": "exclude trainer only; keep generic MODE runtime",
+      "status": "UNLOCKED"
+    }
+  ],
+  "required_reconciliation": [
+    "Archive 2.0 'locked' claims are not 1.9 CCF/CW validation.",
+    "Root config.json and #SYSTEM:config mirror conflict with private /config; Q must validate q.default iff Q included.",
+    "SQLite automatic persistence differs from 1.9 MEM volatile + explicit FILE; retain user-visible durable behavior through explicit owner storage.",
+    "Archive #OSC/#REST/#UM trees conflict with #less minimal MP and restricted INPUT $I / optional #I.",
+    "Archive layout module vs 1.9 Panel primitive needs mapping; archive 'four module kinds' help is out of date vs 5-kind source.",
+    "Archive heavy # table EXP is optional, not part of minimal 1.9 EXP.",
+    "REST 2.0 only # mode must adapt to agreed 1.9 $ GET-only and # GET/POST modes.",
+    "Source trigger cron helpers coexist with different trig expression UI: prove 1.8 cron parity.",
+    "Removing bot.py alone is insufficient: system/lib/contracts/__init__.py exports trainer; compliance.py maps trainer and #MODE to trainer tests; help/command registries include trainer.",
+    "Central /config guard must cover every generic direct file operation, including import/export and symlinks.",
+    "Shopping code and tests exist; Calendar example is documented but dedicated runtime implementation not verified.",
+    "Source dependency three-line headers and MP/CP target closure must be introduced; original source cannot be copied wholesale."
+  ],
+  "full_local_audit": "AIGMos_1.9_new_zip_feature_crosswalk_v0.1.0.json (user-facing artifact, not yet committed)",
+  "validation": {
+    "static_zip_json_and_ast": "PASS",
+    "runtime_tests": "NOT_RUN",
+    "CCF_CW": "NOT_RUN",
+    "status": "UNLOCKED"
+  },
+  "next": "Convert each retained feature into versioned 1.9 contract + deps/libs/target closure + acceptance tests, excluding trainer."
+}
