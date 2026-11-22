@@ -28,6 +28,10 @@ Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välitt
 - Muistin käyttö, firmware/flash-koko, käynnistys ja keskeinen suoritusaika mitataan todellisella laitteella.
 - CPython- ja MicroPython-yhteensopivuus tarkistetaan soveltuvilla yhteisillä testeillä.
 
+## Rajattu sopimusten uudelleenkäyttö
+
+Aiemmista 2.0-määrityksistä otetaan mukaan **vain USER-moduulien viiden primitiivin malli** (command, input, output, adapter, view) ja **Expose** (nanoCMS + NetworkService). Käytetään olemassa olevia lähdesopimuksia, ei suunnitella niitä uudelleen. Toteutus sovitetaan 1.8:n todelliseen koodiin ja Minimal Coren rajauksiin. Lähteet ja 1.9-siirron avoimet tarkistukset: [REUSED_SPECS.md](REUSED_SPECS.md).
+
 ## Phase 2 — LMTS UI as View
 
 **Tavoite:** LMTS:n kehityksessä uudelleenkäytettäväksi suunniteltu käyttöliittymäpalikka integroidaan **yhdeksi** AIGMos View -toteutukseksi.
