@@ -11,7 +11,9 @@ Muita 2.0:n Meta-/business-/domain-/universaali-/kompositiomäärityksiä **ei t
 
 **Lähde:** `Th3Hypn0tist/AIGMos_docs` / Git-commit `535c1dacfc4ee72f1fbc00dedea3f3672178dbe2` (pinnattu lähdeversio). Lähdesopimusten `locked`-tila tarkoittaa lähteen omaa tilaa. 1.9-integraatio ei ole automaattisesti toteutettu tai validoitu. **Ei suunnitella näitä kahta kokonaisuutta uudestaan:** kartoitetaan 1.8-koodin vastaavuus, käytetään valmiita sopimuksia ja dokumentoidaan mahdolliset 1.9-yhteensopivuuserot eksplisiittisesti.
 
-## 1. USER-moduulit — viisi primitiiviä
+## 1. USER-moduulit — viisi alkuperäistä primitiiviä
+
+**1.9-nimeämishuomio:** nämä ovat pinnaatun lähdesopimuksen alkuperäiset tyypit. Uudessa 1.9-käsitteistössä `View` on deklaratiivinen näkymä (nykyinen template) ja sen pienelle UI-moduulille on ehdotettu nimeä `Widget`. Jos moduulin `type=view` muutetaan `type=widget`, kyseessä on 1.9:n **versioitu sopimusmuutos**, ei alkuperäisen lähdesopimuksen sisältö. Ks. [VIEW_NAMING.md](VIEW_NAMING.md).
 
 | Tyyppi | Omistajuus / rajattu tehtävä | Ei saa muuttua |
 |---|---|---|
@@ -26,7 +28,7 @@ Muita 2.0:n Meta-/business-/domain-/universaali-/kompositiomäärityksiä **ei t
 - `module.json` sisältää deklaroidut entrypointit, capabilityt, roots, policies ja testit. Capabilities ovat pyyntöjä, eivät automaattisia oikeuksia.
 - `#UM` on inertti ja moduulikohtaisesti rajattu state-namespace; toisen moduulin haaraan tai system-juuriin ei kirjoiteta implisiittisesti.
 - USER ei saa laajentaa Coren pakollista riippuvuusjoukkoa vain siksi, että kyseinen moduuli on asennettu.
-- USER-primitiivien **view** ja USE-järjestelmämoduulin **View-toteutuksen** (esim. LMTS UI) rajapintojen yhteensovitus on tutkittava 1.8-koodia vasten. Vanhan view-sopimuksen `.tmpl`/Layout Engine -määrittelyä ei saa tulkita Full View'n pakolliseksi Minimal Core -riippuvuudeksi.
+- Alkuperäisen USER-primitiivin `view`, 1.9:n View-komposition, pienemmän Widget-moduulin (nimiehdotus) ja LMTS-pohjaisen valinnaisen View-renderöintitoteutuksen suhde on ratkaistava eksplisiittisesti. Vanhan `.tmpl`/Layout Engine -määrittelyä ei saa tulkita Full View'n pakolliseksi Minimal Core -riippuvuudeksi.
 
 ## 2. Expose — alkuperäiset rajat säilytetään
 
@@ -64,6 +66,6 @@ Lähdesopimuksen ydin: **`Expose = nanoCMS + NetworkService`**. Kaikki tarkoituk
 - [ ] Toteutettu tai todettu jo toimiviksi USER-manifesti, eristetyt symbolijuuret ja moduulien elinkaari hyväksymistesteineen.
 - [ ] Tunnistettu 1.8:n nykyiset ulkoiset pinnat ja luokiteltu ne nanoCMS- tai NetworkService-omistajuuteen.
 - [ ] Todenettu Expose-rajojen säilyminen ilman pakollista View/NetworkService-riippuvuutta Minimal Coressa.
-- [ ] LMTS UI:n View-integraatio tarkistettu USER-view-rajauksen kanssa ilman semanttista päällekkäisyyttä.
+- [ ] LMTS UI:n valinnainen View-renderöinti ja View/Widget-erottelu tarkistettu ilman semanttista päällekkäisyyttä; tyyppimuutos dokumentoitu versioidusti, jos se hyväksytään.
 
 **Muutoskäytäntö:** tarvittavat 1.9-erot kirjataan ensin `DECISIONS.md`- ja `TODO.md`-tiedostoihin. Lähteen locked-kontrakteja ei muokata hiljaisesti eikä toteutusväittämiä tehdä ennen mittauksia ja testejä.
