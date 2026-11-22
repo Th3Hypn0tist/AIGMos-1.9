@@ -1,0 +1,276 @@
+{
+  "document_type": "AIGMOS_1_9_BUILD_TOOL_DESIGN_DRAFT",
+  "version": "0.1.0",
+  "date": "2026-11-23",
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "authority": {
+    "user_confirmed_baseline": [
+      "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+      "developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.2.0.json",
+      "developer/contracts/AIGMos_1.9_Config_Ownership_Parity_Delta_v0.1.0.json"
+    ],
+    "references_to_reconcile": [
+      "A19-003",
+      "A19-039",
+      "A19-040",
+      "A19-041",
+      "A19-042",
+      "A19-043",
+      "A19-045",
+      "A19-051",
+      "A19-052",
+      "A19-069",
+      "A19-070",
+      "A19-071",
+      "A19-072",
+      "CLEAN-005",
+      "CLEAN-006",
+      "CLEAN-007",
+      "CLEAN-008"
+    ],
+    "warning": "This document distinguishes confirmed rules from design proposals and open questions; it is not immutable nor a verified implementation."
+  },
+  "principle": "Builder is an optional AIGMos System View |BUILD with Panels, System commands and functions on the same HC.CS/module registry. It composes a new instance using source modules available to its Builder instance, without introducing a new Hardcore mechanism. Selected feature graph and dependency closure determine actual physical source inclusion.",
+  "confirmed": [
+    {
+      "id": "B-C01",
+      "rule": "One functional MP-compatible shared source implementation; CP adds only selected capabilities."
+    },
+    {
+      "id": "B-C02",
+      "rule": "Each code file, including Hardcore, begins with exact header keys deps, libs, target. deps/libs are JSON arrays of immediate uses only; target is MP or CP. MP means MicroPython and CPython."
+    },
+    {
+      "id": "B-C03",
+      "rule": "Builder composes from its available modules and may include Builder in target only if selected and target-compatible."
+    },
+    {
+      "id": "B-C04",
+      "rule": "Build physically removes unselected code, optional integrations, exclusive dependencies, and unneeded transport listeners. NON-AC build has neither AC implementation nor AC-specific CS hook."
+    },
+    {
+      "id": "B-C05",
+      "rule": "Structured # is optional; standard minimal MP build does not include #. Q absent => no Q code/config/validator or exclusive dependencies. Q selected => valid q.default required at boot."
+    },
+    {
+      "id": "B-C06",
+      "rule": "Target source composition built before target configuration. C6-oriented MP composition can run on PC with explicit hardware shims; this is not a C6 firmware emulator."
+    },
+    {
+      "id": "B-C07",
+      "rule": "Target provisioning may configure persistent TER definitions via explicit FILE; no automatic MEM persistence."
+    },
+    {
+      "id": "B-C08",
+      "rule": "Protected /config is never ordinarily read/written by CS. BOOT/internal RELOAD may read. AC activation false->true is sole runtime CS-triggered write exception."
+    },
+    {
+      "id": "B-C09",
+      "rule": "Build output must prove code references beyond Python import graph, including persisted TER command strings and module/adapter/Expose capability references."
+    }
+  ],
+  "proposed_pipeline": [
+    {
+      "phase": 1,
+      "name": "Inventory",
+      "operation": "Scan all candidate source files once, parse exact 3-line headers, source hashes, module identities/roles, declared capabilities and ownership. Source inventory limited to files physically available to Builder."
+    },
+    {
+      "phase": 2,
+      "name": "Select",
+      "operation": "Choose target MP/CP, requested module/capability IDs, transport/profile, hardware adapters, required target provisioning materials. Distinguish build selection from runtime /config."
+    },
+    {
+      "phase": 3,
+      "name": "Resolve",
+      "operation": "Compute typed direct dependency graph from header SSOT and separately derived transitive closure. Validate graph classes, platform eligibility, cycles, availability, source classification and hard constraints."
+    },
+    {
+      "phase": 4,
+      "name": "Trim",
+      "operation": "Include five HC mechanisms and selected/required file+function capabilities; remove unused files, optional hooks and exclusive imports/libs. Use an explicit build annotation contract for code within files, not ad-hoc string replacement."
+    },
+    {
+      "phase": 5,
+      "name": "Validate",
+      "operation": "Re-scan generated code, compare imports to declared deps/libs, verify all reachable commands from definitions/boot, panel and transport refs, ensure no optional feature leak, check path security and resource estimates. Fail closed on unknown/dynamic unresolved references."
+    },
+    {
+      "phase": 6,
+      "name": "Package",
+      "operation": "Emit runnable target source tree, only relevant module assets, provisioning defaults separate from runtime state, and provenance/validation report. Do not claim canonical LOCKED just because packaging succeeds."
+    },
+    {
+      "phase": 7,
+      "name": "Simulate",
+      "operation": "Start target-profile code on PC with explicitly chosen hardware host adapters, test boot, commands, scoped persistence, resource budgets and negative cases."
+    },
+    {
+      "phase": 8,
+      "name": "Provision",
+      "operation": "Configure new target instance with safe out-of-band /config provisioning and explicit FILE-backed definitions. A temporary Expose is optional for permitted CS-mediated runtime/TER setup; it is not an exemption for ordinary /config writes."
+    },
+    {
+      "phase": 9,
+      "name": "Strip and revalidate",
+      "operation": "Optionally physically remove temporary Expose interfaces and exclusive closure; rerun full closure and command-reference tests, including post-strip boot."
+    },
+    {
+      "phase": 10,
+      "name": "Deploy",
+      "operation": "Copy validated output to target hardware, prove basic execution and resource behavior there."
+    }
+  ],
+  "source_metadata": {
+    "canonical_three_line_example": "# deps: [\"HC.CS\"]\n# libs: [\"EXP\"]\n# target: MP",
+    "declared_edges": "Exact, immediate typed references only (source headers SSOT)",
+    "derived_edges": "Calculated from scanned graph with full provenance; never written back as falsely declared direct deps",
+    "source_capability_mapping": "OPEN: module registry/meta/feature declarations must not become a conflicting manually-maintained requires graph",
+    "intra_file_conditional_pruning": "OPEN: need a safe explicit syntax + verifier to eliminate AC guard without parallel HC.CS implementations"
+  },
+  "candidate_build_profiles": [
+    {
+      "id": "minimal-c6",
+      "target": "MP",
+      "capabilities": [
+        "HC.INPUT",
+        "HC.STATE",
+        "HC.TER",
+        "HC.CS",
+        "HC.EXPOSE"
+      ],
+      "constraints": [
+        "no structured #",
+        "no Q",
+        "no AC",
+        "no unwanted EXPOSE transports"
+      ],
+      "status": "illustrative only"
+    },
+    {
+      "id": "cp-with-q",
+      "target": "CP",
+      "capabilities": [
+        "HC.*",
+        "Q",
+        "Q.QC"
+      ],
+      "constraints": [
+        "q.default required",
+        "Q dependencies only if selected"
+      ],
+      "status": "illustrative only"
+    },
+    {
+      "id": "cp-ac-rest-dollar",
+      "target": "CP",
+      "capabilities": [
+        "HC.*",
+        "AC",
+        "EXP",
+        "EXPOSE.REST"
+      ],
+      "constraints": [
+        "AC hook included",
+        "REST $-only GET",
+        "no structured #"
+      ],
+      "status": "illustrative only"
+    },
+    {
+      "id": "cp-rest-structured",
+      "target": "CP",
+      "capabilities": [
+        "HC.*",
+        "EXP",
+        "STRUCTURED",
+        "EXPOSE.REST"
+      ],
+      "constraints": [
+        "REST # mode may POST",
+        "structured module explicit"
+      ],
+      "status": "illustrative only"
+    }
+  ],
+  "build_invariants": [
+    "Missing direct dependency declaration => FAIL",
+    "MP transitively reaches CP-only source => FAIL",
+    "Forbidden dependency class or cycle => FAIL",
+    "Missing referenced CS command in TER/boot/config/layout => FAIL",
+    "NON-AC build contains any AC code or AC-specific hook => FAIL",
+    "Q-free build contains Q-only source, Q-only validation requirement or Q config secrets => FAIL",
+    "Q-enabled target with absent/malformed q.default => FAIL at boot",
+    "REST dollar-only build includes structured-only code with no other requested reason => FAIL",
+    "EXPOSE stripped but listener still bundled or reachable => FAIL",
+    "Any ordinary CS/extension filesystem path reaches protected /config via traversal/symlink => FAIL",
+    "No implicit MEM-to-FILE persistence",
+    "Every included source file retains valid three-line metadata and exact source provenance",
+    "Unresolved dynamic module import / command string / capability reference must be declared or rejected"
+  ],
+  "open_decisions": [
+    {
+      "id": "BUILD-OPEN-01",
+      "priority": "P0",
+      "question": "Exact build-selectable feature/capability ID vocabulary, registry and per-file mapping; source header remains only authority for direct deps."
+    },
+    {
+      "id": "BUILD-OPEN-02",
+      "priority": "P0",
+      "question": "Source-level conditional annotation grammar to remove AC-specific code inside single HC.CS implementation; how optional direct deps are declared without contradictory unconditional source headers."
+    },
+    {
+      "id": "BUILD-OPEN-03",
+      "priority": "P0",
+      "question": "Module interface/manifest and lifecycle ABI: how selected command, input, output, adapter and panel modules are discovered and initialized."
+    },
+    {
+      "id": "BUILD-OPEN-04",
+      "priority": "P0",
+      "question": "Target artifact tree format for MP/CP and exact code/assets split; whether to generate manifests/provenance as deployable or build-only files."
+    },
+    {
+      "id": "BUILD-OPEN-05",
+      "priority": "P0",
+      "question": "Provision /config of NEW target without weakening protection of RUNNING builder/target; exact config schema and AC activation physical path."
+    },
+    {
+      "id": "BUILD-OPEN-06",
+      "priority": "P0",
+      "question": "Host shim contract and ESP32-C6 resources/import subset; what is statically testable vs requires device test."
+    },
+    {
+      "id": "BUILD-OPEN-07",
+      "priority": "P1",
+      "question": "|BUILD Panels/CS operations, save/load selection profiles and report surface; these are UI/composition, not separate core engine."
+    },
+    {
+      "id": "BUILD-OPEN-08",
+      "priority": "P1",
+      "question": "Deterministic build snapshot/provenance and supported third-party lib resolution; no implicit network install."
+    },
+    {
+      "id": "BUILD-OPEN-09",
+      "priority": "P1",
+      "question": "How to handle dynamic import, reflection, plugin discovery, template references and generated data in closure checks."
+    },
+    {
+      "id": "BUILD-OPEN-10",
+      "priority": "P1",
+      "question": "Resource ceilings and exact validation gates for MP on C6-N16 without PSRAM."
+    }
+  ],
+  "first_design_decision_recommendation": {
+    "topic": "conditional pruning inside one source file",
+    "suggested_direction": "A declarative opt-in feature fence with syntax-aware validation, permitted only at well-defined Python statement boundaries. Keep the three mandatory header lines; add an explicit rule for optional imports/dependencies. Build from immutable source snapshot and reject malformed or unsafe regions. No free-form code editing by Builder.",
+    "why": "NON-AC output must contain no AC hook code while CS has only one common source implementation; whole-file selection cannot achieve this by itself.",
+    "status": "PROPOSAL_NOT_CONFIRMED"
+  },
+  "milestones": {
+    "can_start_coding_when": "Per-component CCF/CW contracts and minimal HC interfaces are sufficiently defined and validated; do not require whole 1.9 release to be LOCKED before beginning component implementation.",
+    "build_tool_implementation_after": "Hardcore, needed Core/System module registration and dependency header scanner foundations are available; follows A19-003 order.",
+    "builder_lock_when": "Complete Build Tool contract passes canonical CCF 2.4.2, NodeTypes 1.15.1, Rules 3.11.0 and structural/behavioral test gates.",
+    "no_runtime_code_modified": true
+  }
+}
