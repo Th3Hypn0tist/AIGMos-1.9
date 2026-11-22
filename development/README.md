@@ -12,7 +12,8 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 - [VIEW_NAMING.md](VIEW_NAMING.md) — View on kompositio; nykyisille View-moduuleille valittu nimi Panel sekä migraatiokysymykset
 
 - [RISKS.md](RISKS.md) — 1.8-lähdekoodista tunnistetut modularisoinnin riskit ja migraation estoehdot
-- [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) — ehdoton riippuvuussääntö: ei piiloriippuvuuksia, kaikki riippuvuudet deklaroidaan ja validoidaan
+- [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) — kerroksittaiset riippuvuussäännöt, ei piiloriippuvuuksia
+- [CORE_SPLIT.md](CORE_SPLIT.md) — 1.8-koodista johdettu kovaytimen ja modularisoitavien osien hakemistopuu
 
 ## Roadmap (järjestys)
 
