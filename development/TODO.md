@@ -15,6 +15,9 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
 - [ ] Erottele pakolliset Core-toiminnot: INPUT, STATE, TER, CS, Runnerin `&`.
 - [ ] Luokittele muu toiminnallisuus valinnaiseksi USE- tai USER-moduuliksi; kirjaa perustelut.
+- [ ] Vertaile 1.8:n USER-moduulirakennetta aiemmin lukittuun viiteen primitiiviin: command, input, output, adapter, view.
+- [ ] Selvitä valmiin USER-manifestin, #UM-namespace-eristyksen ja elinkaarisopimuksen toteutettavuus 1.8-pohjassa; säilytä sopimusten rajat.
+- [ ] Inventoi 1.8:n ulkoiset web-/verkko-/human-pinnat; sovita ne Expose = nanoCMS + NetworkService -omistajuuksiin irrottamatta Minimal Coreen uusia pakollisia riippuvuuksia.
 - [ ] Selvitä `#`-rakenteisen puutilan ja `&`-rutiinien toteutusriippuvuudet; `&` pysyy Coressa.
 - [ ] Irrota Full View, valinnaiset palvelut ja ylimääräiset paketit Coresta.
 - [ ] Tunnista todelliset muistia, koodikokoa ja käynnistystä kuormittavat rakenteet; optimoi vain havaittujen ongelmien perusteella.
@@ -32,14 +35,14 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 ## P1 — LMTS UI → AIGMos View
 
 - [ ] Tarkasta LMTS:n UI-palikan nykyinen koodi ja jo suunniteltu irrotettava rajapinta.
-- [ ] Määritä View-moduulin rajapinta ja riippuvuudet ilman Coreen tehtävää View-sidosta.
+- [ ] Määritä View-moduulin rajapinta ja riippuvuudet ilman Coreen tehtävää View-sidosta; vertaa USER-view-sopimukseen ja Expose-rajaukseen.
 - [ ] Integroi LMTS UI yhden View-toteutuksen pohjaksi.
 - [ ] Todenna View'n käynnistys, irrotettavuus ja Core-only-ajon toiminta.
 - [ ] Dokumentoi View-integraation esimerkit ja testit.
 
 ## P2 — Self-Projection Build
 
-- [ ] Formalisoi USE-/USER-moduulien manifesti (identiteetti, versio, tarjoaa/vaatii, target, entrypointit, riippuvuudet).
+- [ ] Ota pohjaksi aiempi lukittu USER module.json -sopimus; määritä 1.9:n buildin target-/riippuvuustietojen tarvitsemat lisäkentät eksplisiittisesti muuttamatta lähtösopimusta hiljaisesti.
 - [ ] Toteuta moduulien rekisteröinti/discovery ilman builderin lähdekoodimuutoksia.
 - [ ] Toteuta deterministinen riippuvuusratkaisu ja ristiriitojen näkyvä raportointi.
 - [ ] Määritä target-profiilit ja kyvykkyys-/resurssivalidaatio (C6 ensimmäisenä).
