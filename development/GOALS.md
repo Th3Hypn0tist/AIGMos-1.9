@@ -8,7 +8,7 @@ AIGMos 1.8:n **olemassa oleva toteutus** optimoidaan ja modularisoidaan niin, et
 
 **Tavoite:** ajaa mahdollisimman pieni, toimiva AIGMos samalla yhteisellä Core-arkkitehtuurilla myös rajoitetulla laitteella. Lähtökohta on **1.8-koodin refaktorointi ja mitattu optimointi**, ei uuden Coren suunnittelu tyhjästä.
 
-**Rakenneperiaate:** SYSTEM-moduulien hajallaan olevat toteutukset kootaan yhtenäisen `system/library/`-juuren alle. CS-parseri, STATE, TER sekä valinnaiset ajomoottorit erotetaan moduulipaketeista. **View** tarkoittaa näkymäkompositiota (nykyinen template), joka koostuu pienemmistä UI-moduuleista; niille ehdotettu nimi on **Widget**. Alustava rakenne: `system/library/{commands,inputs,outputs,adapters,widgets}/<module_id>/` sekä erilliset `system/library/views/<view_id>/`-määritykset. Lopullinen nimi, manifesti ja migraatio täsmennetään ennen toteutusta. [SYSTEM_MODULES.md](SYSTEM_MODULES.md), [VIEW_NAMING.md](VIEW_NAMING.md).
+**Rakenneperiaate:** SYSTEM-moduulien hajallaan olevat toteutukset kootaan yhtenäisen `system/library/`-juuren alle. CS-parseri, STATE, TER sekä valinnaiset ajomoottorit erotetaan moduulipaketeista. **View** tarkoittaa näkymäkompositiota (nykyinen template), joka koostuu pienemmistä UI-moduuleista; niille vahvistettu nimi on **Panel**. Alustava rakenne: `system/library/{commands,inputs,outputs,adapters,panels}/<module_id>/` sekä erilliset `system/library/views/<view_id>/`-määritykset. Lopullinen nimi, manifesti ja migraatio täsmennetään ennen toteutusta. [SYSTEM_MODULES.md](SYSTEM_MODULES.md), [VIEW_NAMING.md](VIEW_NAMING.md).
 
 **Työperiaate:** ensin 1.8:n nykytilan kartoitus ja käyttäytymisen regressiotestit, sitten riippuvuuksien irrotus ja resurssien optimointi. Toimiva käytös säilytetään, ellei muutosta päätetä erikseen.
 
@@ -33,11 +33,11 @@ Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välitt
 
 ## Rajattu sopimusten uudelleenkäyttö
 
-Aiemmista 2.0-määrityksistä otetaan lähtökohdaksi **vain USER-moduulien järkeistetty primitiivimalli** (alkuperäisessä lukitussa sopimuksessa command, input, output, adapter, view) ja **Expose** (nanoCMS + NetworkService). View-termin uusi merkitys vaatii 1.9:ssä eksplisiittisen, versioidun käsitemigraation; pienemmälle UI-moduulille on ehdotettu nimeä widget. Käytetään olemassa olevia lähdesopimuksia, ei suunnitella niitä uudelleen. Toteutus sovitetaan 1.8:n todelliseen koodiin ja Minimal Coren rajauksiin. Lähteet ja 1.9-siirron avoimet tarkistukset: [REUSED_SPECS.md](REUSED_SPECS.md).
+Aiemmista 2.0-määrityksistä otetaan lähtökohdaksi **vain USER-moduulien järkeistetty primitiivimalli** (alkuperäisessä lukitussa sopimuksessa command, input, output, adapter, view) ja **Expose** (nanoCMS + NetworkService). View-termin uusi merkitys vaatii 1.9:ssä eksplisiittisen, versioidun käsitemigraation; pienemmälle UI-moduulille on ehdotettu nimeä panel. Käytetään olemassa olevia lähdesopimuksia, ei suunnitella niitä uudelleen. Toteutus sovitetaan 1.8:n todelliseen koodiin ja Minimal Coren rajauksiin. Lähteet ja 1.9-siirron avoimet tarkistukset: [REUSED_SPECS.md](REUSED_SPECS.md).
 
 ## Phase 2 — LMTS UI as View
 
-**Tavoite:** LMTS:n kehityksessä uudelleenkäytettäväksi suunniteltu käyttöliittymäpalikka integroidaan **yhdeksi valinnaiseksi View-renderöintitoteutukseksi**, ei yksittäiseksi View-kompositioksi. View'n rakenne koostuu pienemmistä UI-moduuleista (nimiehdotus: Widget).
+**Tavoite:** LMTS:n kehityksessä uudelleenkäytettäväksi suunniteltu käyttöliittymäpalikka integroidaan **yhdeksi valinnaiseksi View-renderöintitoteutukseksi**, ei yksittäiseksi View-kompositioksi. View'n rakenne koostuu pienemmistä UI-moduuleista (vahvistettu nimi: Panel).
 
 **Alustava hyväksymisnäyttö:**
 - UI-komponentti toimii View-rajapinnan kautta ilman Core-riippuvuutta.
