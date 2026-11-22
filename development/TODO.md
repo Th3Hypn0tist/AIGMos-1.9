@@ -29,7 +29,8 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Päivitä moduulien discovery, importit, reload, template-resoluutio ja polkuviittaukset hallitusti; todenna regressiot.
 - [ ] Selvitä ja erota Core-/engine-infrastruktuuri varsinaisista SYSTEM-moduuleista. SYSTEM-/USER-identiteetti ei yksin anna runtime-valtuuksia.
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
-- [ ] Erottele pakolliset Core-toiminnot: INPUT, STATE, TER, CS, Runnerin `&`.
+- [ ] Erottele pakolliset Core-toiminnot: INPUT, STATE, TER, CS, Runnerin `&`; tee `CORE_SPLIT.md`:n pohjalta tiedostokohtainen riippuvuus- ja luokittelutodennus.
+- [ ] Erota Core-perusta ja Core-moduulit: `#` tarvitsee `CORE.STATE`, mutta Core-moduulit eivät saa importoida toisiaan.
 - [ ] Luokittele muu toiminnallisuus valinnaiseksi USE- tai USER-moduuliksi; kirjaa perustelut.
 - [ ] Vertaile 1.8:n USER-moduulirakennetta aiemmin lukittuun viiteen primitiiviin: command, input, output, adapter, view.
 - [ ] Selvitä valmiin USER-manifestin, #UM-namespace-eristyksen ja elinkaarisopimuksen toteutettavuus 1.8-pohjassa; säilytä sopimusten rajat.
