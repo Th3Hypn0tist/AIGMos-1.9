@@ -12,6 +12,7 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 - [VIEW_NAMING.md](VIEW_NAMING.md) — View on kompositio; nykyisille View-moduuleille valittu nimi Panel sekä migraatiokysymykset
 
 - [RISKS.md](RISKS.md) — 1.8-lähdekoodista tunnistetut modularisoinnin riskit ja migraation estoehdot
+- [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md) — ehdoton riippuvuussääntö: ei piiloriippuvuuksia, kaikki riippuvuudet deklaroidaan ja validoidaan
 
 ## Roadmap (järjestys)
 
@@ -20,6 +21,10 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 3. **Self-Projection Build:** rakennetaan tälle käyttöliittymälle `|BUILD` ja sen taustalle itsenäinen Build Engine, joka muodostaa rajattuja kompositioita valituista moduuleista.
 
 Vaiheet toteutetaan tässä järjestyksessä. Uusia ominaisuuksia ei saa käyttää perusteluna Minimal Coren kasvattamiselle.
+
+## Ehdoton riippuvuussääntö
+
+**Piiloriippuvuuksia ei sallita.** Jokaisen suoran riippuvuuden, myös tiedosto-, rajapinta-, resurssi-, alusta-, käynnistys- ja ehdollisen riippuvuuden, on oltava eksplisiittisesti määritelty. Resolver muodostaa transitiivisen sulkeuman ja validaattori hylkää puuttuvat tai ilmoittamattomat suhteet. Pakollinen hyväksymisportti ennen buildiä ja julkaisua: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
 
 ## Rajat
 
