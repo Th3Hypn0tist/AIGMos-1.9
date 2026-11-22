@@ -29,7 +29,7 @@ Do NOT port:
 | **SYSTEM / configuration** | Protected `/config` loaded by BOOT/internal RELOAD; no ordinary CS read/write; AC activation (`false → true`) only permitted write |
 | **STATE / FILE** | Memory-volatile working data, component-owned explicit FILE save/restore, independent named KV lists |
 | **Q (optional)** | q/qc, mandatory `q.default` when Q selected, alias/profile inheritance, Qcue, Qmon, streaming, sampler, bounded scoped tools |
-| **EXP (optional System Lib)** | `eval`, dynamic `?` definitions, resource export/reload and validation; full table pipeline as separately selected extension |
+| **EXP (optional System Lib)** | exact-definition lookup, validate, run through existing HC.CS with restricted effects, return CSo through `?`. No separate parser/dispatcher or mandatory `#`/spreadsheet engine. Extra export/reload support is NOT confirmed and remains OPEN. |
 | **EXPOSE transports (optional)** | OSC IN/OUT, REST, static Web; no listener code in stripped target |
 | **CS optional commands** | `math.*`, imports/exports (including `import.table`), map, `trig.reset` |
 | **User Modules / Panels (optional)** | 5 kinds with `layout → panel` adaptation: command/input/output/adapter/panel; `um.*` install/update/validate/package; Layout View composition |
@@ -44,7 +44,7 @@ Do NOT port:
 2. Archive auto-SQLite persistence vs 1.9 MEM volatile + explicit FILE; durability parity requires an explicit design.
 3. Archive relies on `#` for input/REST/tool registries; minimal MP build must not depend on `#`.
 4. Archive code supports five user-module types but some help/docs say four; reconcile with 1.9 Panel/View.
-5. Archive heavy EXP table processing cannot become mandatory minimal EXP.
+5. Archive heavy EXP table processing, internal expression parser, export/reload bundle are **not** part of agreed minimal EXP. Exact named definitions are run via HC.CS, return data via CSo into `?`, and require restricted effect handling. Any preserved legacy features beyond that require separate optional ownership and parity tests.
 6. REST source has 2.0 semantics; 1.9 has separate `$` GET-only and `#` GET/POST modes.
 7. Cron helpers exist, while the newer `trig` command documents `onchange/at/after`; verify cron parity.
 8. Generic file import/export may bypass `/config` protection absent a single canonical path guard.
@@ -55,3 +55,7 @@ Do NOT port:
 This is a **discovery and architectural crosswalk**, not CCF/CW-validated proof. Each imported feature must get a versioned 1.9 contract, owner, dependency closure, MP/CP target, protected config and acceptance tests. No implementation code has been changed.
 
 Machine-readable inventory: `developer/audits/AIGMos_1.9_new_zip_feature_inclusion_v0.1.0.json`.
+
+## Correction: EXP scope (user reconfirmation)
+
+The 2026-11-22 decision baseline **A19-025..031 is authoritative** over any new.zip feature import suggestion. The minimal EXP is an optional **System Lib** on HC.CS: config-selected definition source, exact named lookup, validation, existing CS command execution, CSo data result presented as `?`. `?` is not a definition store. No private parser, second dispatcher, full `#` table engine, spreadsheet pipeline, or implicit ancestor/descendant fallback. Evaluation is normal read/compute/result work and requires a restricted execution/effect context. Exact config source, schemas, reload/export features remain **OPEN**, not automatically inherited from archive. Heavy legacy functionality may be separately inventoried for optional 1.8 parity; it may not expand slim EXP automatically.
