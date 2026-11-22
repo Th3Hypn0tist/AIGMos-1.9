@@ -2,11 +2,13 @@
 
 ## Päätavoite
 
-AIGMos 1.8 modularisoidaan niin, että yhteinen **Minimal Core** toimii ESP32-C6-N16-ympäristössä. Tämän jälkeen LMTS:n UI-komponentti integroidaan valinnaiseksi View-toteutukseksi ja sen päälle rakennetaan AIGMos:n oma self-projection-build-työkalu.
+AIGMos 1.8:n **olemassa oleva toteutus** optimoidaan ja modularisoidaan niin, että yhteinen **Minimal Core** toimii ESP32-C6-N16-ympäristössä. Tämän jälkeen LMTS:n UI-komponentti integroidaan valinnaiseksi View-toteutukseksi ja sen päälle rakennetaan AIGMos:n oma self-projection-build-työkalu.
 
 ## Phase 1 — Minimal Core / ESP32-C6
 
-**Tavoite:** ajaa mahdollisimman pieni, toimiva AIGMos samalla yhteisellä Core-arkkitehtuurilla myös rajoitetulla laitteella.
+**Tavoite:** ajaa mahdollisimman pieni, toimiva AIGMos samalla yhteisellä Core-arkkitehtuurilla myös rajoitetulla laitteella. Lähtökohta on **1.8-koodin refaktorointi ja mitattu optimointi**, ei uuden Coren suunnittelu tyhjästä.
+
+**Työperiaate:** ensin 1.8:n nykytilan kartoitus ja käyttäytymisen regressiotestit, sitten riippuvuuksien irrotus ja resurssien optimointi. Toimiva käytös säilytetään, ellei muutosta päätetä erikseen.
 
 Pakollinen Core:
 - INPUT: Input-moduulit voivat päivittää STATEa suoraan, ilman CS-parseria.
@@ -18,6 +20,8 @@ Pakollinen Core:
 Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välittää yhden CS-komennon. Runner suorittaa komennon/rutiinin CS:n kautta. Yllä oleva on suunnittelutavoite, jonka vastaavuus nykyiseen 1.8-toteutukseen on tutkittava.
 
 **Alustava hyväksymisnäyttö:**
+- 1.8:n olennaiset toiminnallisuudet ja rajapinnat on kartoitettu ja niiden säilyminen tai tarkoituksellinen siirto moduuliin on osoitettu.
+- Optimointia edeltävä resurssitaso ja optimoinnin jälkeinen taso on mitattu vertailukelpoisesti.
 - C6-N16 käynnistää Minimal Coren ilman PSRAMia.
 - INPUT → STATE → TER → CS -ketju ja `&`-rutiinin järjestetty suoritus toimivat.
 - Core ei edellytä Full View'tä, Build Engineä eikä yksittäisiä USER-moduuleja.
@@ -47,10 +51,6 @@ Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välitt
 - Kaksi eri moduulivalintaa tuottavat kaksi erilaista toimivaa kompositiota.
 - Puuttuva riippuvuus tai kohdealustaristiriita ilmoitetaan eksplisiittisesti; ei hiljaista fallbackia.
 - Buildistä syntyy jäljitettävä raportti (versiot, valinnat, target, riippuvuudet ja todentamistulokset).
-
-## Myöhempi suunta: AIGMos 2.0
-
-Aiemmin suunnitellut ylemmän tason moduulit, kompositiot ja domainit säilyvät vaatimusaineistona. Niitä ei toteuteta 1.9:n pakollisina Core-riippuvuuksina.
 
 ## Ei vielä vahvistettu
 
