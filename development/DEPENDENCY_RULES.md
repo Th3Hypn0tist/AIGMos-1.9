@@ -1,113 +1,112 @@
-# AIGMos 1.9 — Explicit Dependency Contract
+# AIGMos 1.9 — Dependency Rules
 
-**Status:** architectural invariant accepted for AIGMos 1.9; enforcement and migration **not yet implemented**.  
-**Scope:** Core, SYSTEM modules, USER modules, USE modules, Panel, View, View Engine, Expose and build compositions.  
-**Principle:** **NO HIDDEN DEPENDENCIES.** A dependency may exist, but it must be declared, resolvable, authorized where relevant, target-compatible, and verifiable.
+**Tila:** riippuvuusrajat päätetty; migraatio ja tekninen validaattori vielä `unlocked`.  
+**Kohde:** AIGMos 1.9:n 1.8-pohjainen modularisointi. Nämä ovat tämän toteutuksen rajat, eivät sellaisenaan uusi alustariippumattoman AIGM-standardin määräys.  
+**Perussääntö:** **ZERO HIDDEN DEPENDENCIES** — jokainen riippuvuus ilmoitetaan moduulin manifestissa. Manifesti ei kuitenkaan saa oikeuttaa kiellettyä riippuvuutta.
 
-## 1. Non-negotiable invariants
+## 1. Core vs. Core-moduulit — tärkeä ero
 
-**DEP-001 — Every dependency must be explicit.** Each executable component declares its complete **direct** dependencies in its owning manifest/contract. Transitive dependencies are generated as a closure from the direct dependency graph. Neither source location nor runtime import behavior counts as a valid declaration.
+**Core** on yhteinen minimaalinen ajonaikainen perusta, jonka vakaisiin rajapintoihin kuuluu mm. `CORE.STATE`. Muut Core-palvelut ja niiden tarkka API-jako täsmennetään 1.8-koodin analyysissä.
 
-**DEP-002 — No implicit loading.** Importing a module must not silently register, activate, bind, start a listener, connect to external services, or allocate an optional runtime subsystem. Activation follows an explicit selected composition and lifecycle operation.
+**Core-moduuli** on tähän perustaan tukeutuva rajattu moduuli. Se:
 
-**DEP-003 — No hidden transitive dependency.** Selecting A cannot bring in B indirectly except through an auditable declared chain A → ... → B. Every included component has a known owner, purpose and reason for inclusion. Cycles are rejected unless the involved contract defines an explicitly supported cycle resolution with test evidence; default is reject.
+- **saa riippua Coresta ja sen julkisista palveluista** (esimerkiksi `CORE.STATE`);
+- **ei saa riippua toisesta Core-moduulista** suoraan eikä välillisesti;
+- **ei saa riippua System-, AIGM User-, User- tai ulkoisista moduuleista**.
 
-**DEP-004 — Optional means actually removable.** A component marked optional is not imported, started, required for boot, or shipped in a target artifact when unselected. The Core bootstrap must run without any UI/Panel/View, Build Engine, optional network service, or optional state adapter.
+**Esimerkki:** `#` tarvitsee Coren `STATE`-palvelun.
 
-**DEP-005 — Missing dependency is a hard failure of the affected composition.** Missing or incompatible provider, version, capability, manifest, asset, or target feature → **explicit validation failure**. No silent fallback, substitute provider, skip, guessed path, or auto-install. An explicitly declared optional feature may be disabled if its contract defines that behavior and reports the resulting capability set.
+```text
+      ┌─────────────────────┐
+      │ CORE                │
+      │  └── STATE API      │
+      └──────────▲──────────┘
+                 │ sallittu
+       ┌─────────┴─────────┐
+       │ CORE MODULE: #    │
+       └───────────────────┘
 
-**DEP-006 — Names are not authority.** A module does not acquire SYSTEM rights because it resides under `system/library/`, matches a SYSTEM module name, or is loaded by Core. Identity, requested capabilities, and granted runtime permissions are separate facts. Name conflicts are detected, not overwritten.
+CORE MODULE: # ──► CORE MODULE: toinen   KIELLETTY
+```
 
-**DEP-007 — Dependency direction is enforced.** Minimal Core has no dependencies on optional USE/USER/SYSTEM module implementations. Modules depend on stable Core contracts; components cannot reach into another module's implementation or state except through a declared interface/binding. View composes declared Panels; Panel cannot silently import another Panel or access CS authority by being part of a View.
+Tässä `STATE API` kuuluu **Core-perustaan**, eikä sitä luokitella erilliseksi *toiseksi Core-moduuliksi* tämän riippuvuussäännön vastaisesti. Näin `# → CORE.STATE` on sallittu ja `# → jokin toinen Core-moduuli` on kielletty.
 
-**DEP-008 — Runtime and build use the same resolved facts.** Resolution yields an immutable *per-build dependency snapshot* (not a newly locked architectural specification) with selected targets, component identifiers/versions, source revisions where available, resolved interfaces and dependencies, resources, platform constraints, and checks. The runtime must not discover extra dependencies outside that snapshot.
+**Moduulien yhteistoiminta ei tarkoita keskinäistä moduuliriippuvuutta.** Mahdollinen viestinvälitys, STATE-luku/kirjoitus tai Coreen kuuluvan CS-pinnan käyttö kulkee Coren vakaan rajapinnan kautta. Core-alustan API:a ei kuitenkaan saa käyttää kiertotienä toisen Core-moduulin piilokutsuun.
 
-**DEP-009 — Target compatibility is a declared dependency.** Python implementation, MicroPython variant, stdlib availability, native modules, drivers, OS services, hardware peripherals and resource assumptions must be explicit where required. A CPython import working does not prove ESP32-C6 compatibility.
+## 2. Neljä riippuvuusluokkaa
 
-**DEP-010 — No undeclared external resources.** Files, configuration keys, templates, View/Panel references, network endpoints, environmental features, secrets/providers and native assets needed for operation must be declared and validated. Secret *values* must not be stored in module manifests or build reports.
+| Riippuva moduuli | Sallitut moduuli- ja palveluriippuvuudet | Kielletyt riippuvuudet |
+|---|---|---|
+| **CORE MODULE** | **CORE** (sen julkiset API:t ja perustason palvelut, esimerkiksi `CORE.STATE`) | Toiset Core-moduulit; System; AIGM User; User; ulkoiset |
+| **SYSTEM MODULE** | **CORE** ja sen Core-moduulien määritellyt rajapinnat | AIGM User; User; ulkoiset. System→System ei ole erikseen sallittu tässä rajauksessa |
+| **AIGM USER MODULE** | **CORE** ja **SYSTEM** sekä niiden määritellyt rajapinnat | Ulkoiset kirjastot, palvelut ja moduulit riippuvuuksina; tavalliset USER-moduulit. AIGM User→AIGM User ei ole erikseen sallittu tässä rajauksessa |
+| **USER MODULE** | **Mikä tahansa**, myös ulkoiset kirjastot, moduulit ja palvelut | Ei alkuperään perustuvaa riippuvuusrajoitusta — manifesti, yhteensopivuus ja erilliset käyttöoikeussäännöt ovat edelleen pakollisia |
 
-## 2. Required manifest/contract content
+**System→System- ja AIGM User→AIGM User -riippuvuuksien asema:** käyttäjän nimenomaisesti luettelemat sallitut riippuvuuskohteet eivät vielä sisällä samantasoista moduuliriippuvuutta. Siksi näitä ei automaattisesti sallita tulkinnalla, vaan mahdollinen poikkeus tarvitsee eksplisiittisen päätöksen. Tämä ei estä saman tason moduuleja käyttämästä yhteistä Core-palvelua.
 
-Existing USER contracts remain the source baseline; these requirements specify **1.9's dependency information**, which must be versioned without silently changing locked source contracts.
+### Riippuvuuden ja käyttöoikeuden ero
 
-| Field / fact | Required meaning |
+**USER MODULE saa olla riippuvainen mistä tahansa**, mutta tämä ei automaattisesti anna sille oikeutta muuttaa SYSTEM-tilaa, kiertää hyväksyntää tai suorittaa mielivaltaisia operaatioita järjestelmäoikeuksin. Manifestin `requires` kertoo **tarpeesta**, ei oikeuden myöntämisestä; valtuutus, effect policy ja palveluiden rajapinnat tarkistetaan erikseen. Näitä ei pidä sekoittaa moduuliriippuvuuksien kerrosrajoihin.
+
+**AIGM USER** ja **USER** ovat kaksi eri riippuvuusluokkaa. Ne eivät ole sama luokka kahdella eri nimellä, vaikka käyttävät yhteistä moduulipakettimallia.
+
+## 3. Riippuvuudet ovat manifestissa — aina
+
+Jokaisella moduulilla, **myös Core-moduulilla**, on oma manifesti, joka ilmoittaa sen suorat riippuvuudet.
+
+Tietosisältövaatimukset (ei vielä lopullinen JSON-skeema):
+
+| Kenttä / tieto | Tarkoitus |
 |---|---|
-| `identity` | stable module id, class/type, origin (SYSTEM/USER/USE/Core), version |
-| `provides` | explicit public interfaces, capabilities or service bindings exposed to consumers |
-| `requires` | direct dependencies by stable identity or a specific declared interface; version constraints and why required |
-| `optional_requires` | explicit condition, feature and behavior when unavailable; cannot import unconditionally |
-| `runtime_requirements` | runtime/API/platform/library/driver availability and target profile |
-| `resources` | required templates, assets, config schema and external bindings |
-| `entrypoints` / `lifecycle` | concrete start/stop/load interfaces; no import-time activation |
-| `capabilities` / `policies` | requested permissions and applicable restrictions; grant is separate |
-| `tests` | tests covering dependency presence, absence, target, interface and denied access |
+| Identiteetti | Vakaa moduulitunniste, versio, riippuvuusluokka ja toiminnallinen tyyppi (command/input/output/adapter/panel...) |
+| `requires` | Kaikki pakolliset **suorat** riippuvuudet: Core API, muu sallittu moduuli, resurssi, palvelu tai ympäristöominaisuus |
+| `optional_requires` | Ehdolliset riippuvuudet, aktivointiehto ja puuttumisen eksplisiittinen käyttäytyminen |
+| `provides` | Julkiset rajapinnat ja capabilityt, joita muut saavat käyttää |
+| `target_requirements` | CPython/MicroPython, firmware, stdlib, ajuri, OS-palvelu, laiteperiferia, resurssibudjetti |
+| `resources` | Tiedostot, Viewt, Panelit, konfiguraatiot, template-/dataresurssit, ulkoiset sidonnat |
+| `entrypoints`, `lifecycle`, `tests` | Lataus, käynnistys, pysäytys ja tarkistukset |
 
-Names above express **required information**, not a prematurely locked literal JSON schema. The specific manifest fields will be mapped to the pre-existing USER `module.json` contract in a versioned change.
+**Core-moduulin ulkoinen runtime-paketti on kielletty,** vaikka se merkittäisiin manifestiin. Kohdealustan sisäänrakennettu API on eri asia kuin erikseen lisättävä kolmannen osapuolen riippuvuus. Alustavaatimukset on silti kirjattava.
 
-### Explicit dependency classes
+Manifestin luokka ratkaisee, mitä riippuvuusreunoja saa olla. Hakemistopolku `system/library/` tai `library/` ei yksin määrää luokkaa eikä oikeuksia. Lähdespesifikaation mahdollinen ero merkitään 1.9:n versioituun manifestisopimukseen; locked-lähdetiedostoja ei muokata hiljaisesti.
 
-- **Required runtime:** execution cannot work without the declared provider.
-- **Conditional optional:** an identified feature may work with a provider, with explicit alternative/disabled behavior and no undeclared imports.
-- **Build-only:** tooling used to construct/validate an artifact, not present in the shipped runtime unless separately selected.
-- **Test-only:** fixture and validation dependency; cannot leak into runtime packages.
-- **Target/platform:** required host services, language APIs, firmware/native modules, devices and resource constraints.
-- **Resource/data:** required files, View declarations, Panel identities, schemas, protocol bindings and configuration.
+## 4. Validointisääntö
 
-A module may list multiple classes, but every direct edge has one clear execution/scope meaning and a declared condition.
+Validaattori käy läpi kaikki moduulit ennen rakentamista ja tarkistaa:
 
-## 3. Resolver/validator behavior
+1. **Manifestin läsnäolo:** moduulilta puuttuva manifesti tai tuntematon riippuvuusluokka → **FAIL**.
+2. **Sallitut reunat:** jokainen `requires`-reuna verrataan yllä olevaan kerrosrajaan → kielletty reuna **FAIL**, vaikka se olisi ilmoitettu.
+3. **Core-moduulien riippumattomuus:** `Core-moduuli → Core-moduuli` suoraan tai transitiivisesti → **FAIL**. `Core-moduuli → CORE.STATE` → sallittu, jos manifestissa ilmoitettu.
+4. **Koko riippuvuusverkko:** riippuvuuksien tarjoajat, identiteetit, versiot, ehdot ja transitiivinen sulkeuma ratkaistaan deterministisesti. Tuntematon tai ristiriitainen tarjoaja → **FAIL**.
+5. **Todellinen käyttö:** staattiset ja ehdolliset importit, palvelukytkennät, tiedostot, resurssit ja käynnistysaikaiset vaikutukset verrataan manifestiin. Ilmoittamaton riippuvuus → **FAIL**.
+6. **Kielletyn riippuvuuden transitiivinen vuoto:** esimerkiksi AIGM User→System→ulkoinen olisi **FAIL** jo System→ulkoinen-reunan vuoksi.
+7. **Alustan tarkistus:** CPython-yhteensopivuus ei kelpaa todistukseksi MicroPython/ESP32-C6-yhteensopivuudesta; kohteen puuttuva ominaisuus → **FAIL**.
+8. **Oikeudet erillään:** moduulin riippuvuuden löytyminen ei anna oikeutta käyttää sen rajapintaa ilman sallittua operation/capability-sidontaa.
+9. **Karsinta:** kohdeartefaktiin sisällytetään vain valittu Core-perusta, valitut moduulit ja niiden eksplisiittiset transitiiviset riippuvuudet ja resurssit.
+10. **Negatiiviset testit:** jokainen kielletty kerrosreuna testataan, mukaan lukien samantasoiset Core-moduulit sekä manifestiin oikein kirjattu mutta **kielletty** ulkoinen riippuvuus.
 
-For requested target T and selected components S:
+### Esimerkkitulokset
 
-1. Read the selected modules' contracts and **all direct edges**, without executing their implementation code.
-2. Validate identities, versions, declared interfaces, capabilities, target/platform constraints and required resources.
-3. Compute deterministic dependency closure `C = closure(S, requires)`; include each transitive edge with its chain of justification.
-4. Reject missing providers, ambiguous providers, incompatible versions, unsupported target features, unexpected cycles, undeclared imports/resources and violations of allowed dependency direction.
-5. Emit a machine-readable dependency report and per-build lock/snapshot. Include **why each component is in the output**.
-6. Build only C plus the explicitly defined Core baseline. No registry scanning at target boot to pull in additional modules.
-7. Validate the actual packaged files/import graph against that resolved closure. Packaging must not add undeclared code implicitly.
+```text
+# -> CORE.STATE                             PASS (manifestissa)
+# -> toinen CORE MODULE                    FAIL
+SYSTEM.osc -> CORE.STATE                   PASS (manifestissa)
+AIGM_USER.panel -> SYSTEM.view_engine      PASS (manifestissa)
+AIGM_USER.example -> external.requests     FAIL
+USER.custom -> external.requests           PASS (manifestissa)
+USER.custom -> external.requests           FAIL (ei manifestissa)
+```
 
-A general-purpose developer-host discovery tool may inventory candidates, but **discovery is not permission, activation or inclusion**.
+## 5. Toteutuksen työjärjestys
 
-## 4. Static and runtime validation gates
+- [ ] Kartoitus: 1.8:n todellinen Core-perusta ja sen palvelut, mukaan lukien `STATE`.
+- [ ] Erota Core-alustan palvelut (`CORE.STATE` jne.) toisistaan riippumattomista Core-moduuleista.
+- [ ] Luokittele `#`:n ja muiden nykyisten symboli-/komentototeutusten omistajuus ja vaaditut Core-rajapinnat.
+- [ ] Lisää joka moduulille eksplisiittinen manifesti ja kerrosluokka.
+- [ ] Toteuta sallittujen reunojen validaattori ennen laajaa siirtotyötä.
+- [ ] Todista Core-moduulien keskinäinen riippumattomuus import-/call-/resurssitestein.
+- [ ] Tarkista SYSTEM- ja AIGM USER -moduulien sulkeumista ulkoiset riippuvuudet.
+- [ ] Todenna vapaan USER-moduulin ulkoisten riippuvuuksien manifesti-, target- ja lupatarkistus.
+- [ ] Todenna regressiot ja ESP32-C6:n valitun komposition todelliset resurssikulut.
 
-| Check | Must demonstrate |
-|---|---|
-| Import edge scan | `import`, `from ... import`, relative imports and resolvable lazy imports map to owned/declarable dependencies; non-statically resolvable imports require an explicitly bounded declaration and corresponding test. |
-| Runtime smoke with absent modules | Minimal Core starts with View Engine, Panel registry, optional adapters/network and Build Engine physically absent. |
-| Import-time effects | No optional service starts or mutates shared state merely because a module was imported. |
-| Negative dependency tests | Required dependency missing, wrong version, missing capability, ambiguous provider and wrong target all **fail visibly**. |
-| Conditional feature tests | Optional providers absent → declared feature disabled/handled with explicit status, never an unnoticed fallback. |
-| Asset and View/Panel binding validation | Every View Panel reference, template/resource path and cross-module binding resolves to a declared provider. |
-| Permission boundary tests | SYSTEM/USER same-name conflict is explicit; no implied privilege escalation or undeclared state mutation. |
-| Artifact inspection | Produced target contains exactly declared Core baseline + resolved modules/assets, not unselected modules or build/test helpers. |
-| Target checks | CPython tests and MicroPython/ESP32-C6 compatibility are separate measured evidence; no false equivalence. |
-
-**Pass rule:** any unresolved/undeclared dependency is a **hard gate (FAIL)**, never a warning for release or a target composition. Reporting an unresolved dependency is not permission to continue using it. A failure may be fixed by declaring and implementing the relation, changing architecture, or removing the dependency — not by disabling the check.
-
-## 5. P0 migration order
-
-- [ ] Scan the entire 1.8 source tree and build an evidence-backed actual import/call/resource/startup graph.
-- [ ] Classify each node as Core infrastructure, SYSTEM module, USER module, USE module, Panel, View, engine or other declared resource.
-- [ ] Identify and remove implicit Core → optional component edges, starting at `system/bootstrap.py`.
-- [ ] Identify cross-module imports and shared helpers; create explicit interface contracts or relocate truly shared mechanisms.
-- [ ] Map existing USER manifest to 1.9 dependency declarations; version the change without modifying the locked source silently.
-- [ ] Build dependency resolver and independent validator for direct and transitive dependency closure.
-- [ ] Add fail-closed validation for undeclared import, undeclared asset, duplicate identity, incompatible target, non-selected module loaded.
-- [ ] Create Minimal Core no-optional-dependencies smoke and test a single Panel + View composition.
-- [ ] Integrate validation as a mandatory gate before migration completion and before every build/release.
-- [ ] Verify resource savings and behavior preservation on real target hardware.
-
-## 6. Boundary reminder
-
-**Declared dependency ≠ automatically selected module.** A valid declaration permits the resolver to explain the required composition; it does not give the module extra authority, require the whole SYSTEM tree, or override the selected target's limits.
-
-**Goal:** at any time, it must be mechanically answerable:
-- **What** does this component depend on?
-- **Why** is that dependency necessary?
-- **Who** provides it?
-- **Where** is it used and activated?
-- **Can** the target run without it?
-- **What** fails if it is absent?
-
-This contract is **not yet enforced in code**. The 1.9 implementation may not be certified as modular or hidden-dependency-free before the tests and reports pass.
+**Hyväksyntä:** ei piiloriippuvuuksia, ei kiellettyjä riippuvuuksia, ei automaattista oikeuksien laajentamista. Sopimuksen kirjautuminen dokumentaatioon ei tarkoita, että 1.8-koodi olisi jo tämän mukainen.
