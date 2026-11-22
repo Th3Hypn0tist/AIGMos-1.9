@@ -13,7 +13,10 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
 - [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
-- [ ] Yhtenäistä SYSTEM-moduulipakettien sijainnit `system/library/{commands,inputs,outputs,adapters,views}/<module_id>/` ja pidä moduulin metadata, koodi, omat templatet ja testit yhdessä.
+- [ ] Päätä UI-moduulin uusi nimi (ehdotus: Widget), erottaen se View-kompositiosta (entinen template).
+- [ ] Versioi USER-moduulien vanhan `type=view`-sopimuksen semanttinen muutos 1.9:ään; älä muuta lähteen locked-sopimusta hiljaisesti.
+- [ ] Yhtenäistä SYSTEM-moduulipakettien sijainnit ehdotettuun `system/library/{commands,inputs,outputs,adapters,widgets}/<module_id>/`-rakenteeseen ja sijoita deklaratiiviset View-määritykset `system/library/views/<view_id>/`-rakenteeseen. Nimi ja tiedostomuoto lukitaan ennen koodisiirtoja.
+- [ ] Erottele View (kokonainen näkymä), Widget (yksittäinen UI-toiminto) ja valinnainen View Engine (runtime) sekä tee vanhoille `layout`, `module`, `.tmpl` ja `view` -nimille migraatiokartta.
 - [ ] Päivitä moduulien discovery, importit, reload, template-resoluutio ja polkuviittaukset hallitusti; todenna regressiot.
 - [ ] Selvitä ja erota Core-/engine-infrastruktuuri varsinaisista SYSTEM-moduuleista. SYSTEM-/USER-identiteetti ei yksin anna runtime-valtuuksia.
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
@@ -36,12 +39,12 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Mittaa C6-laitteella RAM, flash, käynnistys, toimintaviiveet; dokumentoi mittaustapa.
 - [ ] Todenna C6-Minimal Coren hyväksymiskriteerit.
 
-## P1 — LMTS UI → AIGMos View
+## P1 — LMTS UI → AIGMos View Engine / renderer
 
-Edellytys: P0:n SYSTEM-view-paketointirajaus ja template-discovery on toteutettu ja testattu.
+Edellytys: P0:n View/Widget-nimeämisen migraatio ja erilliset moduuli-/View-discoveryt on toteutettu ja testattu.
 
 - [ ] Tarkasta LMTS:n UI-palikan nykyinen koodi ja jo suunniteltu irrotettava rajapinta.
-- [ ] Määritä View-moduulin rajapinta ja riippuvuudet ilman Coreen tehtävää View-sidosta; vertaa USER-view-sopimukseen ja Expose-rajaukseen.
+- [ ] Määritä View-renderöintitoteutuksen rajapinta ilman Coreen tehtävää View-sidosta; sovita se uusiin View/Widget-käsitteisiin ja Expose-rajaukseen.
 - [ ] Integroi LMTS UI yhden View-toteutuksen pohjaksi.
 - [ ] Todenna View'n käynnistys, irrotettavuus ja Core-only-ajon toiminta.
 - [ ] Dokumentoi View-integraation esimerkit ja testit.
