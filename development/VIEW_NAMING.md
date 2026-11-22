@@ -1,19 +1,19 @@
-# AIGMos 1.9 — View, Widget ja View Engine
+# AIGMos 1.9 — View, Panel ja View Engine
 
-**Tila:** nimeämisehdotus, ei vielä lukittu.  
+**Tila:** Panel-nimi ja View/Panel-erottelu vahvistettu; tiedostopääte ja toteutuksen yksityiskohdat vielä avoimia.  
 **Vahvistettu semanttinen suunta:** nykyinen `.tmpl`-template vastaa **View'tä**, ja View muodostuu pienemmistä UI-moduuleista.  
-**Ehdotettu nimi pienelle UI-moduulille:** **Widget**.
+**Vahvistettu nimi pienelle UI-moduulille:** **Panel**.
 
 ## 1. Käsitteet eivät saa mennä päällekkäin
 
 | Uusi käsite | Nykyinen AIGMos 1.8 | Omistaa | Ei omista |
 |---|---|---|---|
-| **View** | `system/library/layout/*.tmpl` | deklaratiivinen UI-rakenne, widgetien yhdistely, järjestys, sidonnat | widgetin toteutuskoodi, rendering runtime |
-| **Widget** (nimiehdotus) | `system/layout/modules/*.py` | yksi rajattu esitys-/vuorovaikutustoiminto, esim. label, list, cs, q, monitor | koko View'n rakenne |
+| **View** | `system/library/layout/*.tmpl` | deklaratiivinen UI-rakenne, panelien yhdistely, järjestys, sidonnat | panelin toteutuskoodi, rendering runtime |
+| **Panel** (valittu nimi) | `system/layout/modules/*.py` | yksi rajattu esitys-/vuorovaikutustoiminto, esim. label, list, cs, q, monitor | koko View'n rakenne |
 | **View Engine** | `system/layout/` | View'n lataus, sidonta, layoutin laskenta, fokuksen/inputin hallinta, renderöintielinkaari | View'n käyttötapauskohtainen sisältö |
 | **View backend/renderer** | 1.8:n TUI-toteutus; tuleva LMTS UI -integraatio | vaihtoehtoinen View Engineen sidottu käyttöliittymätoteutus | CS-/STATE-/TER-semanttiikka |
 
-**Sääntö:** `View = koostumus(Widget[])`. `Widget` on ehdotettu käyttöliittymämoduulin nimi. `View` ei ole yksittäisen widgetin synonyymi. `Layout` viittaa tarvittaessa vain View'n tilalliseen asetteluun, ei erilliseen moduulityyppiin.
+**Sääntö:** `View = koostumus(Panel[])`. `Panel` on ehdotettu käyttöliittymämoduulin nimi. `View` ei ole yksittäisen panelin synonyymi. `Layout` viittaa tarvittaessa vain View'n tilalliseen asetteluun, ei erilliseen moduulityyppiin.
 
 ## 2. Todellinen esimerkki 1.8:sta
 
@@ -23,12 +23,12 @@ Uusi käsitteellinen tulkinta:
 
 ```text
 View: help
-├── Widget: label
-├── Widget: q
-└── Widget: cs
+├── Panel: label
+├── Panel: q
+└── Panel: cs
 ```
 
-Yksi Widget voi olla käytössä useassa View'ssä. Yksi View voi sisältää useita saman Widgetin instansseja. Widget ei saa toista identiteettiä vain siksi, että se esiintyy eri View'ssä.
+Yksi Panel voi olla käytössä useassa View'ssä. Yksi View voi sisältää useita saman Panelin instansseja. Panel ei saa toista identiteettiä vain siksi, että se esiintyy eri View'ssä.
 
 ## 3. Ehdotettu hakemistorakenne
 
@@ -44,18 +44,18 @@ AIGMos-1.9/
 │       ├── inputs/<module_id>/
 │       ├── outputs/<module_id>/
 │       ├── adapters/<module_id>/
-│       ├── widgets/<widget_id>/  # Widgetin koodi + manifesti + testit
-│       └── views/<view_id>/      # deklaratiivinen View, ei widget
+│       ├── panels/<panel_id>/  # Panelin koodi + manifesti + testit
+│       └── views/<view_id>/      # deklaratiivinen View, ei panel
 └── library/                      # USER-puolen vastaava jako
     ├── commands/<module_id>/
     ├── inputs/<module_id>/
     ├── outputs/<module_id>/
     ├── adapters/<module_id>/
-    ├── widgets/<widget_id>/
+    ├── panels/<panel_id>/
     └── views/<view_id>/
 ```
 
-Vanhojen `.tmpl`-tiedostojen muuttaminen `.view`-tiedostoiksi on **nimiehdotus**, ei vielä lukittu tiedostomuotopäätös. View'n sisältö voidaan alkuvaiheessa pitää samana. Ensimmäisenä muutetaan käsitteellinen vastuu ja vasta testien jälkeen tiedostonimet, latauspolut ja mahdolliset skeemat.
+Vanhojen `.tmpl`-tiedostojen muuttaminen `.view`-tiedostoiksi on **valittu nimi**, ei vielä lukittu tiedostomuotopäätös. View'n sisältö voidaan alkuvaiheessa pitää samana. Ensimmäisenä muutetaan käsitteellinen vastuu ja vasta testien jälkeen tiedostonimet, latauspolut ja mahdolliset skeemat.
 
 `views` on tässä **View-määritysten kirjasto**, ei erillinen kuudes primitiivimoduulityyppi.
 
@@ -66,37 +66,37 @@ Aiemmissa, pinnaatuissa 2.0-lähdesopimuksissa viiden tyypin joukko on `command 
 Käyttäjän nyt määrittelemä 1.9-nimimalli **erottaa komposition ja sen toteuttavan pienemmän moduulin**. Siksi mahdollinen uusi viiden **käyttöliittymämoduulin toteutusluokan** joukko olisi:
 
 ```text
-command / input / output / adapter / widget
+command / input / output / adapter / panel
 ```
 
-`view` olisi tällöin **deklaratiivinen kompositio**, ei Widgetin moduuliluokka. Tämä on 1.9:ään ehdotettu **tietoinen skeemamuutos**, ei alkuperäisen locked USER-sopimuksen tämänhetkinen sisältö. Sitä EI saa ottaa käyttöön pelkällä hakemiston uudelleennimeämisellä:
+`view` olisi tällöin **deklaratiivinen kompositio**, ei Panelin moduuliluokka. Tämä on 1.9:ään ehdotettu **tietoinen skeemamuutos**, ei alkuperäisen locked USER-sopimuksen tämänhetkinen sisältö. Sitä EI saa ottaa käyttöön pelkällä hakemiston uudelleennimeämisellä:
 
-- [ ] Päätä onko uusi moduulityyppi `widget` (nimiehdotus).
-- [ ] Määritä uuden `widget`-manifestin sopimus 1.9:n omana versiona, mukaan lukien identiteetti ja näkyvät entrypointit.
+- [ ] Päätä onko uusi moduulityyppi `panel` (valittu nimi).
+- [ ] Määritä uuden `panel`-manifestin sopimus 1.9:n omana versiona, mukaan lukien identiteetti ja näkyvät entrypointit.
 - [ ] Määritä erillinen View-komposition tiedostomuoto ja mahdollinen metadata (ei oleteta `module.json`:ia View'lle).
-- [ ] Tee vanhan `type=view` -moduulisopimuksen eksplisiittinen migraatiokartta: mikä muuttuu Widgetiksi, mikä View-määritykseksi.
+- [ ] Tee vanhan `type=view` -moduulisopimuksen eksplisiittinen migraatiokartta: mikä muuttuu Paneliksi, mikä View-määritykseksi.
 - [ ] Säilytä alkuperäiset pinnaatut lähdesopimukset muuttumattomina. Ero kirjataan 1.9-versiointiin.
 
 **Ei päätetä kuudetta tasavertaista USER-primitiiviä hiljaisesti.** Tavoite on pitää varsinaiset toiminnalliset moduulit järkeistettyinä ja erottaa deklaratiivinen View omaksi kompositioartefaktikseen.
 
 ## 5. UI-renderöinnin riippuvuusrajat
 
-- Minimal Core ei tarvitse View Engineä, Widget-lataajaa eikä LMTS UI:ta.
+- Minimal Core ei tarvitse View Engineä, Panel-lataajaa eikä LMTS UI:ta.
 - P1: LMTS:n UI-palikka toteutetaan **yhdeksi valinnaiseksi View-toteutus-/renderöintiratkaisuksi**, ei itsenäiseksi View-kompositioksi.
-- P2: `|BUILD` on View, joka kokoaa tarvittavia Widgetejä ja käyttää Build Engineä deklaroitujen komentojen/toimintojen kautta.
-- Widget ei saa käyttöoikeutta, CS-komentojen suoritusvaltaa tai mielivaltaisia STATE-kirjoitusoikeuksia pelkän View-sidonnan perusteella.
+- P2: `|BUILD` on View, joka kokoaa tarvittavia Panelejä ja käyttää Build Engineä deklaroitujen komentojen/toimintojen kautta.
+- Panel ei saa käyttöoikeutta, CS-komentojen suoritusvaltaa tai mielivaltaisia STATE-kirjoitusoikeuksia pelkän View-sidonnan perusteella.
 - Expose säilyy erillisenä ulkoisten näkyvyys-/verkkopintojen omistajuusmallina; View-nimen muutos ei määrittele Exposea uudelleen.
 
 ## 6. P0-migraatio ja testit
 
-- [ ] Pinnaa 1.8:n nykyinen View/layout-resolver, loader, templatet ja widgetit.
-- [ ] Inventoi `system/layout/modules/` ja `extensions/layout/modules/` — mitkä ovat itsenäisiä Widgetejä ja mitkä sisäisiä helper-toteutuksia?
+- [ ] Pinnaa 1.8:n nykyinen View/layout-resolver, loader, templatet ja panelit.
+- [ ] Inventoi `system/layout/modules/` ja `extensions/layout/modules/` — mitkä ovat itsenäisiä Panelejä ja mitkä sisäisiä helper-toteutuksia?
 - [ ] Todenna olemassa oleva `help.tmpl`-View ja sen `label`, `q`, `cs`-komponentit regressiotestillä.
-- [ ] Siirrä yksi widget uudelle polulle, säilytä täsmälleen sama näkyvä ja vuorovaikutteinen käytös.
-- [ ] Siirrä muut widgetit; keskitetty discovery korvaa `system/layout/loader.py`:n kovakoodatut moduulipolut.
+- [ ] Siirrä yksi panel uudelle polulle, säilytä täsmälleen sama näkyvä ja vuorovaikutteinen käytös.
+- [ ] Siirrä muut panelit; keskitetty discovery korvaa `system/layout/loader.py`:n kovakoodatut moduulipolut.
 - [ ] Siirrä View-määritykset `views/`-kirjastoon ja päivitä `system/layout/definitions.py`:n resolver hallitusti.
 - [ ] Selvitä ja toteuta `system/layout/` → `system/view/` -rename ilman rikottuja Python-importteja.
 - [ ] Tarkista kaikkien templateiden, dokumenttien, help-teksteiden, testien ja `new |name /view`-komentojen polut.
-- [ ] Todennetaan View- ja Widget-discovery erikseen; Minimal Core ei importoi kumpaakaan, kun View on pois käytöstä.
+- [ ] Todennetaan View- ja Panel-discovery erikseen; Minimal Core ei importoi kumpaakaan, kun View on pois käytöstä.
 
-**Koodimigraatio ei ole alkanut:** tämä on nimet ja omistajuudet selkeyttävä 1.9-kehitysehdotus.
+**Koodimigraatio ei ole alkanut:** View/Panel-nimet on vahvistettu, mutta toteutus ja manifestisopimuksen muutos ovat vielä avoimia.
