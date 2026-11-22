@@ -1,0 +1,239 @@
+{
+  "format": {
+    "contract_format": "AIGMOS_DEVELOPMENT_CONTRACT",
+    "format_version": "0.2.0",
+    "ccf_cw_validated": false
+  },
+  "identity": {
+    "id": "AIGMOS_1_9_SOURCE_DEPENDENCY_HEADER",
+    "name": "AIGMos 1.9 — Source Dependency Header",
+    "type": "development_contract",
+    "version": "0.2.0"
+  },
+  "status": "unlocked",
+  "purpose": "Define three mandatory source-file header lines (deps, libs, target), with a single shared source of truth for code dependency declarations and platform compatibility. Enable target-safe Build Tool pruning and CW import.",
+  "scope": {
+    "applies_to": "Every AIGMos 1.9 source code file, INCLUDING Hardcore, Core Modules, System Lib, System Modules, EXPOSE implementations, AIGM User Modules and User Modules.",
+    "excludes": "No source-code category exemption; exceptions for shebang/encoding/generated code remain OPEN.",
+    "owns": [
+      "direct dependency declaration syntax",
+      "deps versus libs classification",
+      "source-file provenance",
+      "scanner extraction semantics",
+      "target compatibility tag and its selection semantics"
+    ],
+    "does_not_own": [
+      "permission grants",
+      "runtime authorization",
+      "module lifecycle/identity",
+      "CW canonical link authority"
+    ]
+  },
+  "source_header": {
+    "location": "At the beginning of the source file, before imports and executable declarations.",
+    "canonical_python_lines": [
+      "# deps: []",
+      "# libs: []",
+      "# target: MP"
+    ],
+    "order": [
+      "deps",
+      "libs",
+      "target"
+    ],
+    "value_format": "deps/libs: JSON arrays of identifier strings; target: literal MP or CP",
+    "fields": {
+      "deps": {
+        "required": true,
+        "empty_allowed": true,
+        "meaning": "Only the dependencies on modules and Hardcore interfaces used directly by this file.",
+        "kind": "direct_module_or_interface"
+      },
+      "libs": {
+        "required": true,
+        "empty_allowed": true,
+        "meaning": "Only libraries, including System Lib, used directly by this file.",
+        "kind": "direct_library"
+      },
+      "target": {
+        "required": true,
+        "meaning": "MP means compatible with both MicroPython and CPython. CP means CPython-only extended implementation.",
+        "kind": "platform_compatibility",
+        "allowed": [
+          "MP",
+          "CP"
+        ],
+        "default": "none; missing is an error",
+        "format": "single unquoted uppercase token"
+      }
+    },
+    "declaration_rules": [
+      "Both lines are always present, even when either or both lists are empty.",
+      "Only direct/immediate dependencies are declared; do not repeat indirect/transitive dependencies.",
+      "If a file uses a transitive dependency directly as well, declare that use explicitly.",
+      "deps and libs are separate and must not be interchanged.",
+      "Use stable dependency identifiers rather than filename/path inference.",
+      "Duplicate IDs or misclassified dependencies are errors.",
+      "No implicit authority or permission is granted by a declaration.",
+      "Every source file, including Hardcore files, declares all three headers; deps/libs may be empty.",
+      "target=MP is a compatibility claim for BOTH MP and CP. target=CP is a claim for CP only.",
+      "Never emit MP/CP as a value: use MP for shared code."
+    ],
+    "invalid_cases": [
+      "missing deps or libs line",
+      "non-array or malformed JSON value",
+      "non-string array entry",
+      "duplicate dependency",
+      "unregistered ID",
+      "dependency in wrong category",
+      "undeclared direct dependency",
+      "forbidden dependency edge",
+      "missing target header",
+      "unknown target or target=MP/CP",
+      "MP-target source directly or transitively depending on CP-only code"
+    ]
+  },
+  "examples": [
+    {
+      "name": "Empty valid header",
+      "header": "# deps: []\n# libs: []\n# target: MP",
+      "meaning": "Either or both arrays may be empty."
+    },
+    {
+      "name": "EXP (System Lib)",
+      "header": "# deps: [\"HC.CS\"]\n# libs: []\n# target: MP",
+      "direct_edges": [
+        "EXP -> HC.CS"
+      ]
+    },
+    {
+      "name": "REST Expose module using EXP",
+      "header": "# deps: []\n# libs: [\"EXP\"]\n# target: MP",
+      "direct_edges": [
+        "REST -> EXP"
+      ],
+      "derived_not_declared": [
+        "REST -> HC.CS via EXP"
+      ]
+    },
+    {
+      "name": "REST also using CS directly",
+      "header": "# deps: [\"HC.CS\"]\n# libs: [\"EXP\"]\n# target: MP",
+      "meaning": "Direct CS use is declared even though EXP itself requires CS."
+    },
+    {
+      "name": "CP-only extension",
+      "header": "# deps: [\"HC.CS\"]\n# libs: []\n# target: CP",
+      "meaning": "Added functionality for CP only. No parallel duplicate of the shared MP implementation."
+    }
+  ],
+  "dependency_graph": {
+    "collection": "Read every source file once and extract all three fields with file provenance. Build typed direct-dependency graph and platform compatibility data in memory.",
+    "direct_edge_types": {
+      "deps": "module_or_HC_interface",
+      "libs": "library"
+    },
+    "resolution": "Resolve IDs from the dependency registry and validate source classification and allowed dependency classes.",
+    "closure": "Compute transitive dependency closure after source collection; derived edges are not copied into source headers.",
+    "checks": [
+      "missing and duplicate declarations",
+      "unknown/misclassified targets",
+      "forbidden dependency classes",
+      "cycles where prohibited",
+      "target compatibility",
+      "manifest and real-code dependency consistency",
+      "permissions separately from dependency graph",
+      "transitive target eligibility for selected target MP/CP",
+      "mandatory header on Hardcore sources",
+      "prune unselected CP extensions even when build target is CP"
+    ],
+    "source_of_truth": "The file header is the authority for declared code-level dependencies. Module manifest may include generated/validated dependency projections but must not duplicate independent, conflicting requires data.",
+    "cw_import": "CW importer may map direct typed edges with source-file provenance into StructureTree; it must mark closure edges derived rather than declared.",
+    "target_rules": {
+      "build_target_MP": "Only source files tagged MP and their MP-eligible transitive closure.",
+      "build_target_CP": "Source files tagged MP plus ONLY explicitly selected/required CP extensions and their closure.",
+      "shared_implementation": "MP is the single shared implementation; CP extends it rather than defining a second competing implementation.",
+      "cs_interface": "Same CS command syntax and semantics for both targets; unavailable capability returns an explicit failure when addressed."
+    },
+    "pruning": {
+      "confirmed": "Build Tool removes every unneeded selected-feature component and exclusive dependency. NON-AC build removes AC implementation and its CS-hook code from the generated output.",
+      "unresolved": "Exact pruning granularity and source-level conditional annotation syntax are not decided; do not assert arbitrary Python AST rewriting as locked."
+    }
+  },
+  "architectural_classification": {
+    "hardcore": [
+      "INPUT",
+      "STATE",
+      "TER",
+      "CS",
+      "EXPOSE"
+    ],
+    "core_modules": "Optional modules distinct from System Lib.",
+    "system_lib": "Reusable library code, a separate class from Core Modules and System Modules.",
+    "exp": "EXP is optional System Lib, directly dependent on HC.CS.",
+    "rest": "REST is an optional Expose module requiring EXP; a consumer need not repeat EXP's HC.CS dependency."
+  },
+  "unresolved": [
+    {
+      "id": "HDR-001",
+      "status": "open",
+      "topic": "Stable identifier registry and optional version requirements"
+    },
+    {
+      "id": "HDR-002",
+      "status": "open",
+      "topic": "Other-language comment delimiters; Python '# ' form is defined"
+    },
+    {
+      "id": "HDR-003",
+      "status": "open",
+      "topic": "Header placement exceptions for shebang/encoding/generated files"
+    },
+    {
+      "id": "HDR-004",
+      "status": "open",
+      "topic": "Conditional/optional dependency syntax, if needed"
+    },
+    {
+      "id": "HDR-005",
+      "status": "open",
+      "topic": "System Lib permitted edge classes and cyclic dependency policy"
+    },
+    {
+      "id": "HDR-006",
+      "status": "open",
+      "topic": "Reconcile old module.json requires-SSOT wording in development/DEPENDENCY_RULES.md"
+    },
+    {
+      "id": "HDR-007",
+      "status": "open",
+      "topic": "Exact optional/conditional source block annotation used to remove AC hook in NON-AC build without a duplicate CS implementation"
+    },
+    {
+      "id": "HDR-008",
+      "status": "open",
+      "topic": "How to validate cooperative-command suitability beyond declarations and imports"
+    }
+  ],
+  "references": [
+    {
+      "name": "1.9 decisions",
+      "path": "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json"
+    },
+    {
+      "name": "Prior dependency rules needing reconciliation",
+      "path": "development/DEPENDENCY_RULES.md"
+    },
+    {
+      "name": "CW standards for later formalization",
+      "names": [
+        "Canonical_Contract_Format_v2.4.2",
+        "CanonicalWireframe_NodeTypes_v1.15.1",
+        "CanonicalWireframe_Dependency_Rules_v3.11.0"
+      ],
+      "note": "No CW/CCF validation has been claimed"
+    }
+  ],
+  "supersedes": "developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.1.0.json",
+  "change_note": "v0.2.0 adds target MP/CP to every source file, including Hardcore; v0.1.0 two-line/exclusion rules are superseded. Source/validator implementation not claimed."
+}
