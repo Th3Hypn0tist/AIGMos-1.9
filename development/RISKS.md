@@ -19,6 +19,10 @@ Riskit on asetettu järjestykseen vaikutuksen perusteella. Korkea tarkoittaa ens
 | R-09 | **Keskisuuri, jaetut resurssit** | Sama template/Panel voi olla monen View'n käytössä; kopiointi joka View-pakettiin synnyttää versioeroja. | `system/library/layout/*.tmpl` viittaa samoihin `<label>`, `<q>`, `<cs>`-elementteihin. | Panel-rekisteri yhteiseksi, View viittaa Panel-identiteetteihin. Yksi omistaja ja versio per jaettu Panel, ei koodin klooneja. |
 | R-10 | **Keskisuuri, näkyvyysrajat** | TUI View / Panel / renderer ja Expose (nanoCMS + NetworkService) voivat sekoittua 'kaikki näkyvä = web' -tulkinnaksi. | Lähteen Expose-sopimus koskee ulospäin projisoituja human/web/network-pintoja; 1.8:n View on paikallinen terminal/runtime-rakenne. | Dokumentoi, milloin View renderöidään paikallisena TUI:na ja milloin sen sisältö julkaistaan Expose-rajapinnan kautta. Expose ei saa tuoda web-/verkko-riippuvuutta Minimal Coreen. |
 
+## Ehdoton sääntö: nolla piiloriippuvuutta
+
+Yksikään tässä dokumentissa tunnistettu implisiittinen riippuvuus ei saa jäädä tuotantoon. Ennen kuin 1.9:n modularisointia voidaan pitää valmiina, kaikki koodi-, konfiguraatio-, tiedosto-, palvelu- ja alusta-riippuvuudet täytyy deklaroida, ratkaista transitiivisesti ja vahvistaa todellista import-/paketointigraafia vasten. **Tuntematon tai ilmoittamaton riippuvuus = FAIL.** Katso [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
+
 ## Välittömät etenemisportit
 
 1. **Sopimusportti:** View vs. Panel vs. renderer + USER-lähteen `type=view` ratkaistu eksplisiittisesti, ilman uusia implisiittisiä moduulityyppejä.
