@@ -2,15 +2,23 @@
 
 Tilat: `[ ]` avoin · `[x]` toteutettu ja todennettu. Tehtäviä ei kuitata valmiiksi pelkän suunnitelman perusteella.
 
+## Aktiivinen työ: AIGMos 1.8:n optimointi ja modularisointi
+
+P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhempinä vaiheina.
+
 ## P0 — Minimal Core, ensin
 
 - [ ] Hanki/tarkasta AIGMos 1.8:n lähtökoodi ja määritä siirrettävä lähtöversio.
+- [ ] Kirjaa 1.8:n nykyiset käyttäytymiset, käytössä olevat komennot, rajapinnat ja regressiotestien lähtötaso.
+- [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
 - [ ] Erottele pakolliset Core-toiminnot: INPUT, STATE, TER, CS, Runnerin `&`.
 - [ ] Luokittele muu toiminnallisuus valinnaiseksi USE- tai USER-moduuliksi; kirjaa perustelut.
 - [ ] Selvitä `#`-rakenteisen puutilan ja `&`-rutiinien toteutusriippuvuudet; `&` pysyy Coressa.
 - [ ] Irrota Full View, valinnaiset palvelut ja ylimääräiset paketit Coresta.
+- [ ] Tunnista todelliset muistia, koodikokoa ja käynnistystä kuormittavat rakenteet; optimoi vain havaittujen ongelmien perusteella.
+- [ ] Todenna, että refaktorointi säilyttää sovitut 1.8-käyttäytymiset tai dokumentoi eksplisiittiset muutokset.
 - [ ] Varmista, ettei Core importoi Build Engineä, Full View'tä tai USER-moduuleja.
 - [ ] Määritä minimaalisen STATE:n datamalli, rekisteröinti ja elinkaari.
 - [ ] Määritä INPUT-moduulin suora STATE-päivitys ilman CS-parseria.
@@ -52,6 +60,5 @@ Tilat: `[ ]` avoin · `[x]` toteutettu ja todennettu. Tehtäviä ei kuitata valm
 
 ## Ei tässä vaiheessa
 
-- AIGMos 2.0:n kaikkien metamoduulien toteutus.
 - LLM:n vaatimus ohjausketjuun.
 - Build Engine tai Full View pakollisena sulautetussa Core-runtimeympäristössä.
