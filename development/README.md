@@ -11,6 +11,8 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 - [SYSTEM_MODULES.md](SYSTEM_MODULES.md) — 1.8:n hajallaan olevien SYSTEM-moduulien yhtenäistämis- ja migraatiomalli
 - [VIEW_NAMING.md](VIEW_NAMING.md) — View on kompositio; nykyisille View-moduuleille valittu nimi Panel sekä migraatiokysymykset
 
+- [RISKS.md](RISKS.md) — 1.8-lähdekoodista tunnistetut modularisoinnin riskit ja migraation estoehdot
+
 ## Roadmap (järjestys)
 
 1. **1.8 → optimoitu Minimal Core / ESP32-C6:** kartoitetaan 1.8:n nykyinen toiminta, riippuvuudet ja resurssikulutus; modularisoidaan ylimääräinen toiminnallisuus irti Coresta ja optimoidaan mitattujen pullonkaulojen perusteella, kunnes minimi toimii ESP32-C6-N16:lla.
