@@ -13,7 +13,7 @@
 | **View Engine** | `system/layout/` | View'n lataus, sidonta, layoutin laskenta, fokuksen/inputin hallinta, renderöintielinkaari | View'n käyttötapauskohtainen sisältö |
 | **View backend/renderer** | 1.8:n TUI-toteutus; tuleva LMTS UI -integraatio | vaihtoehtoinen View Engineen sidottu käyttöliittymätoteutus | CS-/STATE-/TER-semanttiikka |
 
-**Sääntö:** `View = koostumus(Panel[])`. `Panel` on ehdotettu käyttöliittymämoduulin nimi. `View` ei ole yksittäisen panelin synonyymi. `Layout` viittaa tarvittaessa vain View'n tilalliseen asetteluun, ei erilliseen moduulityyppiin.
+**Sääntö:** `View = koostumus(Panel[])`. `Panel` on vahvistettu käyttöliittymämoduulin nimi. `View` ei ole yksittäisen panelin synonyymi. `Layout` viittaa tarvittaessa vain View'n tilalliseen asetteluun, ei erilliseen moduulityyppiin.
 
 ## 2. Todellinen esimerkki 1.8:sta
 
@@ -55,7 +55,7 @@ AIGMos-1.9/
     └── views/<view_id>/
 ```
 
-Vanhojen `.tmpl`-tiedostojen muuttaminen `.view`-tiedostoiksi on **valittu nimi**, ei vielä lukittu tiedostomuotopäätös. View'n sisältö voidaan alkuvaiheessa pitää samana. Ensimmäisenä muutetaan käsitteellinen vastuu ja vasta testien jälkeen tiedostonimet, latauspolut ja mahdolliset skeemat.
+Vanhojen `.tmpl`-tiedostojen muuttaminen `.view`-tiedostoiksi on **avoin ehdotus**, ei vielä lukittu tiedostomuotopäätös. View'n sisältö voidaan alkuvaiheessa pitää samana. Ensimmäisenä muutetaan käsitteellinen vastuu ja vasta testien jälkeen tiedostonimet, latauspolut ja mahdolliset skeemat.
 
 `views` on tässä **View-määritysten kirjasto**, ei erillinen kuudes primitiivimoduulityyppi.
 
@@ -71,7 +71,7 @@ command / input / output / adapter / panel
 
 `view` olisi tällöin **deklaratiivinen kompositio**, ei Panelin moduuliluokka. Tämä on 1.9:ään ehdotettu **tietoinen skeemamuutos**, ei alkuperäisen locked USER-sopimuksen tämänhetkinen sisältö. Sitä EI saa ottaa käyttöön pelkällä hakemiston uudelleennimeämisellä:
 
-- [ ] Päätä onko uusi moduulityyppi `panel` (valittu nimi).
+- [x] UI-komponenttimoduulin nimeksi on valittu `panel` (nimeämispäätös; manifestimuutos ei vielä tehty).
 - [ ] Määritä uuden `panel`-manifestin sopimus 1.9:n omana versiona, mukaan lukien identiteetti ja näkyvät entrypointit.
 - [ ] Määritä erillinen View-komposition tiedostomuoto ja mahdollinen metadata (ei oleteta `module.json`:ia View'lle).
 - [ ] Tee vanhan `type=view` -moduulisopimuksen eksplisiittinen migraatiokartta: mikä muuttuu Paneliksi, mikä View-määritykseksi.
