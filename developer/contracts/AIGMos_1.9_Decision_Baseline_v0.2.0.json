@@ -1,0 +1,426 @@
+{
+  "document_type": "AIGMOS_1_9_ARCHITECTURE_DECISION_BASELINE",
+  "document_version": "0.2.0",
+  "date": "2026-11-22",
+  "status": "unlocked",
+  "source_role": "development_decision_registry",
+  "authority": "User-confirmed architecture decisions and explicit open items; not an immutable validated canonical contract.",
+  "applicable_to": "AIGMos 1.9 development",
+  "supersedes_no_locked_spec": true,
+  "scope": {
+    "purpose": "Versioned architecture decisions including the file-local two-line deps/libs contract; prior 0.1.0 remains historical.",
+    "not_a_claim_of": [
+      "CCF 2.4.2 validation",
+      "CW NodeTypes 1.15.1 readiness",
+      "CW Dependency Rules 3.11.0 compliance",
+      "immutable specification status",
+      "conformance to unchanged AIGMos 2.0 REST contracts"
+    ]
+  },
+  "decisions": [
+    {
+      "id": "A19-001",
+      "topic": "Identity",
+      "decision": "AIGM is a platform-independent standard; AIGMos 1.9 is its technical implementation/reference. MicroPython support is an AIGMos implementation target, not a condition of AIGM standard conformance.",
+      "notes": []
+    },
+    {
+      "id": "A19-002",
+      "topic": "Baseline",
+      "decision": "Build AIGMos 1.9 by modularizing and optimizing the existing AIGMos 1.8. Preserve working semantics where applicable; avoid unconditional rewrites.",
+      "notes": []
+    },
+    {
+      "id": "A19-003",
+      "topic": "Development order",
+      "decision": "Hardcore → Core Modules → System Modules → Build Tool → ESP32-C6 Build.",
+      "notes": []
+    },
+    {
+      "id": "A19-004",
+      "topic": "Hardware target",
+      "decision": "Reference constrained target: ESP32-C6-N16 without PSRAM; all mandatory Hardcore source must be compatible with MicroPython. Run constrained target-profile composition on PC with explicit hardware adapters.",
+      "notes": []
+    },
+    {
+      "id": "A19-005",
+      "topic": "Hardcore membership",
+      "decision": "Exactly five named Hardcore mechanisms: INPUT, STATE, TER, CS and EXPOSE. EXP, REST transport, standalone UI, structured tables, IAM and AccessCore are not additional mandatory Hardcore mechanisms.",
+      "notes": []
+    },
+    {
+      "id": "A19-006",
+      "topic": "Input contract",
+      "decision": "INPUT has a narrowly scoped write-only gateway into STATE under $I or #I as selected by config.json. INPUT cannot read STATE or invoke CS.",
+      "notes": []
+    },
+    {
+      "id": "A19-007",
+      "topic": "STATE boundaries",
+      "decision": "STATE is not a public API. General reads/writes and other STATE operations go through CS. Only INPUT has the dedicated restricted write gateway; MEM is default and FILE persistence is explicit.",
+      "notes": []
+    },
+    {
+      "id": "A19-008",
+      "topic": "TER membership",
+      "decision": "Trigger !, Event @ and Runner % are one Hardcore TER mechanism. & denotes ordered CS routines/lists executed through CSi; the three TER stages are not separate Core Modules.",
+      "notes": []
+    },
+    {
+      "id": "A19-009",
+      "topic": "TER access",
+      "decision": "TER reads STATE via CS, not via a public STATE API. TER drives command execution through CSi and does not directly mutate STATE.",
+      "notes": []
+    },
+    {
+      "id": "A19-010",
+      "topic": "Trigger predicates",
+      "decision": "Trigger-condition expressions are TER-specific predicates, independent from EXP. Preserve/optimize the existing trigger expression capability rather than conflating the two expression systems.",
+      "notes": []
+    },
+    {
+      "id": "A19-011",
+      "topic": "CS responsibility",
+      "decision": "CS owns CSi/CSo, command parsing, registry, dispatch and STATE access. Its initial command surface is limited to what the runtime/TER/module use cases require; do not carry over the complete legacy command set merely for compatibility.",
+      "notes": []
+    },
+    {
+      "id": "A19-012",
+      "topic": "AccessCore integration",
+      "decision": "CS may have an optional AccessCore authorization hook; no mandatory IAM/AccessCore dependency in Hardcore. Independent structural/module write restrictions remain mandatory.",
+      "notes": []
+    },
+    {
+      "id": "A19-013",
+      "topic": "Expose responsibility",
+      "decision": "EXPOSE owns interface bindings. Serial, Telnet, HTTP/REST and OSC are optional transports/implementations selected by build and configuration; no mandatory external listener stack in Hardcore.",
+      "notes": []
+    },
+    {
+      "id": "A19-014",
+      "topic": "OSC Expose placement",
+      "decision": "OSC input/output belongs under EXPOSE, configured in config.json.expose; it is not a top-level mandatory osc setting. OSC is an Expose interface even for incoming OSC.",
+      "notes": []
+    },
+    {
+      "id": "A19-015",
+      "topic": "Headless/Expose-less runtime",
+      "decision": "After PC-based configuration it must be possible to remove EXPOSE transports and all dependencies exclusive to them; a valid deployed target may run with no externally exposed interfaces.",
+      "notes": []
+    },
+    {
+      "id": "A19-016",
+      "topic": "Configuration file",
+      "decision": "Keep config.json as the root configuration file; do not introduce boot.config. Remove old common boot keys role, layout and AI/Q-specific configuration. Precise 1.9 configuration schema is not yet locked.",
+      "notes": []
+    },
+    {
+      "id": "A19-017",
+      "topic": "Core Module dependency",
+      "decision": "Core Modules may depend on allowed Hardcore interfaces (e.g. HC.CS), not direct private STATE access; Core Module → Core Module remains forbidden.",
+      "notes": []
+    },
+    {
+      "id": "A19-018",
+      "topic": "System Module dependency",
+      "decision": "System Modules may depend on Hardcore and permitted Core Modules; direct System→System imports/dependencies are NOT yet authorized by a final decision.",
+      "notes": []
+    },
+    {
+      "id": "A19-019",
+      "topic": "User Module dependency",
+      "decision": "AIGM User Modules use Core/System facilities without external dependencies. Other User Modules may have external dependencies if explicitly declared and policy-compliant.",
+      "notes": []
+    },
+    {
+      "id": "A19-020",
+      "topic": "Explicit dependency closure",
+      "decision": "Zero hidden dependencies. Source-file headers, not an independently maintained manifest requires list, declare immediate code dependencies; validate derived transitive closure and actual imports, runtime references, target support and rights independently.",
+      "notes": []
+    },
+    {
+      "id": "A19-021",
+      "topic": "Structured data optional",
+      "decision": "The # structured tree/table facility is not mandatory Hardcore. A Core Module tentatively named structured can supply it; this is not the separate Structure inspection application.",
+      "notes": []
+    },
+    {
+      "id": "A19-022",
+      "topic": "Module primitives",
+      "decision": "The five AIGMos 1.9 functional module primitives are command, input, output, adapter and panel. This is a versioned 1.9 adaptation of relevant 2.0 module contracts.",
+      "notes": []
+    },
+    {
+      "id": "A19-023",
+      "topic": "Views and Panels",
+      "decision": "View is declarative composition of Panels, not a sixth primitive. Panel replaces the former small UI View primitive; legacy .tmpl is conceptually a View composition.",
+      "notes": []
+    },
+    {
+      "id": "A19-024",
+      "topic": "2.0 contract preservation",
+      "decision": "Never silently modify locked AIGMos 2.0 canonical contracts. Adapt semantics through explicitly versioned 1.9 contracts and document differences.",
+      "notes": []
+    },
+    {
+      "id": "A19-025",
+      "topic": "EXP classification",
+      "decision": "EXP is a nonmandatory System Lib, NOT Hardcore, NOT Core Module. EXP uses CS, with no independent parser, dispatcher or mandatory table engine.",
+      "notes": []
+    },
+    {
+      "id": "A19-026",
+      "topic": "EXP namespaces",
+      "decision": "The ? namespace provides dynamic EXP evaluation results. Definitions are stored elsewhere; ? itself is not the definitions storage location.",
+      "notes": []
+    },
+    {
+      "id": "A19-027",
+      "topic": "EXP definition source",
+      "decision": "Legacy EXP definitions at #EXP must no longer be required. Config.json selects a definition source/adapter/path; exact JSON shape and source backend remain unresolved.",
+      "notes": []
+    },
+    {
+      "id": "A19-028",
+      "topic": "EXP evaluation",
+      "decision": "Resolve an exact named definition, validate it, pass its CS command text through the existing CS execution path, and expose CSo result through ?. Missing definitions are not resolved by implicit ancestor/descendant lookup.",
+      "notes": []
+    },
+    {
+      "id": "A19-029",
+      "topic": "EXP return contract",
+      "decision": "The supplied expressions.py wrapper returns bool for found/executed; this is not the expression's data result. AIGMos 1.9 must explicitly bind a returned value/result through CSo.",
+      "notes": []
+    },
+    {
+      "id": "A19-030",
+      "topic": "EXP reduced scope",
+      "decision": "Do not include full-#-table processing, spreadsheet-style operations or heavy table pipelines in the minimal 1.9 EXP.",
+      "notes": []
+    },
+    {
+      "id": "A19-031",
+      "topic": "EXP effect boundaries",
+      "decision": "Normal EXP evaluation is read/compute/result-oriented. CS needs an explicit restricted execution/effect context for EXP, rather than assuming direct parser.parse enforces pure-read semantics.",
+      "notes": []
+    },
+    {
+      "id": "A19-032",
+      "topic": "REST symbol mapping",
+      "decision": "REST GET response mapping remains ?REST:<path>, NOT $REST:<path>. The user's $REST proposal was explicitly corrected; $REST is not part of the agreed result mapping.",
+      "notes": []
+    },
+    {
+      "id": "A19-033",
+      "topic": "REST GET",
+      "decision": "GET /rest/<path> validates path, evaluates ?REST:<path> using EXP/CS evaluation and returns the result. GET is read-only with respect to STATE.",
+      "notes": []
+    },
+    {
+      "id": "A19-034",
+      "topic": "REST $ mode",
+      "decision": "REST has a $ mode: GET-only; POST is not offered. This mode must be buildable without the optional # structured facility.",
+      "notes": []
+    },
+    {
+      "id": "A19-035",
+      "topic": "REST # mode",
+      "decision": "REST has a # mode: GET plus POST. POST writes validated JSON request data to the route-derived #REST:<path> state, then may evaluate/return ?REST:<path> if a response is configured.",
+      "notes": []
+    },
+    {
+      "id": "A19-036",
+      "topic": "REST optional POST response",
+      "decision": "For AIGMos 1.9 the response after # mode POST is optional. This intentionally differs from the original 2.0 WEB_REST missing-response rule, which specifies REST_RESPONSE_NOT_FOUND or configurable rejection; document as a 1.9 versioned contract divergence.",
+      "notes": []
+    },
+    {
+      "id": "A19-037",
+      "topic": "REST safety and Expose",
+      "decision": "REST is an optional Expose HTTP interface and a deterministic symbol mapping, not an endpoint-definition framework, arbitrary CS parser proxy, dynamic route registrar, shell or command selector from request bodies.",
+      "notes": []
+    },
+    {
+      "id": "A19-038",
+      "topic": "REST dependency selection",
+      "decision": "Build Tool must not pull # structured code into a $-only REST target. Expose REST capability and $/# mode selection are configuration/profile concerns; precise field names and granularity remain open.",
+      "notes": []
+    },
+    {
+      "id": "A19-039",
+      "topic": "Build Tool architectural position",
+      "decision": "Build Tool is an AIGMos System View |BUILD composed of Panels and System commands/functions, not a separate mandatory architecture layer or engine. It uses the same CS, module registry and dependency model.",
+      "notes": []
+    },
+    {
+      "id": "A19-040",
+      "topic": "Builder self-composition",
+      "decision": "An AIGMos instance containing the Builder builds another AIGMos target composition from its own available modules; target build may optionally include Builder when target compatibility allows.",
+      "notes": []
+    },
+    {
+      "id": "A19-041",
+      "topic": "Build-before-config sequence",
+      "decision": "Build the C6-target source composition first; run that composition on PC; configure the TARGET instance through temporary Expose; write target config.json and FILE-backed TER definitions; optionally strip Expose and validate; deploy to C6.",
+      "notes": []
+    },
+    {
+      "id": "A19-042",
+      "topic": "PC-hosted target profile",
+      "decision": "The C6-target source composition must be runnable on a PC with explicit host shims for hardware-bound modules. This does not mean running a C6 MicroPython firmware binary under CPython.",
+      "notes": []
+    },
+    {
+      "id": "A19-043",
+      "topic": "Strip semantics",
+      "decision": "Stripping Expose removes transport code and exclusive dependencies, not merely config.enabled. Rerun closure/command-reference checks after stripping; preserve target behavior unrelated to interfaces.",
+      "notes": []
+    },
+    {
+      "id": "A19-044",
+      "topic": "Persistence for TER",
+      "decision": "Persist TER definitions written during PC configuration via FILE and restore them deterministically before enabling trigger execution on-device. Restore must not create accidental trigger firing.",
+      "notes": []
+    },
+    {
+      "id": "A19-045",
+      "topic": "Manifest and boot closure",
+      "decision": "Validate dependencies from persisted TER/CS command references, adapters and capabilities in addition to direct manifest imports and target compatibility.",
+      "notes": []
+    },
+    {
+      "id": "A19-046",
+      "topic": "2.0 REST reference semantics",
+      "decision": "Original AIGMos 2.0 WEB_REST: GET /rest/<path> → ?REST:<path>; POST /rest/<path> → #REST:<path> then ?REST:<path>. Keep this explicitly distinguished from new 1.9 $/# REST modes.",
+      "notes": []
+    },
+    {
+      "id": "A19-047",
+      "topic": "Change-control rule",
+      "decision": "Status remains unlocked until a compatible complete contract is validated. No claim of immutable specification or automatic lock may be made based solely on documenting these decisions.",
+      "notes": []
+    },
+    {
+      "id": "A19-048",
+      "topic": "Mandatory two-line dependency headers",
+      "decision": "Every non-Hardcore source-code file starts with '# deps: []' and '# libs: []', both mandatory, each containing a JSON array of identifiers. Both arrays may be empty.",
+      "notes": []
+    },
+    {
+      "id": "A19-049",
+      "topic": "Typed direct dependencies",
+      "decision": "'deps' declares only directly used modules and Hardcore interfaces; 'libs' declares only directly used libraries (including System Lib). Do not conflate the two categories.",
+      "notes": []
+    },
+    {
+      "id": "A19-050",
+      "topic": "No transitive duplication",
+      "decision": "Declare only immediate dependencies; REST declaring EXP in libs does not declare EXP's HC.CS dependency unless REST directly uses CS itself.",
+      "notes": []
+    },
+    {
+      "id": "A19-051",
+      "topic": "Source dependency SSOT",
+      "decision": "Source headers are the source of truth for code dependency declarations. Module manifests may contain generated/validated projections but not a competing manually-maintained requires list.",
+      "notes": []
+    },
+    {
+      "id": "A19-052",
+      "topic": "Single source scan",
+      "decision": "A scanner can extract every source header in one pass, then compute and validate dependency closure in memory for Build Tool and later CW code import, preserving declared edge provenance versus derived edges.",
+      "notes": []
+    },
+    {
+      "id": "A19-053",
+      "topic": "System Lib separate class",
+      "decision": "Core Modules and System Lib are separate architectural categories; EXP belongs to System Lib and REST is an Expose module requiring EXP.",
+      "notes": []
+    },
+    {
+      "id": "A19-054",
+      "topic": "Config-selected INPUT namespace",
+      "decision": "The restricted INPUT write destination is $I or #I as selected via config.json; #I requires the structured facility when selected.",
+      "notes": []
+    }
+  ],
+  "open_decisions": [
+    {
+      "id": "OPEN-001",
+      "area": "STATE",
+      "question": "Private STATE interfaces, CS-mediated general state operations, restricted INPUT write gateway and config-selected $I/#I, adapter routes and FILE persistence."
+    },
+    {
+      "id": "OPEN-002",
+      "area": "TER",
+      "question": "Queue/event loop, timing, onchange/edge semantics, bounded backpressure, reentry/cycle detection, restart/resume."
+    },
+    {
+      "id": "OPEN-003",
+      "area": "CS",
+      "question": "Minimum commands, ABI, compatible legacy parser subset, CSo response channel, EXP restricted execution context."
+    },
+    {
+      "id": "OPEN-004",
+      "area": "config.json",
+      "question": "Exact schema for runtime profile, expose bindings and REST $/# mode selection; service-level vs route-level mode."
+    },
+    {
+      "id": "OPEN-005",
+      "area": "EXP",
+      "question": "Exact configurable definition source adapter/path, ? representation, safe evaluation and source reload policy."
+    },
+    {
+      "id": "OPEN-006",
+      "area": "REST",
+      "question": "Optional response behavior/status for POST without ?REST; request isolation, JSON/body mapping, missing GET response semantics and transport errors."
+    },
+    {
+      "id": "OPEN-007",
+      "area": "Modules",
+      "question": "Versioned 1.9 manifest schema, lifecycle/entrypoint ABI and System→System dependency policy."
+    },
+    {
+      "id": "OPEN-008",
+      "area": "Build and deploy",
+      "question": "Exact Build View panels/operations, PC/C6 shims, artifact format, resource checks and test gates."
+    },
+    {
+      "id": "OPEN-009",
+      "area": "Persistence",
+      "question": "Atomic FILE writes, flash wear policy, TER restoration format and startup synchronization."
+    },
+    {
+      "id": "OPEN-010",
+      "area": "Integration",
+      "question": "Reconcile obsolete development/ROADMAP.md, DECISIONS.md, CORE_SPLIT.md, GOALS.md, TODO.md only in a separately scoped update."
+    },
+    {
+      "id": "OPEN-011",
+      "area": "Source headers and System Lib",
+      "question": "Finalize stable dependency ID registry, cross-language comment binding, conditionals, System Lib allowed dependency edges and migration of older manifest-as-SSOT docs."
+    }
+  ],
+  "source_provenance": {
+    "memo": "developer/memos/2026-11-22_architecture_handover.md",
+    "local_user_supplied_code": "expressions.py (execute_exact_expression)",
+    "implementation_reference": "Th3Hypn0tist/AIGMos (AIGMos 1.8)",
+    "development_reference": "Th3Hypn0tist/AIGMos-1.9/development/",
+    "spec_2_0_repo": "Th3Hypn0tist/AIGMos_docs",
+    "spec_2_0_commit": "535c1dacfc4ee72f1fbc00dedea3f3672178dbe2",
+    "spec_2_0_paths": [
+      "canonical/json/interfaces/01_WEB_REST.json",
+      "canonical/json/runtime/io/00_Native_IO_Contracts.json",
+      "canonical/json/runtime/symbols/03_EXP.json",
+      "canonical/json/runtime/symbols/00_Symbol_Namespace_Registry.json",
+      "canonical/json/runtime/modules/"
+    ],
+    "format_references": [
+      "Canonical_Contract_Format_v2.4.2",
+      "CanonicalWireframe_NodeTypes_v1.15.1",
+      "CanonicalWireframe_Dependency_Rules_v3.11.0"
+    ],
+    "format_note": "These source references are not proof this development decision registry passes their validators.",
+    "source_header_contract": "developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.1.0.json"
+  },
+  "supersedes": "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.1.0.json"
+}
