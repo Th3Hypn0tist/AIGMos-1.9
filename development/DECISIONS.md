@@ -43,6 +43,9 @@ Tämä tiedosto erottaa **vahvistetut** linjaukset ehdotuksista ja avoimista suu
 ### D-013 — Panel on View'n komponenttimoduulin nimi
 **Päätös:** View on deklaratiivinen kompositio, joka koostuu **Panel**-moduuleista. Käsite `widget` ei ole 1.9:n moduulityyppi eikä uusi nimi. SYSTEM- ja USER-puolella käytetään `panels/`-hakemistoa. Aiemman lukitun `type=view`-lähdesopimuksen muutokset dokumentoidaan 1.9-migraationa; alkuperäistä lähdesopimusta ei kirjoiteta uudelleen. View-tiedostopääte ja tarkka manifestimuoto jäävät avoimiksi.
 
+### D-014 — Ei piiloriippuvuuksia (ehdoton arkkitehtuurisääntö)
+**Päätös:** AIGMos 1.9 ei saa sisältää piiloriippuvuuksia. Kaikki moduulien, ajomoottorien ja Coren suorat riippuvuudet (koodi, palvelut, alusta, resurssit ja ehdolliset ominaisuudet) on määriteltävä eksplisiittisesti. Resolverin on voitava muodostaa koko transitiivinen riippuvuusverkko ja validoida kompositio ennen käynnistystä/buildiä. Ilmoittamaton tai ratkaisematon riippuvuus on **hard fail**, ei varoitus; valinnainen moduuli ei saa latautua tai tulla pakettiin valitsematta. SYSTEM-/USER-oikeudet eivät synny polusta. Yksityiskohdat ja verifiointi: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md). Päätös on vahvistettu; toteutus on vielä avoin.
+
 ## Avoimet päätökset
 
 - **O-001:** `#`-puutilan sijoitus: Core vai USE? Lähtöhypoteesi on USE, ei vielä lukittu.
