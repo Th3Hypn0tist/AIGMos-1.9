@@ -24,7 +24,7 @@ Vaiheet toteutetaan tässä järjestyksessä. Uusia ominaisuuksia ei saa käytt�
 
 ## Ehdoton riippuvuussääntö
 
-**Piiloriippuvuuksia ei sallita.** Jokaisen suoran riippuvuuden, myös tiedosto-, rajapinta-, resurssi-, alusta-, käynnistys- ja ehdollisen riippuvuuden, on oltava eksplisiittisesti määritelty. Resolver muodostaa transitiivisen sulkeuman ja validaattori hylkää puuttuvat tai ilmoittamattomat suhteet. Pakollinen hyväksymisportti ennen buildiä ja julkaisua: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
+**Piiloriippuvuuksia ei sallita.** Neljä moduulien riippuvuusluokkaa: **Core-moduuli → vain Core-alustan palvelut** (esim. `# → CORE.STATE`), ei toisia Core-moduuleita; **System → Core**; **AIGM User → Core ja System**, ei ulkoisia; **User → mitä tahansa**, mutta kaikki riippuvuudet on ilmoitettava manifestissa. Core-perusta erotetaan Core-moduuleista. Validointi hylkää sekä ilmoittamattomat että luokkarajoja rikkovat riippuvuudet. Pakollinen hyväksymisportti: [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
 
 ## Rajat
 
