@@ -14,7 +14,11 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
 - [ ] Inventoi myös resurssit, ulkoiset palvelut, dynaamiset importit, implisiittinen aktivointi ja ehdolliset riippuvuudet; dokumentoi todellinen riippuvuusverkko.
-- [ ] Ota `DEPENDENCY_RULES.md` pakolliseksi **FAIL**-portiksi: ilmoittamaton riippuvuus, tuntematon provider, väärä target tai yllättävä import estää buildin.
+- [ ] Erota Core-alustan palvelut (esim. `CORE.STATE`) Core-moduuleista (esim. `#`) ja dokumentoi niiden julkiset rajapinnat.
+- [ ] Määritä jokaisen moduulin riippuvuusluokka: Core Module, System Module, AIGM User Module tai User Module.
+- [ ] Kirjaa kaikki suorat riippuvuudet jokaisen moduulin manifestiin, mukaan lukien `# → CORE.STATE`.
+- [ ] Ota `DEPENDENCY_RULES.md` pakolliseksi **FAIL**-portiksi: ilmoittamaton riippuvuus, Core-moduuli→Core-moduuli, kielletty kerrosriippuvuus, tuntematon provider, väärä target tai yllättävä import estää buildin.
+- [ ] Testaa, että AIGM User -moduuli ei voi ottaa ulkoista riippuvuutta, mutta User-moduulin manifestoitu ulkoinen riippuvuus hyväksytään, kun target- ja käyttöoikeusvaatimukset täyttyvät.
 - [ ] Toteuta/todenna resolverin deterministinen transitiivinen riippuvuussulkeuma ja riippuvuuksien syyketjut.
 - [ ] Lisää Minimal Core -testi, jossa kaikki valinnaiset moduulit ja View on fyysisesti poistettu; ei implisiittisiä latauksia.
 - [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
