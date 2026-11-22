@@ -6,7 +6,7 @@
 
 ## Päätavoite
 
-SYSTEM-moduuleilla on yksi looginen sijoituspaikka ja USER-moduulien kanssa yhteensopiva luokittelu. **View on kokonainen deklaratiivinen näkymäkompositio (nykyinen template), ei pienmoduuli.** Pienemmälle UI-moduulille ehdotetaan nimeä `panel`; tyyppimuutoksen lopullinen nimi ja sopimus ovat vielä avoinna. Ks. [VIEW_NAMING.md](VIEW_NAMING.md).
+SYSTEM-moduuleilla on yksi looginen sijoituspaikka ja USER-moduulien kanssa yhteensopiva luokittelu. **View on kokonainen deklaratiivinen näkymäkompositio (nykyinen template), ei pienmoduuli.** Pienemmän UI-moduulin nimeksi on vahvistettu `panel`; manifestin tyyppimuutos ja sopimus ovat vielä avoinna. Ks. [VIEW_NAMING.md](VIEW_NAMING.md).
 
 **SYSTEM ja USER erotetaan omistajuuden ja oikeuksien mukaan, ei viemällä niiden moduulirakenteita eri periaatteilla toteutettuihin järjestelmiin.** SYSTEM-moduuli voi tarvita rajatumpia tai laajempia järjestelmäoikeuksia kuin USER-moduuli; USER-moduulin rajoituksia ei poisteta, eikä SYSTEM saa oikeuksia pelkän tiedostopolun perusteella.
 
@@ -30,7 +30,7 @@ Tämä on vanhojen SYSTEM-moduulien järjestely ja latausmekanismien selkeytys. 
 
 ## 2. Ehdotettu hakemistorakenne
 
-Käytetään valmiiden USER-sopimusten SYSTEM-referenssijuuren mukaista yleistä mallia `system/library/<type>/<module_id>/`, mutta erotetaan View-kompositio sen pienmoduuleista. Ehdotettu `panel`-nimi on vielä auki ja vaatii aiemman locked USER-view-sopimuksen eksplisiittisen 1.9-migraation.
+Käytetään valmiiden USER-sopimusten SYSTEM-referenssijuuren mukaista yleistä mallia `system/library/<type>/<module_id>/`, mutta erotetaan View-kompositio sen pienmoduuleista. Vahvistettu `panel`-nimi vaatii aiemman locked USER-view-sopimuksen eksplisiittisen 1.9-migraation.
 
 ```text
 AIGMos-1.9/
