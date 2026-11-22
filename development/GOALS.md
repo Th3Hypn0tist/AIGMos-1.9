@@ -10,7 +10,7 @@ AIGMos 1.8:n **olemassa oleva toteutus** optimoidaan ja modularisoidaan niin, et
 
 **Rakenneperiaate:** SYSTEM-moduulien hajallaan olevat toteutukset kootaan yhtenäisen `system/library/`-juuren alle. CS-parseri, STATE, TER sekä valinnaiset ajomoottorit erotetaan moduulipaketeista. **View** tarkoittaa näkymäkompositiota (nykyinen template), joka koostuu pienemmistä UI-moduuleista; niille vahvistettu nimi on **Panel**. Alustava rakenne: `system/library/{commands,inputs,outputs,adapters,panels}/<module_id>/` sekä erilliset `system/library/views/<view_id>/`-määritykset. Lopullinen nimi, manifesti ja migraatio täsmennetään ennen toteutusta. [SYSTEM_MODULES.md](SYSTEM_MODULES.md), [VIEW_NAMING.md](VIEW_NAMING.md).
 
-**Ehdoton hyväksymisvaatimus:** nolla piiloriippuvuutta. Kaikki suorat riippuvuudet ovat deklaroituja, ja transitiivinen riippuvuusverkko on mekaanisesti ratkaistu ja tarkistettu. Puuttuva, ilmoittamaton tai targetiin sopimaton riippuvuus estää buildin. Ks. [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
+**Ehdoton hyväksymisvaatimus:** nolla piiloriippuvuutta ja sallitut riippuvuussuunnat. Core-moduulit saavat käyttää Core-alustan julkisia palveluita (esim. `# → CORE.STATE`) mutta eivät saa riippua toisistaan; System-moduulit saavat riippua Coresta; AIGM User -moduulit Coresta ja Systemistä mutta eivät ulkoisista; tavalliset User-moduulit saavat riippua mistä tahansa. Jokaisen moduulin riippuvuudet ovat manifestissa. Puuttuva, ilmoittamaton, kielletty tai targetiin sopimaton riippuvuus estää buildin. Ks. [DEPENDENCY_RULES.md](DEPENDENCY_RULES.md).
 
 **Työperiaate:** ensin 1.8:n nykytilan kartoitus ja käyttäytymisen regressiotestit, sitten riippuvuuksien irrotus ja resurssien optimointi. Toimiva käytös säilytetään, ellei muutosta päätetä erikseen.
 
@@ -24,6 +24,7 @@ Pakollinen Core:
 Periaate: Triggeriin voidaan sitoa useita Eventtejä; yksittäinen Event välittää yhden CS-komennon. Runner suorittaa komennon/rutiinin CS:n kautta. Yllä oleva on suunnittelutavoite, jonka vastaavuus nykyiseen 1.8-toteutukseen on tutkittava.
 
 **Alustava hyväksymisnäyttö:**
+- Core-perusta ja Core-moduulit on erotettu: esim. `#` käyttää `CORE.STATE`-palvelua ilman riippuvuutta toisista Core-moduuleista.
 - Jokaisen komponentin riippuvuudet ja resurssit ovat eksplisiittisiä. Riippuvuussulkeuma ja pakattu artefakti vastaavat toisiaan; mitään valinnaista ei tuoda piilossa.
 - SYSTEM-moduulit löytyvät vakioidun `system/library/`-rakenteen alta; kunkin paketin toteutus, manifesti ja omat resurssit ovat yhdessä. Yhteiset ajomoottorit eivät muutu implisiittisesti moduuleiksi.
 - 1.8:n olennaiset toiminnallisuudet ja rajapinnat on kartoitettu ja niiden säilyminen tai tarkoituksellinen siirto moduuliin on osoitettu.
