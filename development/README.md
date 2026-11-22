@@ -2,9 +2,10 @@
 
 Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuuripäätökset**.
 
-**Nykyinen aktiivinen työ:** AIGMos 1.8:n toimivan koodipohjan optimointi ja modularisointi. Pidetään toiminnallisuus sekä rajapinnat hallitusti testattavina ja saadaan Minimal Core toimimaan ESP32-C6-N16:lla. LMTS View ja Build Engine ovat 1.9-roadmapin myöhempiä vaiheita, eivät tämänhetkisen Coren laajennuksia.
+**Nykyinen aktiivinen työ:** AIGMos 1.8:n toiminnasta johdettava MicroPython-yhteensopiva Hardcore (vaihe 1). Sen jälkeen Core Modules, System Modules, Build Tool ja vasta lopuksi varsinainen ESP32-C6-build ja mittaukset. Katso ensisijainen [ROADMAP.md](ROADMAP.md).
 
-- [GOALS.md](GOALS.md) — tavoitetila, vaiheistus ja hyväksymiskriteerit
+- [ROADMAP.md](ROADMAP.md) — ensisijainen viisivaiheinen toteutusjärjestys ja C6:n Expose/Transport-valinnat
+- [GOALS.md](GOALS.md) — taustatavoitteet ja aiemmat hyväksymiskriteerit (vaiheistusksessa ROADMAP.md on ensisijainen)
 - [TODO.md](TODO.md) — toteutettava työ vaiheittain
 - [DECISIONS.md](DECISIONS.md) — vahvistetut linjaukset ja avoimet päätökset
 - [REUSED_SPECS.md](REUSED_SPECS.md) — ainoat aiemmista 2.0-määrityksistä säilytettävät kokonaisuudet: USER ja Expose
@@ -17,11 +18,9 @@ Tämä hakemisto kokoaa AIGMos 1.9:n **tavoitteet, tehtävät ja arkkitehtuurip�
 
 ## Roadmap (järjestys)
 
-1. **1.8 → optimoitu Minimal Core / ESP32-C6:** kartoitetaan 1.8:n nykyinen toiminta, riippuvuudet ja resurssikulutus; modularisoidaan ylimääräinen toiminnallisuus irti Coresta ja optimoidaan mitattujen pullonkaulojen perusteella, kunnes minimi toimii ESP32-C6-N16:lla.
-2. **LMTS View:** integroidaan LMTS:n käyttöliittymäpalikka yhdeksi valinnaiseksi AIGMos View -toteutukseksi.
-3. **Self-Projection Build:** rakennetaan tälle käyttöliittymälle `|BUILD` ja sen taustalle itsenäinen Build Engine, joka muodostaa rajattuja kompositioita valituista moduuleista.
+**Voimassa oleva vaiheistus:** **Core → Core Modules → System Modules → Build Tool → ESP32-C6 Build**.
 
-Vaiheet toteutetaan tässä järjestyksessä. Uusia ominaisuuksia ei saa käyttää perusteluna Minimal Coren kasvattamiselle.
+Katso [ROADMAP.md](ROADMAP.md). C6-buildissä Expose/Transport voidaan valita: Serial, Telnet sekä ehdollisesti Web + REST, jos todellinen laitteella mitattu resurssibudjetti riittää. Tämä korvaa aiemman kolmivaiheisen järjestyksen.
 
 ## Ehdoton riippuvuussääntö
 
