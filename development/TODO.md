@@ -13,6 +13,10 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Korjaa tai validoi `RISKS.md`-auditoinnin R-01–R-08 riskit ennen laajaa tiedostojen siirtoa (View/Panel-sopimus, bootstrap-importit, loader-polut, template-semanttiikka, UI-dispatch, moduuli-identiteetit, MicroPython-discovery, polkurajat).
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
+- [ ] Inventoi myös resurssit, ulkoiset palvelut, dynaamiset importit, implisiittinen aktivointi ja ehdolliset riippuvuudet; dokumentoi todellinen riippuvuusverkko.
+- [ ] Ota `DEPENDENCY_RULES.md` pakolliseksi **FAIL**-portiksi: ilmoittamaton riippuvuus, tuntematon provider, väärä target tai yllättävä import estää buildin.
+- [ ] Toteuta/todenna resolverin deterministinen transitiivinen riippuvuussulkeuma ja riippuvuuksien syyketjut.
+- [ ] Lisää Minimal Core -testi, jossa kaikki valinnaiset moduulit ja View on fyysisesti poistettu; ei implisiittisiä latauksia.
 - [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
 - [x] Päätä UI-moduulin uusi nimi: **Panel**. View tarkoittaa entistä template-kompositiota (päätös kirjattu; koodia ei vielä muutettu).
 - [ ] Versioi USER-moduulien vanhan `type=view`-sopimuksen semanttinen muutos 1.9:ään; älä muuta lähteen locked-sopimusta hiljaisesti.
