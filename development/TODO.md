@@ -13,10 +13,10 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 - [ ] Määritä mitattava optimointibaseline (RAM, flash/paketin koko, käynnistysaika, suoritusaika sekä mittausympäristö).
 - [ ] Inventoi 1.8:n moduulit, importit, käynnistysketju ja alustariippuvuudet.
 - [ ] Tee `SYSTEM_MODULES.md`-dokumentin mukainen SYSTEM-module/engine/resource-inventaario; selvitä `system/cs/commands`, `system/inputs`, `system/adapters`, `system/layout/modules` ja `system/library/layout`.
-- [ ] Päätä UI-moduulin uusi nimi (ehdotus: Widget), erottaen se View-kompositiosta (entinen template).
+- [x] Päätä UI-moduulin uusi nimi: **Panel**. View tarkoittaa entistä template-kompositiota (päätös kirjattu; koodia ei vielä muutettu).
 - [ ] Versioi USER-moduulien vanhan `type=view`-sopimuksen semanttinen muutos 1.9:ään; älä muuta lähteen locked-sopimusta hiljaisesti.
-- [ ] Yhtenäistä SYSTEM-moduulipakettien sijainnit ehdotettuun `system/library/{commands,inputs,outputs,adapters,widgets}/<module_id>/`-rakenteeseen ja sijoita deklaratiiviset View-määritykset `system/library/views/<view_id>/`-rakenteeseen. Nimi ja tiedostomuoto lukitaan ennen koodisiirtoja.
-- [ ] Erottele View (kokonainen näkymä), Widget (yksittäinen UI-toiminto) ja valinnainen View Engine (runtime) sekä tee vanhoille `layout`, `module`, `.tmpl` ja `view` -nimille migraatiokartta.
+- [ ] Yhtenäistä SYSTEM-moduulipakettien sijainnit ehdotettuun `system/library/{commands,inputs,outputs,adapters,panels}/<module_id>/`-rakenteeseen ja sijoita deklaratiiviset View-määritykset `system/library/views/<view_id>/`-rakenteeseen. Panel-nimi on vahvistettu; tiedostomuoto ja manifestisopimus vahvistetaan ennen koodisiirtoja.
+- [ ] Erottele View (kokonainen näkymä), Panel (yksittäinen UI-toiminto) ja valinnainen View Engine (runtime) sekä tee vanhoille `layout`, `module`, `.tmpl` ja `view` -nimille migraatiokartta.
 - [ ] Päivitä moduulien discovery, importit, reload, template-resoluutio ja polkuviittaukset hallitusti; todenna regressiot.
 - [ ] Selvitä ja erota Core-/engine-infrastruktuuri varsinaisista SYSTEM-moduuleista. SYSTEM-/USER-identiteetti ei yksin anna runtime-valtuuksia.
 - [ ] Mittaa 1.8:n nykyiset RAM-/flash-/käynnistysvaatimukset soveltuvassa testissä.
@@ -41,10 +41,10 @@ P0 on ainoa aktiivinen toteutusvaihe. P1 ja P2 säilyvät 1.9-roadmapissa myöhe
 
 ## P1 — LMTS UI → AIGMos View Engine / renderer
 
-Edellytys: P0:n View/Widget-nimeämisen migraatio ja erilliset moduuli-/View-discoveryt on toteutettu ja testattu.
+Edellytys: P0:n View/Panel-nimeämisen migraatio ja erilliset moduuli-/View-discoveryt on toteutettu ja testattu.
 
 - [ ] Tarkasta LMTS:n UI-palikan nykyinen koodi ja jo suunniteltu irrotettava rajapinta.
-- [ ] Määritä View-renderöintitoteutuksen rajapinta ilman Coreen tehtävää View-sidosta; sovita se uusiin View/Widget-käsitteisiin ja Expose-rajaukseen.
+- [ ] Määritä View-renderöintitoteutuksen rajapinta ilman Coreen tehtävää View-sidosta; sovita se uusiin View/Panel-käsitteisiin ja Expose-rajaukseen.
 - [ ] Integroi LMTS UI yhden View-toteutuksen pohjaksi.
 - [ ] Todenna View'n käynnistys, irrotettavuus ja Core-only-ajon toiminta.
 - [ ] Dokumentoi View-integraation esimerkit ja testit.
