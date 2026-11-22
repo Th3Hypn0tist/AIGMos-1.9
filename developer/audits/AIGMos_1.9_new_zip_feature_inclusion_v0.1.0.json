@@ -325,7 +325,7 @@
     "SQLite automatic persistence differs from 1.9 MEM volatile + explicit FILE; retain user-visible durable behavior through explicit owner storage.",
     "Archive #OSC/#REST/#UM trees conflict with #less minimal MP and restricted INPUT $I / optional #I.",
     "Archive layout module vs 1.9 Panel primitive needs mapping; archive 'four module kinds' help is out of date vs 5-kind source.",
-    "EXP minimum is ONLY exact-definition validated CS evaluation and CSo→? result; archive's heavy # table/spreadsheet pipeline, independent parser/dispatcher, and export/reload feature bundle are NOT granted as minimal EXP. Any parity-retained extras need separate optional modules and contracts.",
+    "EXP minimum is ONLY exact-definition validated CS evaluation and CSo→? result; archive's heavy # table/spreadsheet pipeline, independent parser/dispatcher, and export/reload feature bundle are NOT granted as minimal EXP. Any parity-retained extras need separate optional modules and contracts. Explicit user deferral: structured # table evaluation to be redesigned later when reached; no current interface/implementation decision.",
     "REST 2.0 only # mode must adapt to agreed 1.9 $ GET-only and # GET/POST modes.",
     "Source trigger cron helpers coexist with different trig expression UI: prove 1.8 cron parity.",
     "Removing bot.py alone is insufficient: system/lib/contracts/__init__.py exports trainer; compliance.py maps trainer and #MODE to trainer tests; help/command registries include trainer.",
@@ -366,6 +366,19 @@
       "A19-029",
       "A19-030",
       "A19-031"
-    ]
+    ],
+    "deferred_structured_eval": {
+      "status": "FUTURE_SCOPE_UNDESIGNED",
+      "decision": "Full evaluation over structured # tables is deferred. It will be designed when work reaches that functionality, rather than porting the legacy implementation or deciding its architecture now.",
+      "current_1_9_EXP_scope": "No full # table eval, table/spreadsheet pipeline, or implied dependency on structured core.",
+      "no_early_commitment": [
+        "API",
+        "execution semantics",
+        "table data model",
+        "dependency strategy",
+        "implementation architecture",
+        "build placement"
+      ]
+    }
   }
 }
