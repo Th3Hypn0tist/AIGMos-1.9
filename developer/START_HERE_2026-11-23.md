@@ -12,6 +12,8 @@ Read in this order:
 4. `developer/audits/AIGMos_1.9_1.8_Cleanup_2026-11-23.md` — source-pinned feature inventory and structural cleanup.
 5. `developer/memos/2026-11-22_session_handover_v0.3.0.md` and `developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.2.0.json` — prior runtime details and source dependency ABI.
 
+**Structure derivability audit (2026-11-23):** [Structure-derived vs manually resolved pre-code requirements](audits/AIGMos_1.9_Structure_Derivability_Audit_2026-11-23_v0.1.0.json). CCF/CW can derive typed identities, links, closure and readiness from **explicitly modeled canonical data**, but existing 1.9 developer notes are not a complete CCF artifact and runtime behavior requires separate evidence.
+
 **Source-header caution:** v0.2.0 still defines `target=MP` as compatible with both MP and CP. Proposed `target=BOTH` and distinct MP-only treatment require a versioned contract change; no silent migration. Basic pruning starts from one full-system source snapshot and does not solve dependency versions individually.
 
 **Immediate next task:** Complete 1.8 source parity coverage and define component-owned /config, loader, Q default profile and AC activation exception. Never label this LOCKED until validation. Never modify runtime implementation without separate clear authorization.
