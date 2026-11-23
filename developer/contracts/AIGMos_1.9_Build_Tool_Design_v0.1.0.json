@@ -127,7 +127,7 @@
     "declared_edges": "Exact, immediate typed references only (source headers SSOT)",
     "derived_edges": "Calculated from scanned graph with full provenance; never written back as falsely declared direct deps",
     "source_capability_mapping": "OPEN: module registry/meta/feature declarations must not become a conflicting manually-maintained requires graph",
-    "intra_file_conditional_pruning": "Single-# comment markers; user proposes # target: BOTH plus # <AC.MP> / # <AC.CP> to select target-specific optional code. Existing v0.2.0 target=MP means both, so changing MP to MP-only requires a versioned contract update; scope, parsing and optional deps are OPEN."
+    "intra_file_conditional_pruning": "Default Git checkout executes CP source unchanged. In # target: BOTH files, CP-specific code may remain live within # <FEATURE.CP> and MP-specific code is commented within # <FEATURE.MP>; MP Build removes CP blocks and activates validated MP-comment blocks. Versioned header/conditional dependency contract remains UNLOCKED."
   },
   "candidate_build_profiles": [
     {
@@ -447,9 +447,9 @@
     ]
   },
   "target_specific_pruning_proposal": {
-    "state": "USER_SUGGESTED_UNFINALIZED",
+    "state": "USER_CONFIRMED_DESIGN_DIRECTION_NOT_CCF_LOCKED",
     "user_idea": "When one source file needs different MicroPython and CPython implementations, declare target BOTH and distinguish feature blocks AC.MP and AC.CP.",
-    "example": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: BOTH\n# prune: [\"AC\"]\n\ndef execute(command):\n    # <AC.MP>\n    authorize_mp(command)\n    # </AC.MP>\n\n    # <AC.CP>\n    authorize_cp(command)\n    # </AC.CP>\n\n    return dispatch(command)",
+    "example": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: BOTH\n# prune: [\"AC\"]\n\ndef execute(command):\n    # <AC.CP>\n    authorize_cp(command)\n    # </AC.CP>\n\n    # <AC.MP>\n    # authorize_mp(command)\n    # </AC.MP>\n\n    return dispatch(command)",
     "suggested_target_semantics": {
       "BOTH": "This file has shared source with target-conditional blocks and can be built for MP or CP; prune target-specific branches BEFORE parsing the generated Python.",
       "MP": "Candidate NEW meaning: MP-only source. WARNING: changes v0.2.0 rule where MP denotes compatible with BOTH; requires explicit versioned migration.",
@@ -510,6 +510,22 @@
       "Define optional deps/libs declaration mechanism consistent with header SSOT.",
       "Formal marker grammar, placement, pairing, nesting, target tag handling, and structurally valid empty suites.",
       "CCF/CW validation and tests before LOCKED."
+    ],
+    "default_source_runtime": "CPython: raw Git checkout is executable as CPython source without Build Tool preprocessing. MicroPython alternatives are kept as Python comments and become executable only in an MP build.",
+    "transformation_rules": [
+      "Raw source defaults to CP: AC.CP block body is live code; AC.MP body is commented out, including platform-specific imports.",
+      "Build target CP with AC: preserve live AC.CP body, discard commented AC.MP body and all markup.",
+      "Build target MP with AC: remove AC.CP region; recognize AC.MP region and remove exactly one agreed comment marker from each marked code line (preserving indentation); discard markup.",
+      "Build without AC: remove both platform variants regardless of target.",
+      "Shared code outside conditional regions remains unchanged. AC common block, if present, is included only when AC selected.",
+      "Validate raw CP source and generated CP/MP variants, with imports, dependency declarations, syntax and target constraints checked after transformation."
+    ],
+    "comment_line_syntax": "Candidate rule: within # <AC.MP> each executable source line is prefixed by '# ' at its actual Python indentation; Build Tool removes exactly this prefix, with a well-defined escape convention for source comment lines; exact grammar remains OPEN.",
+    "unresolved_implementation_details": [
+      "How to preserve nested Python comments, blank lines and commented multi-line syntax without ambiguity",
+      "How to declare optional dependencies in source headers",
+      "Whether MP-only files should also be preprocessed and what 'target: MP' means in revised header contract",
+      "Source mapping, target-specific tests and fail-closed malformed markers"
     ]
   }
 }
