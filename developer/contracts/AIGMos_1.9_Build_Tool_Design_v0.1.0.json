@@ -207,7 +207,11 @@
     "Any ordinary CS/extension filesystem path reaches protected /config via traversal/symlink => FAIL",
     "No implicit MEM-to-FILE persistence",
     "Every included source file retains valid three-line metadata and exact source provenance",
-    "Unresolved dynamic module import / command string / capability reference must be declared or rejected"
+    "Unresolved dynamic module import / command string / capability reference must be declared or rejected",
+    "Builder input comes from one complete and coherent source-system snapshot, not per-module version selection/remote solving; source snapshot provenance is retained.",
+    "Profile exports contain selection metadata only, never protected /config or target secrets.",
+    "Raw full-system checkout is CPython-first; MP-specific source statements inside # <FEATURE.MP> remain Python comments until an MP build.",
+    "Source-header BOTH semantics require explicit versioned migration; historical header v0.2.0 MP=both remains historical."
   ],
   "open_decisions": [
     {
@@ -243,7 +247,7 @@
     {
       "id": "BUILD-OPEN-07",
       "priority": "P1",
-      "question": "|BUILD Panels/CS operations, save/load selection profiles and report surface; these are UI/composition, not separate core engine."
+      "question": "BUILD View Panel composition/CS command naming and profile persistence UI. Save and export are CONFIRMED requirements, import/load supported; exact commands/labels remain OPEN."
     },
     {
       "id": "BUILD-OPEN-08",
@@ -375,6 +379,11 @@
       "status": "PROPOSAL_ONLY",
       "panels": [
         {
+          "id": "profiles",
+          "label": "Profiles",
+          "shows": "Create/load/save/save-as/import/export builder-owned reusable Build Profiles and their selected source snapshot reference"
+        },
+        {
           "id": "target",
           "label": "Target / Profile",
           "shows": "MP/CP + target resources + hardware shim profile"
@@ -430,20 +439,23 @@
     "status": "USER_CONFIRMED_CONTINUITY; overall Build Tool design remains UNLOCKED"
   },
   "pruning_markup_decision": {
-    "status": "USER_CONFIRMED_SYNTAX_ONLY",
+    "status": "USER_CONFIRMED_EXAMPLE; CW_GRAMMAR_UNVALIDATED",
     "location": "At file start after the three mandatory '# deps:', '# libs:', '# target:' lines",
     "syntax_examples": {
-      "header": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: MP\n# prune: [\"AC\", \"IAM\"]",
-      "open_tag": "# <AC>",
-      "close_tag": "# </AC>"
+      "header": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: BOTH\n# prune: [\"AC\"]",
+      "cp_open": "# <AC.CP>",
+      "cp_close": "# </AC.CP>",
+      "mp_open": "# <AC.MP>",
+      "mp_close": "# </AC.MP>",
+      "mp_commented_body": "# authorize_mp(command)"
     },
-    "rule": "Use one # comment prefix, not ##. Exact canonical case and identifier grammar remain OPEN. The build tool parses tags and removes omitted feature blocks; generated output must validate.",
+    "rule": "Single # markers; raw Git checkout is CPython-executable with CP code live and MP-only alternatives commented. Build Tool emits selected target by removing target/feature-incompatible regions and activating eligible commented MP regions. Full grammar must be provided by CW CodeMarkup ruleset later.",
     "scope": "Initial proposal: source-level pruning limited to Hardcore; Core Module boundary and exact scope require formalization.",
     "remaining_open": [
-      "Optional deps in code and whether the header includes them",
-      "Nested/overlapping markers",
-      "Source mapping and validation of removed lines",
-      "Whether target markers such as CP use the same registry as feature IDs"
+      "Conditional direct dependency declarations in headers",
+      "Exact comment escaping, indentation, nested regions and syntax validation",
+      "Versioned source-header update: BOTH and nonretroactive MP/CP semantics",
+      "Source mapping and output header policy"
     ]
   },
   "target_specific_pruning_proposal": {
@@ -527,5 +539,24 @@
       "Whether MP-only files should also be preprocessed and what 'target: MP' means in revised header contract",
       "Source mapping, target-specific tests and fail-closed malformed markers"
     ]
+  },
+  "references_2026_11_23": [
+    "developer/contracts/AIGMos_1.9_Build_Profile_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Build_CodeMarkup_Integration_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Full_Source_Snapshot_Build_v0.1.0.json",
+    "developer/memos/2026-11-23_build_tool_session_handover.md"
+  ],
+  "profile_decision": {
+    "status": "USER_CONFIRMED_SAVE_EXPORT; SCHEMA_UNVALIDATED",
+    "rule": "Profiles can be saved and exported, imported/loaded for reuse; profile stores desired selections, not source graph truth, target /config or secrets.",
+    "persistence": "Builder-owned FILE outside protected /config",
+    "view_definition": "BUILD",
+    "runtime_view_instance_example": "|BUILD",
+    "draft_contract": "developer/contracts/AIGMos_1.9_Build_Profile_v0.1.0.json"
+  },
+  "source_snapshot_decision": {
+    "status": "USER_CONFIRMED",
+    "rule": "Always start pruning from one coherent full-system source checkout loaded together. No dependency-by-dependency version negotiation or independently versioned resolver inputs. Whole snapshot source revision/hash recorded in build artifact provenance.",
+    "draft_contract": "developer/contracts/AIGMos_1.9_Full_Source_Snapshot_Build_v0.1.0.json"
   }
 }
