@@ -1,0 +1,204 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_AUDIT",
+  "identity": {
+    "id": "AIGMOS_1_9_ERRORS_LOGGING_SOURCE_AUDIT",
+    "version": "0.1.0",
+    "date": "2026-11-23"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "runtime_implementation_modified": false,
+  "purpose": "Source-evidenced inventory of existing errors/logging behavior and the minimal remaining AIGMos 1.9 decisions. Do not treat proposals as approved contracts.",
+  "sources": [
+    {
+      "ref": "Th3Hypn0tist/AIGMos@20383e681dd49f3be33070dba41bbcdc4034ef63",
+      "paths": [
+        "system/cs/models.py",
+        "system/cs/parser.py",
+        "system/cs/reporter.py",
+        "system/boot.py",
+        "system/bootstrap.py",
+        "system/runtime/events.py",
+        "system/runtime/triggers.py",
+        "system/runtime/runner.py",
+        "system/lib/q/errors.py",
+        "system/state/api.py",
+        "system/lib/trigger/event_runtime.py"
+      ]
+    },
+    {
+      "ref": "Th3Hypn0tist/AIGMos-1.9/main",
+      "paths": [
+        "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+        "developer/contracts/AIGMos_1.9_Config_Ownership_Parity_Delta_v0.1.0.json",
+        "developer/audits/AIGMos_1.9_Structure_Derivability_Audit_2026-11-23_v0.1.0.json"
+      ]
+    },
+    {
+      "ref": "Th3Hypn0tist/CW/main",
+      "paths": [
+        "spec_sets/CW_CORE_v1.6.0.json",
+        "CanonicalWireframe_Dependency_Rules_v4.4.0.json",
+        "Canonical_Contract_Format_v2.6.0.json"
+      ]
+    }
+  ],
+  "observed_legacy": [
+    {
+      "id": "EVID-01",
+      "source": "system/cs/models.py",
+      "finding": "HandlerResponse carries result, buffer_output, error (string) and force_render. No typed code/severity in this type."
+    },
+    {
+      "id": "EVID-02",
+      "source": "system/cs/parser.py",
+      "finding": "Parser.parse returns optional error string; wraps handler exceptions and routes handler errors through handle_error(). Successful execution ordinarily returns None."
+    },
+    {
+      "id": "EVID-03",
+      "source": "system/cs/reporter.py",
+      "finding": "handle_error writes error to legacy $SYSTEM.ERRORS and to UI buffer; timestamp-keyed strings combine full raw command and message; failures in logging/buffer path are caught and suppressed."
+    },
+    {
+      "id": "EVID-04",
+      "source": "system/boot.py",
+      "finding": "boot_log appends text to boot_log_lines on flags for UI display or prints to terminal when flags are not installed; append is unbounded in inspected function."
+    },
+    {
+      "id": "EVID-05",
+      "source": "system/bootstrap.py",
+      "finding": "Boot/startup catches top-level exception, calls boot_log '[boot-error]', records boot_startup_error string; startup status in flags."
+    },
+    {
+      "id": "EVID-06",
+      "source": "system/runtime/events.py",
+      "finding": "Event worker catches exceptions and emits text '[event-error]' via boot_log; trigger worker similarly emits '[trigger-error]' in triggers.py."
+    },
+    {
+      "id": "EVID-07",
+      "source": "system/runtime/runner.py",
+      "finding": "Runner has STATUS_ERROR and last_error in live state. Source audit did not prove persistent error history or unified cross-component error event."
+    },
+    {
+      "id": "EVID-08",
+      "source": "system/lib/q/errors.py",
+      "finding": "QCallError is a Q-local exception type."
+    },
+    {
+      "id": "EVID-09",
+      "source": "system/state/api.py",
+      "finding": "read_value returns default if guard denies or state read reports error; caller cannot distinguish denied/error from absence through this helper alone."
+    },
+    {
+      "id": "EVID-10",
+      "source": "system/lib/trigger/event_runtime.py",
+      "finding": "Event command failure is taken from parser.parse() error string and raised as RuntimeError."
+    }
+  ],
+  "established_1_9_boundaries": [
+    "Exactly five mandatory Hardcore mechanisms: INPUT, STATE, TER, CS, EXPOSE; errors/logging cannot silently create a sixth Hardcore architecture item.",
+    "CS owns CSi/CSo and general STATE operations; TER executes via CS and does not directly mutate STATE.",
+    "STATE is persistence/working storage, not semantic owner; component-owned diagnostics must not default wholesale to #SYSTEM or $SYSTEM.ERRORS.",
+    "MEM is volatile default; FILE persistence explicit; no automatic log persistence is implied.",
+    "Protected /config is not an ordinary CS or logging destination; no raw secrets/config projection in error logs.",
+    "MicroPython ESP32-C6-N16 no PSRAM is the constrained reference target; optional UI/SQLite/threading should not enter minimum logging path."
+  ],
+  "cw_relation": {
+    "bundle": "CW_CORE_v1.6.0 is explicit opt-in UNLOCKED candidate over CCF 2.6.0, NodeTypes 1.19.0 and Rulesets 4.4.0.",
+    "validator_result_classes": [
+      "INVALID_SPECIFICATION",
+      "INVALID_MODEL",
+      "UNREADY",
+      "READY",
+      "CONFLICT",
+      "IMPLEMENTATION_FAILURE"
+    ],
+    "boundary": "CW validation result classes classify specification/model/tool evaluation, NOT automatically runtime CS/TER/BOOT error codes or logging severity. Reuse requires explicit separate mapping, not name equivalence.",
+    "lifecycle": "CW and AIGMos 1.9 evolve concurrently; no claim current CodeMarkup candidate is LOCKED. Frozen pinned evaluation snapshots may still exist for reproducibility without final architecture lock."
+  },
+  "derivable_from_explicit_structure": [
+    "Failure origin (component/entity/function reference) and relationship to a declared operation",
+    "Ownership of an error state/result and relevant Link/Function/Event correspondence",
+    "Declared error class/code references and allowed output paths, WHEN they are modeled in canonical Properties",
+    "Required validation failure reasons and their source spans from CW readiness/validator findings",
+    "Target capability/resource constraints and mandatory observability interfaces WHEN expressed in target registry"
+  ],
+  "requires_normative_decision": [
+    {
+      "id": "ERR-01",
+      "subject": "Result taxonomy",
+      "question": "What is the stable minimal CS/CSo failure contract: success/failure, machine code vs human message, optional detail/cause, and exact return shape?"
+    },
+    {
+      "id": "ERR-02",
+      "subject": "Error/report separation",
+      "question": "Does a failure always produce a typed result even if logging is absent, and is logging an optional controlled projection/sink rather than the outcome itself?"
+    },
+    {
+      "id": "ERR-03",
+      "subject": "Ownership",
+      "question": "Does each component own live diagnostic status while a SYSTEM logging facility only aggregates/copies allowed records (no ownership transfer)?"
+    },
+    {
+      "id": "ERR-04",
+      "subject": "Severity and scope",
+      "question": "Which levels and required event metadata exist on MP minimum (e.g. error/fatal only), and is monotonic sequence required while wall-clock time optional?"
+    },
+    {
+      "id": "ERR-05",
+      "subject": "Retention",
+      "question": "What are MEM log buffer bounds/overflow behavior and FILE persistence triggers, rotation, flash wear limits, and crash/early-boot paths?"
+    },
+    {
+      "id": "ERR-06",
+      "subject": "Privacy/security",
+      "question": "Redaction of raw CS commands, secret-bearing configuration, IAM/Q tokens/headers, network payloads and access-controlled log read/export?"
+    },
+    {
+      "id": "ERR-07",
+      "subject": "Failure propagation",
+      "question": "Which failures stop BOOT, abort current CS command, reject enqueue, stop Runner, or permit continue; how do TER/INPUT report without violating CS/STATE isolation?"
+    },
+    {
+      "id": "ERR-08",
+      "subject": "Failure of logging",
+      "question": "What happens when an optional logger sink fails, and how are recursive logging failures prevented?"
+    },
+    {
+      "id": "ERR-09",
+      "subject": "Correlation",
+      "question": "Should invocation/job/event/runner ID and causal reference be mandatory where present? Where is contextual state kept?"
+    },
+    {
+      "id": "ERR-10",
+      "subject": "Compatibility",
+      "question": "What is the explicit parity path for legacy parser error strings, $SYSTEM.ERRORS, boot_log, Runner last_error, QCallError and state.read default-masking?"
+    }
+  ],
+  "initial_design_direction_not_yet_confirmed": {
+    "principle": "Errors are execution/result semantics; logs are optional observations. A failed action must remain a failure even with zero log sinks.",
+    "minimum_path": "CS/CSo returns a bounded machine-readable failure with explicit origin; BOOT must have minimal early failure reporting before CS is initialized.",
+    "optional_path": "A System-side logger may consume bounded records to MEM and selected explicit FILE/Expose sinks, without becoming an independent Hardcore mechanism or privileged STATE bypass.",
+    "safeguards": [
+      "No hidden /config path",
+      "No implicit auto-FILE persistence",
+      "Fail closed on denied critical operations",
+      "No recursion on log failure",
+      "No unbounded MP allocation",
+      "Never log secret-bearing raw commands by default",
+      "Do not conflate CW UNREADY with a runtime exception"
+    ]
+  },
+  "suggested_first_step": "Specify and validate the CS/CSo failure result envelope and distinguish it from optional LOG record and component-owned status before selecting storage/UI and sink policies.",
+  "acceptance_tests_to_design": [
+    "A failed CS command is discoverable via CSo when all log sinks are disabled.",
+    "Denied STATE read is distinguishable from a valid missing key at the external API boundary.",
+    "An Event/Runner failure preserves cause identity without being reported as success.",
+    "A logger FILE write fails but does not recursively crash its own error reporting path.",
+    "MP core runs with no file log and bounded memory.",
+    "Raw Q/API secrets and protected config are absent from error outputs by default.",
+    "Early BOOT failure is reported even when no CS or View exists.",
+    "CW validator evaluation result class is not misidentified as a runtime diagnostic severity."
+  ],
+  "historical_notes": "Only inspected files support concrete legacy observations; no runtime tests executed here. No claims about all possible logging mechanisms in repository."
+}
