@@ -31,7 +31,7 @@
     ],
     "warning": "This document distinguishes confirmed rules from design proposals and open questions; it is not immutable nor a verified implementation."
   },
-  "principle": "Builder is an optional AIGMos System View definition BUILD with Panels, System commands and functions on the same HC.CS/module registry. It composes a new instance using source modules available to its Builder instance, without introducing a new Hardcore mechanism. Selected feature graph and dependency closure determine actual physical source inclusion. The runtime view instance identifier is separate from the view definition identity (e.g. |BUILD), and must not be mistaken for the definition itself.",
+  "principle": "Builder is an optional AIGMos System View definition BUILD with Panels, System commands and functions on the same HC.CS/module registry. It composes a new instance using source modules available to its Builder instance, without introducing a new Hardcore mechanism. Selected feature graph and dependency closure determine actual physical source inclusion. As in AIGMos 1.8, the definition name and runtime instance handle are separate (View BUILD, example instance |BUILD); 1.9 only adjusts naming rather than introducing a new distinction.",
   "confirmed": [
     {
       "id": "B-C01",
@@ -414,13 +414,19 @@
   },
   "naming_correction": {
     "correction_date": "2026-11-23",
-    "source": "User clarification",
+    "source": "User clarification; checked AIGMos 1.8 system/layout/definitions.py and system/layout/instances.py",
     "authoritative_identifiers": {
       "view_definition": "BUILD",
       "example_runtime_view_instance": "|BUILD"
     },
-    "rule": "AIGMos View definitions are identified without the | instance prefix. The | prefix denotes a runtime View instance; they must be modeled as different entities.",
-    "supersedes": "The notation in prior A19-039 text 'System View |BUILD' and earlier draft uses of |BUILD as a View name; does not change optional System View architecture.",
-    "status": "USER_CONFIRMED; overall design remains UNLOCKED awaiting validation"
+    "rule": "View definition and runtime instance are separate identifiers as already established in AIGMos 1.8. AIGMos 1.9 preserves this separation; the terminology and naming change slightly (1.8 layout definition/template -> 1.9 View; 1.8 layout instance/handle |... -> 1.9 View instance |...). This is NOT a newly introduced architectural separation.",
+    "continuity_1_8": {
+      "definition": "system/layout/definitions.py: parse_layout_definition(name) loads .tmpl and returns the file-stem name plus tree and module specs",
+      "instance": "system/layout/instances.py: LayoutInstance has a distinct | handle; binding and instance creation are already separate",
+      "same_semantics": "Definition -> instantiated runtime handle was already present in 1.8",
+      "version_1_9_change": "Minor naming change and panel terminology, not a new identity model"
+    },
+    "affected_prior_statement": "Prior explanation incorrectly described definition/instance separation as an important architectural difference. Corrected to existing 1.8 behavior.",
+    "status": "USER_CONFIRMED_CONTINUITY; overall Build Tool design remains UNLOCKED"
   }
 }
