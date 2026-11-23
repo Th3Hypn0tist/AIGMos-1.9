@@ -1,0 +1,74 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "identity": {
+    "id": "AIGMOS_1_9_FULL_SOURCE_SNAPSHOT_BUILD",
+    "version": "0.1.0",
+    "date": "2026-11-23"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "source_role": "AIGMos Build Tool source and provenance policy, not canonical CW Ruleset",
+  "confirmed": [
+    {
+      "id": "SRC-001",
+      "rule": "Pruning starts from a complete source-system checkout/inventory loaded together, not independently downloaded module versions."
+    },
+    {
+      "id": "SRC-002",
+      "rule": "Do NOT create a per-dependency version-resolution requirement for Build Tool. Direct deps/libs use unambiguous identifiers from one source snapshot."
+    },
+    {
+      "id": "SRC-003",
+      "rule": "Record provenance at whole-source-snapshot level (e.g. Git commit/source tree digest) for reproducible/traced output."
+    },
+    {
+      "id": "SRC-004",
+      "rule": "Build Tool forms dependency closure from direct source headers, selected components, source registry and declared resources; only required code is included."
+    },
+    {
+      "id": "SRC-005",
+      "rule": "Build profiles store selected composition; the generated artifact stores actual source hashes, selected graph and validation/provenance."
+    }
+  ],
+  "pipeline": [
+    "Acquire one complete source checkout/snapshot",
+    "Inventory files, registered module identities, source headers and CodeMarkup metadata",
+    "Validate single-snapshot identifiers and declared direct dependencies",
+    "Resolve closure using local snapshot only; missing required dependency => FAIL",
+    "Select target-specific code and remove unselected features physically",
+    "Validate generated source, imports, CS/TER references and target compatibility",
+    "Emit source provenance and artifact report, then test/provision/deploy as separately specified"
+  ],
+  "separation": {
+    "build_profile": "Reusable user-chosen selection; MAY pin full source snapshot for repeatability.",
+    "source_snapshot": "Coherent imported set of source code, metadata, module manifests and resources; source provenance ID/hash.",
+    "dependency_graph": "Calculated from snapshot declarations and selected profile, never a manually maintained version solver.",
+    "artifact": "Generated target-specific source and validation/provenance, excluding secrets and unselected code."
+  },
+  "non_requirements": [
+    "Per-module semantic-version constraints solely for pruning",
+    "Per-dependency version selectors and lockfile solving across remote registries",
+    "Independent network fetching or mixed-revision dependency assembly as part of basic Build Tool"
+  ],
+  "hard_gates": [
+    "Unknown/ambiguous module identifiers => FAIL",
+    "Missing required file/module/library in full source snapshot => FAIL; no automatic remote downloads",
+    "Forbidden dependency edge => FAIL",
+    "Source selected for MP contains unsupported CP-only unresolved references => FAIL",
+    "Nondeterminism from different source snapshots must not be concealed; record snapshot identity",
+    "Snapshot provenance and per-emitted-file source mapping must be traceable"
+  ],
+  "notes": [
+    "Snapshot-level version information does not mean all source must share the same individual file version number; provenance establishes exactly which files formed the input.",
+    "Third-party library versions, if present in source, may be recorded as factual provenance but the Builder does not need to invent a per-dependency version negotiation system.",
+    "The source-header v0.2.0 target semantic migration remains a separate unlocked contract change.",
+    "Module metadata and policy validation remain necessary; absence of version solving does not waive dependency correctness or external library safety."
+  ],
+  "open": [
+    "Exact snapshot ID/hash representation, Git vs archive vs working tree provenance",
+    "How to refuse or warn about a dirty checkout when reproducibility requested",
+    "Whether selected third-party libraries are expected to be vendored in snapshot or can be declared as target-owned system facilities",
+    "Machine-readable artifact manifest layout",
+    "Which source-hash/canonicalization strategy is stable across hosts"
+  ]
+}
