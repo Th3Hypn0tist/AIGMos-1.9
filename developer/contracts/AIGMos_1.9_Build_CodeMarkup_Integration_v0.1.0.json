@@ -1,0 +1,111 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "identity": {
+    "id": "AIGMOS_1_9_BUILD_CODEMARKUP_INTEGRATION",
+    "version": "0.1.0",
+    "date": "2026-11-23"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "source_role": "AIGMos Build Tool integration requirements; NOT a CW Ruleset edit",
+  "scope": {
+    "owns": [
+      "AIGMos Build Tool consumption of source markup",
+      "target branch selection",
+      "physical pruning integration",
+      "build-time validation requirements"
+    ],
+    "does_not_own": [
+      "CW CodeMarkup formal grammar",
+      "Canonical Wireframe dependency rules",
+      "CCF or NodeTypes semantics",
+      "runtime module permissions"
+    ]
+  },
+  "source_refs": [
+    "developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.2.0.json (historical two-target semantics)",
+    "developer/contracts/AIGMos_1.9_Build_Tool_Design_v0.1.0.json",
+    "CW_CodeMarkup_Prune_Requirements_Handover_v0.1.0.json (2026-11-23 handoff delivered separately to CW development)"
+  ],
+  "confirmed_by_user": [
+    {
+      "id": "CMI-001",
+      "rule": "Single Python # comment prefix for metadata and markup, never a special ## prefix."
+    },
+    {
+      "id": "CMI-002",
+      "rule": "First three metadata lines retain exact order: # deps, # libs, # target; optional # prune JSON string array follows."
+    },
+    {
+      "id": "CMI-003",
+      "rule": "The Git checkout is CPython-first. In a file supporting both targets, CP body is executable Python and MP body is commented source activated by MP build."
+    },
+    {
+      "id": "CMI-004",
+      "rule": "Use # target: BOTH for files with shared MP/CP implementations and # <AC.CP>/# </AC.CP> and # <AC.MP>/# </AC.MP> for platform variations. AC is an example feature ID."
+    },
+    {
+      "id": "CMI-005",
+      "rule": "A root feature entry in # prune such as AC controls its AC.CP and AC.MP code variants; the target suffix is a variant selector, not a separately chosen feature."
+    },
+    {
+      "id": "CMI-006",
+      "rule": "Build Tool physically removes excluded branches, optional hooks and exclusive dependencies; raw code is not rewritten by executing it."
+    },
+    {
+      "id": "CMI-007",
+      "rule": "CodeMarkup already belongs on the CW roadmap; AIGMos only sends its new real use-case requirements to CW. Do not modify CW specs in this repo/session."
+    }
+  ],
+  "example": {
+    "source": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: BOTH\n# prune: [\"AC\"]\n\ndef execute(command):\n\n    # <AC.CP>\n    authorize_cp(command)\n    # </AC.CP>\n\n    # <AC.MP>\n    # authorize_mp(command)\n    # </AC.MP>\n\n    return dispatch(command)\n",
+    "raw_checkout": "CPython interprets the CP statement, and the MP statement is a comment.",
+    "build_cp_ac": "CP branch stays; MP branch and markup removed.",
+    "build_mp_ac": "CP branch removed; MP comment is activated by removing its single agreed comment prefix.",
+    "build_cp_no_ac": "Both AC branches removed.",
+    "build_mp_no_ac": "Both AC branches removed."
+  },
+  "target_migration": {
+    "historical_contract": "Source_Dependency_Header_v0.2.0: MP=compatible with MP and CP; CP=CP-only. BOTH does not exist there.",
+    "proposed_next_version": "Explicitly version a three-value target scheme MP=MP-only, CP=CP-only, BOTH=supported on MP and CP (with target-specific blocks as needed).",
+    "compatibility_gate": "NEVER reinterpret header v0.2.0 target=MP retroactively. Scanner must use pinned header/markup contract versions.",
+    "raw_checkout_scope": "CP-first is a rule for the normal full-system source/entrypoint; it does not imply MP-only files are independently executable under CPython.",
+    "status": "UNLOCKED_PENDING_CW_AND_HEADER_VERSION"
+  },
+  "source_processing": {
+    "order": [
+      "Read complete single source snapshot",
+      "Scan headers and CodeMarkup with pinned ruleset",
+      "Resolve canonical feature IDs against StructureTree projection",
+      "Compute direct typed dependencies and derived dependency closure",
+      "Select feature and target branches and physically emit code",
+      "Re-scan emitted code and validate imports/commands/resources",
+      "Parse/compile generated Python and enforce target/runtime checks",
+      "Record source-to-output provenance"
+    ],
+    "dependency_authority": "Code-file header declares direct code dependencies. StructureTree is derived and cannot silently override actual source claims. Closure is computed, never treated as independent SSOT.",
+    "conditional_dependency_gap": "Exact declaration of branch-specific direct deps/libs is unresolved. # prune itself is NOT a full substitute for deps/libs.",
+    "scope_boundary": "In-file pruning in Hardcore and whole module/file pruning starting at Core Modules is an AIGMos initial use-case policy proposal, not a global CW rule or a validated hard prohibition."
+  },
+  "validator_requirements": [
+    "Unknown feature IDs and malformed JSON => FAIL",
+    "Unknown/unbalanced/crossed/invalid target tags => FAIL",
+    "Tag feature missing from # prune => FAIL absent explicitly versioned exception",
+    "Illegal MP/CP branch combinations => FAIL",
+    "Generated code has valid syntax and no leaked unwanted feature/import/command reference",
+    "Direct dependencies, platform capabilities, module authorization and closure validated separately",
+    "Raw default CP file must parse; all required emitted target variants must parse",
+    "No implicit automatic fix of invalid suites or magical import installation",
+    "Original source span -> emitted line/region provenance recorded",
+    "Historical header semantic versions must remain distinguishable"
+  ],
+  "open_for_CW_or_AIGMos": [
+    "CW formal CodeMarkup syntax: nesting, escaping comments, multiline syntax, indentation, raw Python token contexts",
+    "How conditional direct deps/libs are explicitly represented and checked",
+    "Exact versioned migration from header v0.2.0 to new target vocabulary",
+    "Line source mapping/format and emitted metadata policy",
+    "Detailed allowed markup scope at Core Module boundary",
+    "Compiler/device acceptance implementation and negative tests"
+  ],
+  "lifecycle": "Development draft; no executable validator, CW ruleset change or LOCKED status implied."
+}
