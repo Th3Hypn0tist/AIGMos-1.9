@@ -1,0 +1,58 @@
+{
+  "type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "version": "0.1.0",
+  "date": "2026-11-23",
+  "status": "UNLOCKED",
+  "validated": false,
+  "reference_spec": {
+    "set": "CW_CORE_v1.6.0",
+    "ccf": "2.6.0",
+    "nodetypes": "1.19.0",
+    "rules": "4.4.0",
+    "status": "UNLOCKED opt-in candidate"
+  },
+  "authority": "User decisions; CW and AIGMos evolve concurrently, not final LOCKED",
+  "source": {
+    "new_zip_sha256": "9c4d1a0223549f501eca64e3cc35b01d9cb00cabee2710ee608504f5df5145f9",
+    "old_runtime": "Th3Hypn0tist/AIGMos@20383e681dd49f3be33070dba41bbcdc4034ef63"
+  },
+  "id": "AIGMOS_1_9_UNIFIED_ERRORS_CSO",
+  "confirmed": {
+    "one_error": "Exactly one Error mechanism applies everywhere: pre-CS BOOT, INPUT, STATE, TER, CS, EXPOSE and Core/System/User modules. No parallel authoritative error subsystem.",
+    "cso": "CS = command input; execution output = OK (success no payload), actual command response when there is one (no mandatory wrapper), or ERROR under unified Error contract.",
+    "errors_buffer": "config.json defines Error Buffer count: positive integer N holds latest N errors; 0 retains all entries. Independent from Log Buffer.",
+    "error_cs_trace": "Every Error during a CS invocation causes one corresponding CS log record with executed command and parameters, even when logger mode off. Never duplicate if mode cs/ac already recorded that invocation.",
+    "error_ac": "When AC is runtime-active, Error includes available AC actor/identity information for any logging mode; never invent a missing actor.",
+    "error_without_cs": "BOOT/module errors use same Error mechanism even when no CS execution exists; no fabricated CS record.",
+    "always_available": "Errors and mandatory failure-linked CS log remain active regardless of optional continuous logger."
+  },
+  "derived_constraints": [
+    "One Error protocol across runtime, not a sixth Hardcore mechanism.",
+    "An Error must not require optional AC, Q, UI, logger mode cs/ac or Expose to exist.",
+    "Error and Log Buffer are independent counts and records.",
+    "Protect credentials when capturing full CS command/parameters.",
+    "0 means all, not disabled; possible memory pressure requires target-aware validation, not silent cap.",
+    "Retain original ERROR if optional logging sink fails."
+  ],
+  "legacy_evidence": [
+    "new/docs/contracts/shared_error_audit_log_schema.json defines AIGMOS_ERROR_V1 fields and redaction as legacy reference; 2.0 locked/audit clauses not adopted.",
+    "new/system/lib/contracts/errors.py provides build_contract_error and redact_for_contract, not a universal live dispatcher.",
+    "new/system/cs/parser.py / reporter.py still use legacy text error and $SYSTEM.ERRORS; BOOT/TER use boot_log."
+  ],
+  "open": [
+    "Precise Error shape and unambiguous internal tagging for payload text OK/ERROR.",
+    "Error mechanism/buffer owner, early BOOT before config.json, user module access without violating CS/STATE rules.",
+    "Exact config.json keys/default counts and memory policy for 0=all.",
+    "MEM vs optional FILE save/reload, buffer failure, correlation/duplicate handling.",
+    "Parameter-level secret redaction and error/log read/export access control."
+  ],
+  "tests": [
+    "CS success with no value returns OK; with value returns actual value.",
+    "CS failure in mode off yields ERROR + Error Buffer + one CS command+parameters log.",
+    "CS failure in cs/ac does not double-log.",
+    "AC-active Error has actor independent of logging mode.",
+    "BOOT and User Module Error use same common format.",
+    "Buffer count 1 keeps newest, 0 keeps all.",
+    "No secret-bearing raw values in visible error/log."
+  ]
+}

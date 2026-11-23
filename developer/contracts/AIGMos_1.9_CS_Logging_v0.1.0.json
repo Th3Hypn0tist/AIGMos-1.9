@@ -1,0 +1,85 @@
+{
+  "type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "version": "0.1.0",
+  "date": "2026-11-23",
+  "status": "UNLOCKED",
+  "validated": false,
+  "reference_spec": {
+    "set": "CW_CORE_v1.6.0",
+    "ccf": "2.6.0",
+    "nodetypes": "1.19.0",
+    "rules": "4.4.0",
+    "status": "UNLOCKED opt-in candidate"
+  },
+  "authority": "User decisions; CW and AIGMos evolve concurrently, not final LOCKED",
+  "source": {
+    "new_zip_sha256": "9c4d1a0223549f501eca64e3cc35b01d9cb00cabee2710ee608504f5df5145f9",
+    "old_runtime": "Th3Hypn0tist/AIGMos@20383e681dd49f3be33070dba41bbcdc4034ef63"
+  },
+  "id": "AIGMOS_1_9_CS_LOGGING",
+  "confirmed": {
+    "modes": [
+      "off",
+      "cs",
+      "ac"
+    ],
+    "default_mode": "off",
+    "off": "No continuous normal successful CS logging; still mandatory on CS errors, so logging cannot be totally disabled.",
+    "cs": "Log all CS executions and parameters. Dependency: CS only.",
+    "ac": "Log all CS executions/parameters and actor identity. Dependencies: CS and AccessCore.",
+    "conditional_dependency": "Select optional logging deps per chosen mode; do not remove mandatory Error mechanism or error-triggered CS log.",
+    "buffer": "Independent Log Buffer count in config.json; N>=1 retains newest N, 0 retains all.",
+    "error_actor": "When AC runtime-active, Errors always include actor even in off/cs mode.",
+    "dedupe": "CS error creates no extra CS record if already captured by regular mode."
+  },
+  "mode_matrix": [
+    {
+      "mode": "off",
+      "success": "no normal log",
+      "fail": "one CS log + Error Buffer",
+      "ac_error": "actor if active"
+    },
+    {
+      "mode": "cs",
+      "success": "CS log",
+      "fail": "one CS log + Error Buffer",
+      "ac_error": "actor if active"
+    },
+    {
+      "mode": "ac",
+      "success": "CS + AC actor log",
+      "fail": "one CS + actor log + Error Buffer",
+      "ac_error": "actor if active"
+    }
+  ],
+  "not_agreed": [
+    "Concrete config.json names or default capacities",
+    "Automatic FILE persistence",
+    "Standalone Audit subsystem; bot-training Audit excluded, Q/runtime parity still required",
+    "Logger levels and clock/payload limits",
+    "Mode ac when AC included but runtime-disabled",
+    "Build-vs-runtime mode switching exact rule"
+  ],
+  "candidate_config_NOT_NORMATIVE": {
+    "errors": {
+      "buffer": 100
+    },
+    "logging": {
+      "mode": "off",
+      "buffer": 100
+    }
+  },
+  "open": [
+    "Exact config.json field names/default counts; 0=all RAM consequences.",
+    "Buffer ownership/location and access, read/clear and FILE export.",
+    "Build-mode/runtime switch policy, AC runtime-disabled behavior.",
+    "Secret-safe complete CS parameter capture; correlation/dedupe across nested invocations."
+  ],
+  "tests": [
+    "off success no normal log; off failure one CS log.",
+    "cs/ac success captured; failure not duplicated.",
+    "AC runtime active always adds identity to Error.",
+    "Log Buffer count 1 newest, 0 all.",
+    "Selecting ac in build with no AC dependency fails rather than downgrades."
+  ]
+}
