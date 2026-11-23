@@ -127,7 +127,7 @@
     "declared_edges": "Exact, immediate typed references only (source headers SSOT)",
     "derived_edges": "Calculated from scanned graph with full provenance; never written back as falsely declared direct deps",
     "source_capability_mapping": "OPEN: module registry/meta/feature declarations must not become a conflicting manually-maintained requires graph",
-    "intra_file_conditional_pruning": "OPEN: need a safe explicit syntax + verifier to eliminate AC guard without parallel HC.CS implementations"
+    "intra_file_conditional_pruning": "USER-CONFIRMED SYNTAX DIRECTION: use a single # prefix for optional prune list and block markers, matching existing source headers; exact parsing, dependency semantics and edge cases remain OPEN."
   },
   "candidate_build_profiles": [
     {
@@ -428,5 +428,22 @@
     },
     "affected_prior_statement": "Prior explanation incorrectly described definition/instance separation as an important architectural difference. Corrected to existing 1.8 behavior.",
     "status": "USER_CONFIRMED_CONTINUITY; overall Build Tool design remains UNLOCKED"
+  },
+  "pruning_markup_decision": {
+    "status": "USER_CONFIRMED_SYNTAX_ONLY",
+    "location": "At file start after the three mandatory '# deps:', '# libs:', '# target:' lines",
+    "syntax_examples": {
+      "header": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: MP\n# prune: [\"AC\", \"IAM\"]",
+      "open_tag": "# <AC>",
+      "close_tag": "# </AC>"
+    },
+    "rule": "Use one # comment prefix, not ##. Exact canonical case and identifier grammar remain OPEN. The build tool parses tags and removes omitted feature blocks; generated output must validate.",
+    "scope": "Initial proposal: source-level pruning limited to Hardcore; Core Module boundary and exact scope require formalization.",
+    "remaining_open": [
+      "Optional deps in code and whether the header includes them",
+      "Nested/overlapping markers",
+      "Source mapping and validation of removed lines",
+      "Whether target markers such as CP use the same registry as feature IDs"
+    ]
   }
 }
