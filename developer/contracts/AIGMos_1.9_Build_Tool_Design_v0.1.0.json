@@ -31,7 +31,7 @@
     ],
     "warning": "This document distinguishes confirmed rules from design proposals and open questions; it is not immutable nor a verified implementation."
   },
-  "principle": "Builder is an optional AIGMos System View |BUILD with Panels, System commands and functions on the same HC.CS/module registry. It composes a new instance using source modules available to its Builder instance, without introducing a new Hardcore mechanism. Selected feature graph and dependency closure determine actual physical source inclusion.",
+  "principle": "Builder is an optional AIGMos System View definition BUILD with Panels, System commands and functions on the same HC.CS/module registry. It composes a new instance using source modules available to its Builder instance, without introducing a new Hardcore mechanism. Selected feature graph and dependency closure determine actual physical source inclusion. The runtime view instance identifier is separate from the view definition identity (e.g. |BUILD), and must not be mistaken for the definition itself.",
   "confirmed": [
     {
       "id": "B-C01",
@@ -343,7 +343,7 @@
       },
       {
         "lmts": "TabDefinition + TabRegistry",
-        "aigmos_1_9": "Declarative |BUILD View navigation composition (optional UI layout details)"
+        "aigmos_1_9": "Declarative BUILD View navigation composition (example runtime instance |BUILD) (optional UI layout details)"
       },
       {
         "lmts": "ViewFrame / ViewItem / Projector",
@@ -371,7 +371,7 @@
       }
     ],
     "suggested_build_view": {
-      "view": "|BUILD",
+      "view": "BUILD",
       "status": "PROPOSAL_ONLY",
       "panels": [
         {
@@ -401,7 +401,9 @@
         }
       ],
       "action_flow": "UI intent → System command (CSi) → Build functions using module registry/validated deps → CSo result → renderer-neutral Panel projection → optional host",
-      "question": "Whether the UI is tab/page navigation with switchable panes like LMTS, or primarily a one-screen multi-pane builder."
+      "question": "Whether the UI is tab/page navigation with switchable panes like LMTS, or primarily a one-screen multi-pane builder.",
+      "view_instance_example": "|BUILD",
+      "view_identity_rule": "view: BUILD denotes the View definition. |BUILD denotes a runtime View instance created from a View definition. An instance ID is NOT the View definition identity."
     },
     "module_dependency_policy": [
       "No lmts package dependency in AIGMos 1.9 from this reference.",
@@ -409,5 +411,16 @@
       "Actual LMTS Curses host is CP-specific optional UI, not a mandatory part of MP runtime.",
       "Build Tool source scanner and graph validation should run independently of UI host and projectors."
     ]
+  },
+  "naming_correction": {
+    "correction_date": "2026-11-23",
+    "source": "User clarification",
+    "authoritative_identifiers": {
+      "view_definition": "BUILD",
+      "example_runtime_view_instance": "|BUILD"
+    },
+    "rule": "AIGMos View definitions are identified without the | instance prefix. The | prefix denotes a runtime View instance; they must be modeled as different entities.",
+    "supersedes": "The notation in prior A19-039 text 'System View |BUILD' and earlier draft uses of |BUILD as a View name; does not change optional System View architecture.",
+    "status": "USER_CONFIRMED; overall design remains UNLOCKED awaiting validation"
   }
 }
