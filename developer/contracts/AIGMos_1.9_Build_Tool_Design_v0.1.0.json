@@ -127,7 +127,7 @@
     "declared_edges": "Exact, immediate typed references only (source headers SSOT)",
     "derived_edges": "Calculated from scanned graph with full provenance; never written back as falsely declared direct deps",
     "source_capability_mapping": "OPEN: module registry/meta/feature declarations must not become a conflicting manually-maintained requires graph",
-    "intra_file_conditional_pruning": "USER-CONFIRMED SYNTAX DIRECTION: use a single # prefix for optional prune list and block markers, matching existing source headers; exact parsing, dependency semantics and edge cases remain OPEN."
+    "intra_file_conditional_pruning": "Single-# comment markers; user proposes # target: BOTH plus # <AC.MP> / # <AC.CP> to select target-specific optional code. Existing v0.2.0 target=MP means both, so changing MP to MP-only requires a versioned contract update; scope, parsing and optional deps are OPEN."
   },
   "candidate_build_profiles": [
     {
@@ -444,6 +444,72 @@
       "Nested/overlapping markers",
       "Source mapping and validation of removed lines",
       "Whether target markers such as CP use the same registry as feature IDs"
+    ]
+  },
+  "target_specific_pruning_proposal": {
+    "state": "USER_SUGGESTED_UNFINALIZED",
+    "user_idea": "When one source file needs different MicroPython and CPython implementations, declare target BOTH and distinguish feature blocks AC.MP and AC.CP.",
+    "example": "# deps: [\"HC.STATE\"]\n# libs: []\n# target: BOTH\n# prune: [\"AC\"]\n\ndef execute(command):\n    # <AC.MP>\n    authorize_mp(command)\n    # </AC.MP>\n\n    # <AC.CP>\n    authorize_cp(command)\n    # </AC.CP>\n\n    return dispatch(command)",
+    "suggested_target_semantics": {
+      "BOTH": "This file has shared source with target-conditional blocks and can be built for MP or CP; prune target-specific branches BEFORE parsing the generated Python.",
+      "MP": "Candidate NEW meaning: MP-only source. WARNING: changes v0.2.0 rule where MP denotes compatible with BOTH; requires explicit versioned migration.",
+      "CP": "CP-only source, as already defined in header v0.2.0."
+    },
+    "markers": [
+      {
+        "tag": "AC",
+        "meaning": "Optional AC code common to both targets"
+      },
+      {
+        "tag": "AC.MP",
+        "meaning": "Optional AC code emitted only if AC is selected AND target is MP"
+      },
+      {
+        "tag": "AC.CP",
+        "meaning": "Optional AC code emitted only if AC is selected AND target is CP"
+      }
+    ],
+    "prune_list_semantics": "One logical optional capability entry ('AC') covers its AC, AC.MP, and AC.CP blocks; avoid duplicate independently selectable AC.MP/AC.CP feature IDs unless a distinct feature is explicitly modeled.",
+    "build_matrix": [
+      {
+        "target": "MP",
+        "ac": false,
+        "keeps": []
+      },
+      {
+        "target": "CP",
+        "ac": false,
+        "keeps": []
+      },
+      {
+        "target": "MP",
+        "ac": true,
+        "keeps": [
+          "AC",
+          "AC.MP"
+        ]
+      },
+      {
+        "target": "CP",
+        "ac": true,
+        "keeps": [
+          "AC",
+          "AC.CP"
+        ]
+      }
+    ],
+    "guardrails": [
+      "Exactly one target variant remains for each mutually exclusive target-specific code path; no MP output may retain CP-only syntax/imports.",
+      "Conditional imports are inside selected markers or represented by verifiable feature-specific imports/dependency declarations.",
+      "Hardcore uses public boundaries; selecting AC does not authorize unconditional Hardcore->private Core Module imports.",
+      "Validate generated variants for syntax, dependencies, target compatibility, full source provenance and removal of unselected code."
+    ],
+    "open": [
+      "Versioned change to header v0.2.0 target: MP semantics is necessary if adopting distinct MP-only / CP-only / BOTH values.",
+      "Decide whether BOTH is mandatory for all shared files, or only for mixed-block files.",
+      "Define optional deps/libs declaration mechanism consistent with header SSOT.",
+      "Formal marker grammar, placement, pairing, nesting, target tag handling, and structurally valid empty suites.",
+      "CCF/CW validation and tests before LOCKED."
     ]
   }
 }
