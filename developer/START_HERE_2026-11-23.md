@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**23 Nov Build Tool additions:** [Build Tool session handover](memos/2026-11-23_build_tool_session_handover.md) and three draft contracts: [Build Profile](contracts/AIGMos_1.9_Build_Profile_v0.1.0.json), [CodeMarkup integration](contracts/AIGMos_1.9_Build_CodeMarkup_Integration_v0.1.0.json), [Full Source Snapshot Build](contracts/AIGMos_1.9_Full_Source_Snapshot_Build_v0.1.0.json). Read these for later Build Tool discussions; they do not supersede unrelated 1.9 runtime decisions or modify CW Rulesets.
+
 Read in this order:
 
 1. `developer/START_HERE_2026-11-22.md` — preceding baseline and original navigation.
@@ -9,6 +11,8 @@ Read in this order:
 3. `developer/contracts/AIGMos_1.9_Config_Ownership_Parity_Delta_v0.1.0.json` — confirmed 2026-11-23 changes; use to reconcile superseded config assumptions.
 4. `developer/audits/AIGMos_1.9_1.8_Cleanup_2026-11-23.md` — source-pinned feature inventory and structural cleanup.
 5. `developer/memos/2026-11-22_session_handover_v0.3.0.md` and `developer/contracts/AIGMos_1.9_Source_Dependency_Header_v0.2.0.json` — prior runtime details and source dependency ABI.
+
+**Source-header caution:** v0.2.0 still defines `target=MP` as compatible with both MP and CP. Proposed `target=BOTH` and distinct MP-only treatment require a versioned contract change; no silent migration. Basic pruning starts from one full-system source snapshot and does not solve dependency versions individually.
 
 **Immediate next task:** Complete 1.8 source parity coverage and define component-owned /config, loader, Q default profile and AC activation exception. Never label this LOCKED until validation. Never modify runtime implementation without separate clear authorization.
 
