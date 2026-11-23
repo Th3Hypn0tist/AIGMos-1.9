@@ -1,0 +1,119 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_AUDIT",
+  "identity": {
+    "id": "AIGMOS_1_9_STRUCTURE_DERIVABILITY_AUDIT",
+    "version": "0.1.0",
+    "date": "2026-11-23"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "implementation_verified": false,
+  "purpose": "Separate what can be mechanically derived from explicit CCF/CW canonical structure or source metadata from architecture choices, implementation correspondence and runtime acceptance that require evidence or user decisions.",
+  "evidence": [
+    "Local Canonical_Contract_Format_v2.4.2(1).json: structure_tree, contract_shape, validator, model_implementation_correspondence.",
+    "Local CanonicalWireframe_NodeTypes_v1.15.1(1).json: nodetypes, api_io_contract, output_source_contract, readiness_claim_boundary.",
+    "Local CanonicalWireframe_Dependency_Rules_v3.11.0(1).json: derived_dependency, function_call, event_handler, model_implementation_correspondence.",
+    "AIGMos-1.9 developer/contracts/* + developer/audits/* source-pinned 1.8 audit, inspected on 2026-11-23.",
+    "Local AIGMos_1.9_1.8_Functional_Parity_Gate_v0.1.0.json: 21 feature groups all migration_unresolved.",
+    "Local AIGMos_1.9_Suursiivous_Audit_v0.2.0.json: 48 atomic capability entries, 21 grouped features, 12 code/document drift points, 19 named tests (not executed)."
+  ],
+  "current_source_state": {
+    "aigmos_1_9_repo_tree": "29 tracked files and 5 directories at time of audit; all are developer/development documents, not AIGMos 1.9 runnable source code.",
+    "example_ccf_structure_gap": "Current development decision/Build Tool JSON files lack full canonical format, specification_ref, entities, constraints/gaps and other mandatory CCF top-level fields; they are development records, not a validated CCF canonical model.",
+    "canonical_ready_proven": false,
+    "structuretree_importer_or_mapper_runtime_verified": false,
+    "derived_structure_full_aigmos_1_9_available": false,
+    "conclusion": "Code generation or authoritative target-specific registry cannot be claimed to work from a currently complete canonical AIGMos 1.9 StructureTree. First formalize and validate explicitly modeled semantics; don't infer missing implementation behavior."
+  },
+  "classifications": {
+    "DIRECT": "Mechanically derivable from explicit, valid pinned canonical properties/links using existing CCF/CW semantics; no domain guess.",
+    "CONDITIONAL": "Mechanically derivable once the corresponding AIGMos-specific structured properties, feature IDs, profiles/source mappings or runtime evidence are explicitly modeled and a mapper exists.",
+    "MANUAL": "Cannot be decided from current structure; needs a normative policy, implementation behavior study, source evidence, target test, or user acceptance."
+  },
+  "workstreams": [
+    {
+      "id": "HC_API",
+      "subject": "Hardcore API contracts",
+      "auto": "DIRECT: declared API input/output reference compatibility, required links, ownership/call/event graph validation; CONDITIONAL: generated interface documentation and test skeletons once HC functions/data/flows are modeled.",
+      "manual": "Exact CSi/CSo error/authorization ABI, TER Runner invocation and scheduling semantics, boot-failure behavior, API edge cases and behavioral parity with 1.8.",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "CONFIG_BOOT",
+      "subject": "Component config, BOOT, RELOAD",
+      "auto": "DIRECT: explicit ownership/scope, typed reference/required-link consistency; CONDITIONAL: loader dependency order if canonical initialization edges and prerequisites are modeled.",
+      "manual": "Paths/file schemas under /config, loader ABI, init order, optional component failure modes, config atomic reload boundaries, applied config visibility, AC privileged false→true write authorization/atomic failure, full file-path guard.",
+      "status": "MOSTLY_MANUAL"
+    },
+    {
+      "id": "SOURCE_MARKUP",
+      "subject": "Code headers, target and in-file prune",
+      "auto": "CONDITIONAL: direct typed deps/libs/target graph from source metadata, derived closure, source mapping, feature/target branch selection and negative checks when CodeMarkup Ruleset/mapper/version migration are implemented.",
+      "manual": "Formal CodeMarkup grammar belongs in CW development; agree revised MP/CP/BOTH header semantics and conditional imports, blank/comment handling, generated header and safe transform. No changes to CW during this audit.",
+      "status": "CONDITIONAL_NOT_YET_IMPLEMENTED"
+    },
+    {
+      "id": "MODULE_REGISTRY",
+      "subject": "Module registry and lifecycle",
+      "auto": "DIRECT: canonical identities/typed links/capabilities if explicitly modeled; CONDITIONAL: versioned registry, validated derived dependencies, MODULE/Panel projections and readiness reports from canonical entities plus annotated source/manifest.",
+      "manual": "Versioned 2.0 type=view -> 1.9 panel migration, System Lib dependency class/lifecycle policy, entrypoint/bind/start/stop semantics, module collision policy, dynamic imports and device registry strategy.",
+      "status": "LARGELY_DERIVABLE_AFTER_ADAPTATION"
+    },
+    {
+      "id": "MIGRATION_PARITY",
+      "subject": "1.8 to 1.9 functional parity",
+      "auto": "CONDITIONAL: source mapper may enumerate symbols/files/imports/calls and propose candidates with provenance; canonical crosswalk matrix, missing feature list and test scaffolds derivable from accepted owner/capability mapping.",
+      "manual": "Accept/reject behavioral equivalence, runner once/cycle/loop details, Q stream/alias/history/roles, legacy SQLite->explicit FILE durability and planned bot-training exclusion; real code-backed tests needed.",
+      "status": "MANUAL_POLICY_PLUS_SOURCE_EVIDENCE"
+    },
+    {
+      "id": "BUILD_PROFILE",
+      "subject": "Profiles and BUILD View",
+      "auto": "CONDITIONAL: selection widgets, target feature catalog, feasible combinations and validation explanations derived from accepted target/module/capability data; View can project registry and validation results.",
+      "manual": "Portable profile JSON format, edit/save/import/export command names/authorization, profile FILE location and restore/import conflict semantics; snapshot pin behavior and UI ergonomics.",
+      "status": "DERIVABLE_FIELDS_MANUAL_FORMAT"
+    },
+    {
+      "id": "BUILD_ARTIFACT",
+      "subject": "Source closure, artifact and deploy",
+      "auto": "DIRECT: derived dependencies from explicitly typed dependency-forming links. CONDITIONAL: resolved file/resource inclusion and prune output from pinned full source snapshot, source metadata, feature and target Ruleset.",
+      "manual": "Target MP/CP package layout/boot files, hardware shim/firmware limits, provisioning /config, artifact/report location, dirty tree and external library policy, measured C6 memory/timing tests.",
+      "status": "DERIVABLE_CONTENT_MANUAL_PACKAGING"
+    },
+    {
+      "id": "VALIDATION",
+      "subject": "CCF/CW validation and implementation checks",
+      "auto": "DIRECT: shape, identity/reference resolution, property/link rulesets, Required Link satisfaction, readiness and validation findings from valid pinned canonical artifacts.",
+      "manual": "Actually formalize missing AIGMos 1.9 canonical entities/properties/gaps; execute validator, prove mapper source↔model correspondence, run target tests and parity tests, accept failures/changes.",
+      "status": "FRAMEWORK_READY_INPUTS_MISSING"
+    }
+  ],
+  "most_important_boundaries": [
+    "CCF StructureTree is a rebuildable resolved semantic IR, not a second canonical SSOT.",
+    "CW derives entity dependencies only from explicit dependency-forming Link Rulesets, not every visual/textual link.",
+    "CW READY is canonical-model completeness, not implementation correctness, real hardware suitability or runtime behavior.",
+    "Source code mapper is an allowed CCF import path, not proof a complete production mapper is present.",
+    "No individual dependency version solver is needed for AIGMos pruning of one coherent source snapshot, but canonical specification_ref/format-version interpretation still requires immutable version pinning.",
+    "No direct generation from prose-only developer documents; first structure them into explicit Entity/Property semantics with pinned interpretation specification.",
+    "No silent change of historical source header MP=both when adding target BOTH."
+  ],
+  "recommended_order": [
+    "M1: Produce full 1.9 CCF candidate from current decision/feature inventory with explicit Gaps; map each decision to entity/property/constraint and provenance.",
+    "M2: Run CCF/CW shape/readiness on candidate, distinguish INVALID vs UNREADY; do not assume validated before actual tests.",
+    "M3: Resolve only semantics not derivable: component /config+BOOT/RELOAD/AC privilege, HC CS/TER ABI, 1.8 parity divergences, module 1.9 lifecycle adaptation.",
+    "M4: Import CW CodeMarkup ruleset when ready; apply versioned MP/CP/BOTH and conditional-dependency handling.",
+    "M5: Generate registry/closure/profile field catalog from structured metadata; hand-decide only profile file format and target packaging.",
+    "M6: Run implementation correspondence, security, parity and C6 real-device tests; lock only passing artifacts."
+  ],
+  "no_changes_to": [
+    "CCF v2.4.2",
+    "CW NodeTypes v1.15.1",
+    "CW Dependency Rules v3.11.0",
+    "AIGMos 1.9 runtime source"
+  ],
+  "no_unverified_claims": [
+    "No full canonical AIGMos 1.9 StructureTree was built here.",
+    "No source mapper, build output or CW validator executed.",
+    "No live AIGMos 1.9 runtime acceptance tests performed."
+  ]
+}
