@@ -1,0 +1,114 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "identity": {
+    "id": "AIGMOS_1_9_BUILD_PROFILE",
+    "version": "0.1.0",
+    "date": "2026-11-23"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "source_role": "Build Tool persisted/exportable selection contract (initial draft)",
+  "scope": {
+    "owns": [
+      "Builder profile identity and user selection",
+      "Builder save/load/import/export semantics",
+      "Separation of desired composition from emitted code and target runtime configuration"
+    ],
+    "does_not_own": [
+      "Code dependency source of truth",
+      "Compiled/derived dependency closure",
+      "Runtime /config",
+      "TER-owned persistent definitions",
+      "CW CodeMarkup formal syntax"
+    ]
+  },
+  "confirmed": [
+    {
+      "rule": "Build Profiles must be saveable and exportable."
+    },
+    {
+      "rule": "Build Profiles belong to the optional AIGMos System View BUILD and associated CS functions, not a new Hardcore layer."
+    },
+    {
+      "rule": "A Profile defines selected target, modules, features and optional interfaces, not a precomputed direct/transitive dependency truth."
+    },
+    {
+      "rule": "Profile operations must not provide CS/FILE path access to protected runtime /config."
+    },
+    {
+      "rule": "Builder uses a complete coherent full-system source checkout/snapshot as dependency universe for pruning; no independent version solving for each dependency."
+    }
+  ],
+  "proposed_schema_example": {
+    "kind": "AIGMOS_BUILD_PROFILE",
+    "format_version": "0.1.0",
+    "profile": {
+      "id": "minimal-c6",
+      "name": "Minimal ESP32-C6",
+      "revision": 1
+    },
+    "source": {
+      "snapshot_id": "<source snapshot reference; may be Git commit, hash, or local pinned snapshot>"
+    },
+    "selection": {
+      "target": "MP",
+      "hardware": "ESP32-C6-N16",
+      "modules": [],
+      "features": [],
+      "expose": [],
+      "adapters": []
+    },
+    "options": {
+      "strip_unselected": true,
+      "include_builder": false
+    }
+  },
+  "field_semantics": {
+    "source.snapshot_id": "Source inventory pin for tracing/reproducing builds; optional within interactive editing if builder has an active inventory, but resolved before final build.",
+    "selection.target": "MP or CP build target, NOT source-header BOTH. Build profile selects one concrete output target.",
+    "selection.modules": "Identifiers chosen from Source Registry/StructureTree; default and required closure computed, not persisted as authoritative graph.",
+    "selection.features": "Optional feature IDs such as AC/IAM; target-specific AC.MP/AC.CP variants are NOT standalone profile features.",
+    "selection.expose": "Chosen optional external transport/bindings to compile into build, not runtime service secrets.",
+    "options.strip_unselected": "Actually remove unnecessary source code and its exclusive transitive dependencies."
+  },
+  "operations": {
+    "mandatory": [
+      "create",
+      "save",
+      "load",
+      "export"
+    ],
+    "natural_supported": [
+      "list",
+      "save_as",
+      "import",
+      "rename",
+      "delete",
+      "validate"
+    ],
+    "names": "Exact CS command namespace and parameters OPEN; do not treat these labels as canonical CS commands"
+  },
+  "persistence": {
+    "owner": "Builder-specific FILE-backed user data outside protected /config",
+    "format": "Versioned portable JSON",
+    "export_rules": [
+      "Export only profile/selection metadata and non-secret provenance",
+      "Never export access tokens/API keys, runtime private configuration or arbitrary FILE paths",
+      "Preserve unknown-but-valid profiles in inspect mode; fail build when required module/capability missing",
+      "Imported profiles need schema, ID, target and feature validation"
+    ]
+  },
+  "resolution": "Profile + one pinned full-source snapshot -> validated selected components -> derived dependency closure -> physically pruned target artifact. Do not store computed closure as a second semantic authority.",
+  "open_decisions": [
+    "Final portable schema, stable naming conventions and profile revisions",
+    "Source pin/reference portability between machines and offline imports",
+    "Hardware selector and target constraints schema",
+    "Exact CS operation names, profile FILE storage locations and import permissions",
+    "Default profile migration on source inventory change",
+    "How to version the profile schema independently from the repository snapshot"
+  ],
+  "compatibility": {
+    "header": "Current 1.9 header v0.2.0 only has MP/CP and defines MP as both; next CodeMarkup/header version introduces BOTH without silently rewriting historical meaning.",
+    "cw": "No CCF/CW validation pass claimed."
+  }
+}
