@@ -1,0 +1,462 @@
+{
+  "type": "AIGMOS19_CONTRACT_ACCEPTANCE_MATRIX",
+  "id": "A19_ERRORS_LOGGING_TESTS",
+  "version": "0.1.2",
+  "status": "UNLOCKED",
+  "date": "2026-11-25",
+  "execution_status": "NOT_EXECUTED",
+  "tests": [
+    {
+      "id": "EL-T01",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "CS success without return",
+      "expected": {
+        "output": "OK",
+        "log_delta": 0,
+        "error_delta": 0
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T02",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "CS success with return 0",
+      "expected": {
+        "output": 0,
+        "log_delta": 0,
+        "error_delta": 0
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T03",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "CS error with parameters",
+      "expected": {
+        "output": "ERROR",
+        "log_delta": 1,
+        "error_delta": 1,
+        "logged_fields": [
+          "command",
+          "parameters"
+        ]
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T04",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "CS success",
+      "expected": {
+        "log_delta": 1,
+        "error_delta": 0
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T05",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "CS error",
+      "expected": {
+        "log_delta": 1,
+        "error_delta": 1,
+        "no_duplicate": true
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T06",
+      "mode": "ac",
+      "ac_active": true,
+      "scenario": "CS success actor Alice",
+      "expected": {
+        "log_delta": 1,
+        "log_actor": "Alice"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T07",
+      "mode": "ac",
+      "ac_active": true,
+      "scenario": "CS error actor Alice",
+      "expected": {
+        "log_delta": 1,
+        "error_delta": 1,
+        "log_actor": "Alice",
+        "error_actor": "Alice"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T08",
+      "mode": "off",
+      "ac_active": true,
+      "scenario": "CS error actor Alice",
+      "expected": {
+        "log_delta": 1,
+        "error_delta": 1,
+        "error_actor": "Alice"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T09",
+      "mode": "cs",
+      "ac_active": true,
+      "scenario": "CS error actor Alice",
+      "expected": {
+        "log_delta": 1,
+        "error_delta": 1,
+        "error_actor": "Alice"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T10",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "BOOT error before CS init",
+      "expected": {
+        "error_delta": 1,
+        "synthetic_cs_entry": false
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T11",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "User module error without CS",
+      "expected": {
+        "error_delta": 1,
+        "synthetic_cs_entry": false
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T12",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "Error Buffer configured N=1; two Errors",
+      "expected": {
+        "error_buffer_count": 1,
+        "retains": "newest"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T13",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "Error Buffer configured N=0; three Errors",
+      "expected": {
+        "error_buffer_count": 3,
+        "retains": "all"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T14",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "Log Buffer N=1; two successes",
+      "expected": {
+        "log_buffer_count": 1,
+        "retains": "newest"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T15",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "Log Buffer N=0; three successes",
+      "expected": {
+        "log_buffer_count": 3,
+        "retains": "all"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T16",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "Error Buffer N=2 and Log Buffer N=1, two failures",
+      "expected": {
+        "error_buffer_count": 2,
+        "log_buffer_count": 1
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T17",
+      "mode": "ac",
+      "ac_active": true,
+      "scenario": "No CS context but AC runtime active",
+      "expected": {
+        "error_actor": "available_identity",
+        "synthetic_cs_entry": false
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T18",
+      "mode": "ac",
+      "ac_active": true,
+      "scenario": "Derive logging mode dependency closure",
+      "expected": {
+        "dependencies": [
+          "A19.HC.CS",
+          "A19.ACCESS_CORE"
+        ]
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T19",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "Derive logging mode dependency closure",
+      "expected": {
+        "dependencies": [
+          "A19.HC.CS"
+        ]
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T20",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "Derive normal logging mode dependency closure",
+      "expected": {
+        "dependencies": []
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T21",
+      "mode": "ac",
+      "ac_active": false,
+      "scenario": "AC missing from selected build",
+      "expected": {
+        "selected_profile": "invalid_or_fails_build"
+      },
+      "requirement_status": "confirmed"
+    },
+    {
+      "id": "EL-T22",
+      "mode": "off",
+      "ac_active": true,
+      "scenario": "Failed CS with credential param",
+      "expected": {
+        "secret_redacted": true,
+        "command_identity_and_param_structure_retained": true
+      },
+      "requirement_status": "pending_redaction_policy"
+    },
+    {
+      "id": "EL-T23",
+      "mode": "cs",
+      "ac_active": false,
+      "scenario": "Nested CS same command text",
+      "expected": {
+        "one_entry_per_invocation": true
+      },
+      "requirement_status": "pending_invocation_id"
+    },
+    {
+      "id": "EL-T24",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "Successful command returns literal ERROR",
+      "expected": {
+        "data_preserved": true,
+        "not_confused_with_failure": true
+      },
+      "requirement_status": "pending_CSo_encoding"
+    },
+    {
+      "id": "EL-T25",
+      "mode": "off",
+      "ac_active": false,
+      "scenario": "Logger sink fails while Error generated",
+      "expected": {
+        "original_Error_preserved": true,
+        "no_recursive_logging": true
+      },
+      "requirement_status": "pending_failure_policy"
+    },
+    {
+      "id": "EL-T26",
+      "mode": "ac",
+      "ac_active": false,
+      "scenario": "AC included in build but disabled at runtime",
+      "expected": {
+        "actor_when_disabled": "open"
+      },
+      "requirement_status": "pending_AC_runtime_policy"
+    },
+    {
+      "id": "EL-T27",
+      "scenario": "BOOT Error before config and CS initialized",
+      "expected": "Error library available; bootstrap storage choice open",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T28",
+      "scenario": "User Module Error without CS invocation",
+      "expected": "same protocol, zero invented CS log",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T29",
+      "scenario": "Error forwarded to CS after already being recorded",
+      "expected": "no duplicate Error Buffer or CS Log Buffer entry",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T30",
+      "scenario": "Error -> Logging -> CS import topology inspection",
+      "expected": "No direct Logger->CS source import, no dependency cycle",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T31",
+      "scenario": "Error Buffer owner and Log Buffer owner trace",
+      "expected": "candidate ownership links are unique and resolved",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T32",
+      "scenario": "Shrink Error capacity from four to two",
+      "expected": "proposed: retain newest two independently",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T33",
+      "scenario": "Zero configured buffer",
+      "expected": "all entries retained by count, no silent clamp",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T34",
+      "scenario": "CS error contains secret-bearing parameter",
+      "expected": "safe command/parameter context and redaction; policy open",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T35",
+      "scenario": "Error Logger sink throws while recording original Error",
+      "expected": "original ERROR survives, no recursive reporting",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T36",
+      "scenario": "ac selected while AC is present but disabled",
+      "expected": "behavior still OPEN; no fabricated actor",
+      "authority": "candidate_or_open",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T37",
+      "scenario": "Error Buffer owner",
+      "expected": "Error library",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T38",
+      "scenario": "Log Buffer owner",
+      "expected": "Logging library",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T39",
+      "scenario": "BOOT Error without CS",
+      "expected": "Unified Error record; no imaginary CS trace",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T40",
+      "scenario": "Success payload equal ERROR",
+      "expected": "Successful data remains ERROR, no false failure; internal tag proposed",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T41",
+      "scenario": "Success payload equal OK",
+      "expected": "Distinguish no-data from data payload internally",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T42",
+      "scenario": "Forward same Error via TER and CS",
+      "expected": "Error record remains single",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T43",
+      "scenario": "Two distinct invocations with equal CS text",
+      "expected": "Two distinct logs, no text-based dedupe",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T44",
+      "scenario": "Failed CS parsing",
+      "expected": "Error includes safe original command context",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T45",
+      "scenario": "AC active mode off",
+      "expected": "Error carries actual actor; one failure log",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T46",
+      "scenario": "AC disabled mode cs",
+      "expected": "No fabricated actor",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T47",
+      "scenario": "Password param in CS",
+      "expected": "Safe masked param but command identity preserved",
+      "authority": "candidate",
+      "run": "NOT_EXECUTED"
+    },
+    {
+      "id": "EL-T48",
+      "scenario": "BOOT before config",
+      "expected": "Error library usable, bootstrap capacity open",
+      "authority": "confirmed",
+      "run": "NOT_EXECUTED"
+    }
+  ],
+  "previous": "developer/tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.1.json"
+}

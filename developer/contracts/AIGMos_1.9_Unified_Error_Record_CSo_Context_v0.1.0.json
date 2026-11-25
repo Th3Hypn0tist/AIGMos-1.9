@@ -1,0 +1,83 @@
+{
+  "type": "AIGMOS19_DEVELOPMENT_CONTRACT",
+  "id": "A19_UNIFIED_ERROR_RECORD_CSO_CONTEXT",
+  "version": "0.1.0",
+  "date": "2026-11-25",
+  "status": "UNLOCKED",
+  "validated": false,
+  "confirmed": [
+    "One Error mechanism for BOOT/Hardcore/Core/System/User Modules",
+    "CS input -> CSo OK, actual command response or ERROR",
+    "When CS fails, exactly one command+params entry in Log Buffer even mode off, no duplicate in cs/ac",
+    "When AC active, Error includes available actor identity irrespective of logging mode",
+    "Error owns Error Buffer; Logging owns Log Buffer; buffers independently retain last N or all when 0"
+  ],
+  "proposed_not_confirmed": {
+    "error_record": {
+      "required": [
+        "code",
+        "message",
+        "source"
+      ],
+      "optional": [
+        "operation",
+        "details",
+        "correlation_id",
+        "cs",
+        "ac"
+      ],
+      "legacy_reference": "new.zip AIGMOS_ERROR_V1",
+      "exact_fields": "OPEN"
+    },
+    "cs_context": {
+      "command": "command identity/text",
+      "parameters": "actual parameter structure with safe masking policy to be decided",
+      "invocation_id": "per actual execution, not command-text equality",
+      "actor": "AC-provided when available/active; no Error->AC import",
+      "source": "actual origin, no fabricated CS in BOOT",
+      "context_propagation": "pass into Error library without importing HC.CS"
+    },
+    "error_entrypoint": {
+      "candidate_name": "Error.report",
+      "construct_once": true,
+      "append_to_ErrorBuffer_once": true,
+      "send_failed_CS_trace_to_Logging_once": true,
+      "forward_existing_Error_without_duplication": true
+    },
+    "cso_semantics": {
+      "success_no_data": "OK",
+      "success_with_data": "raw command return",
+      "failure": "ERROR",
+      "internal_outcome_tag": "proposed only to distinguish success payload literally ERROR/OK from failure",
+      "transport_encoding": "OPEN"
+    },
+    "sink_flow": {
+      "semantic": "Error -> Logging",
+      "physical_source_import": "OPEN: direct import or injected callback",
+      "avoid_cycle": "Logging must not import HC.CS if Error imports Logging"
+    },
+    "resource_policy": {
+      "buffer_positive": "last N entries",
+      "buffer_zero": "all entries",
+      "storage": "MEM default candidate, no silent FILE",
+      "MP_risk": "0 unbounded by count, no silent cap",
+      "config_keys_and_defaults": "OPEN"
+    }
+  },
+  "unresolved": [
+    "Exact Error record fields, severity/legacy compatibility",
+    "CSo collision when command returns ERROR or OK as data",
+    "Early BOOT Error Buffer bootstrap/config lifecycle",
+    "Parameter secret classification/redaction, log access",
+    "Failure during Error Buffer or Log Buffer write and recursive handling",
+    "AccessCore present-but-runtime-disabled ac mode",
+    "Exact FILE export and auto-write prohibition"
+  ],
+  "tests": [
+    "Same Error schema from BOOT and User Module",
+    "Failed CS in off/cs/ac adds exactly one matching trace",
+    "Two identical commands from separate invocations retain separate logs",
+    "AC actor included on Error whenever active regardless of mode",
+    "No direct Error library import of HC.CS or AC"
+  ]
+}

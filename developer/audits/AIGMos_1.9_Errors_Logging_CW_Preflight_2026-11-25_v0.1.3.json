@@ -1,0 +1,29 @@
+{
+  "type": "AIGMOS19_CW_STRUCTURAL_PREFLIGHT",
+  "version": "0.1.3",
+  "date": "2026-11-25",
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "formal_CW_validator_executed": false,
+  "counts": {
+    "entities": 17,
+    "properties": 45,
+    "dependency_links": 6,
+    "ownership_links": 2,
+    "scenarios": 48,
+    "gaps": 9
+  },
+  "findings": [],
+  "checks": [
+    "Link endpoints resolve",
+    "Local Property identity unique",
+    "Ownership/dependency Property on dependent endpoint",
+    "No cycles",
+    "Confirmed owner relationships exist"
+  ],
+  "not_verified": [
+    "Official CCF/CW validator",
+    "Runtime behavior",
+    "MicroPython resource budget",
+    "CSo transport framing"
+  ]
+}
