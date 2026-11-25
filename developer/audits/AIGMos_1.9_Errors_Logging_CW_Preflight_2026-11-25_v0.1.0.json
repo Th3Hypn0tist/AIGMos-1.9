@@ -1,0 +1,32 @@
+{
+  "type": "A19_CW_PREFLIGHT",
+  "date": "2026-11-25",
+  "scope": "Local structural checks only",
+  "status": "PREFLIGHT_PASS",
+  "not_official_CW_validator": true,
+  "counts": {
+    "nodes": 17,
+    "properties": 32,
+    "links": 14,
+    "dependency_links": 3,
+    "gaps": 9,
+    "acceptance_cases": 26
+  },
+  "check_names": [
+    "CCF mandatory top-level shape",
+    "CW Core component NodeType refs",
+    "Data and Link basic Ruleset value shapes",
+    "Entity and owner-local Property identity uniqueness",
+    "Link endpoints resolve",
+    "RULESET_LINK_DEPENDENCY Property owned by dependent",
+    "Gap entity refs resolve"
+  ],
+  "findings": [],
+  "not_verified": [
+    "Official CW spec lint/validator",
+    "Pinned specification_ref resolver compatibility",
+    "CW Ruleset field semantics and readiness",
+    "Runtime correspondence or executed tests",
+    "MP memory/capability performance"
+  ]
+}
