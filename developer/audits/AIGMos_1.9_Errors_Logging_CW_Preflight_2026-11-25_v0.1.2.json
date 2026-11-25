@@ -1,0 +1,28 @@
+{
+  "document_type": "AIGMOS_1_9_CW_LOCAL_PREFLIGHT",
+  "version": "0.1.2",
+  "date": "2026-11-25",
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "formal_CW_validator_executed": false,
+  "passed_checks": [
+    "Local node/property id uniqueness",
+    "Link endpoint local resolution",
+    "Ownership/dependency Link property on owned/dependent endpoint",
+    "No candidate dependency cycles"
+  ],
+  "findings": [],
+  "counts": {
+    "entities": 17,
+    "properties": 40,
+    "dependencies": 6,
+    "ownerships": 2,
+    "gaps": 9,
+    "tests": 36
+  },
+  "not_covered": [
+    "CW validator full semantics",
+    "Validator readiness Gaps",
+    "Runtime behavior",
+    "MP hardware capacity"
+  ]
+}

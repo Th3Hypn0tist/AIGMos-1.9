@@ -1,0 +1,126 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_CONTRACT",
+  "identity": {
+    "id": "AIGMOS19_ERROR_LIBRARY_AND_BUFFER_API",
+    "version": "0.1.0",
+    "date": "2026-11-25"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "runtime_tests_executed": false,
+  "purpose": "One Error System Lib: boot-safe reporting, unified outcome and independent Error/Log buffer responsibilities. Clearly separate user-confirmed facts from proposed implementation choices.",
+  "refs": [
+    "developer/contracts/AIGMos_1.9_Error_Library_Placement_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Unified_Errors_CSo_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_CS_Logging_v0.1.0.json",
+    "developer/canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.1.json"
+  ],
+  "confirmed": [
+    {
+      "id": "EL-C01",
+      "rule": "Error is a shared System Lib, available from BOOT through Core/System/User modules, not owned by HC.CS and not a sixth Hardcore mechanism."
+    },
+    {
+      "id": "EL-C02",
+      "rule": "CS is input; CSo is plain OK for no-data success, actual command return data for success with data, or unified ERROR for failure."
+    },
+    {
+      "id": "EL-C03",
+      "rule": "All components use the same Error mechanism; a non-CS Error must not invent a CS invocation."
+    },
+    {
+      "id": "EL-C04",
+      "rule": "Every Error during a CS invocation produces one CS command+parameters Log Buffer record, even with normal logging off, and it is not duplicated when already logged."
+    },
+    {
+      "id": "EL-C05",
+      "rule": "Any Error includes available actor identity when AC is active regardless of logging mode."
+    },
+    {
+      "id": "EL-C06",
+      "rule": "Normal CS logging modes off (default), cs and ac. Mode cs requires CS; ac requires CS and AccessCore."
+    },
+    {
+      "id": "EL-C07",
+      "rule": "Both buffers are configured from config.json independently, where N>=1 retains newest N and 0 retains all entries."
+    }
+  ],
+  "candidate_NOT_YET_USER_APPROVED": {
+    "API": {
+      "operation": "Error.report",
+      "input": [
+        "code",
+        "message",
+        "context?",
+        "details?"
+      ],
+      "output": "one canonical Error record/ref",
+      "effects": [
+        "append to Error Buffer exactly once",
+        "if a real CS invocation is in context, ensure one command+parameter Log Buffer record"
+      ],
+      "propagation": "forward same Error identity; don't emit new Error on catching/rethrowing the same failure",
+      "name_and_exact_abi": "PROPOSED"
+    },
+    "architecture": {
+      "Error": "System Lib with no HC.CS or AC import",
+      "Logger": "shared minimal logging sink even in off (candidate System Lib), receives CS data/actor via argument, not HC.CS/AC import",
+      "optional_import": "ERROR -> LOGGING, if direct lib import is chosen; alternative registered sink injection remains OPEN",
+      "sources": "HC.CS and BOOT use ERROR; selected cs/ac success capture uses optional CS-side hook; thus no ERROR <-> HC.CS cycle",
+      "semantic_vs_import_dependency": "Mode cs/ac capability requirements are NOT proof of Logger-to-CS Python imports"
+    },
+    "buffer_ownership": {
+      "ErrorBuffer": "Error System Lib",
+      "LogBuffer": "Logging System Lib",
+      "legacy": "Do not store diagnostically owned truth wholesale under #SYSTEM / $SYSTEM.ERRORS",
+      "status": "proposal"
+    },
+    "bootstrap": {
+      "before_config": "Error works before config.json and CS startup",
+      "capture": "temporary minimal boot-safe Error receiver; exact capacity and merge behavior OPEN",
+      "config": "BOOT validates protected config then supplies settings to libraries; libraries do not give CS read access to /config"
+    },
+    "buffer_lifecycle": {
+      "default_storage": "volatile MEM, aligned with 1.9 baseline (buffer-specific choice not yet confirmed)",
+      "FILE": "No implicit persistence; optional explicit FILE backend/exports OPEN",
+      "N_positive": "on append, drop oldest only after reaching configured N",
+      "N_zero": "no count-based eviction; never silently reinterpret zero as off",
+      "resize": "proposed keep newest on shrink; lost entries not reconstructed on grow",
+      "security": "retain useful command/parameter context while masking secrets; detailed policy OPEN"
+    },
+    "failure_behavior": {
+      "logging_failure": "Original Error remains observable; no recursive Error->Logger->Error reentry",
+      "concurrency": "Use explicit context for invocation/AC identity; global mutable actor is unsafe under CP concurrency",
+      "correlation": "lightweight invocation identity proposed, exact ABI OPEN"
+    },
+    "result_ambiguity": "Internal typed outcome may be necessary when command success data literally equals OK or ERROR; CSo public success data remains unwrapped. No decision yet."
+  },
+  "prohibited": [
+    "Error System Lib depending on HC.CS or optional AC",
+    "Logger source-importing HC.CS while Error source-imports Logger (cycle)",
+    "additional independent Audit/BOOT Error subsystems",
+    "silently discarding Error when logging.mode is off",
+    "silent count cap when buffer N=0",
+    "automatic FILE persistence from MEM Buffer append"
+  ],
+  "unresolved": [
+    "Exact Error record schema/API and CSo wire discrimination",
+    "Exact config.json paths and default buffer lengths",
+    "Bootstrap emergency capacity/early Error visibility and merge",
+    "Whether Logger is a System Lib and Error imports Logger vs sink injection",
+    "Atomic buffer configuration/reload and limits for ESP32-C6 RAM",
+    "Access control for read/clear/export; sensitive parameter redaction",
+    "AC-build present but runtime disabled in ac logging mode",
+    "Whether Error and Log Buffer are ever explicitly saved to FILE"
+  ],
+  "next_tests": [
+    "BOOT Error before CS and config must use shared Error.",
+    "CS failed invocation in off must create Error + exactly one CS log.",
+    "Mode cs/ac failed invocation must not duplicate CS log.",
+    "User Module Error without CS must not fabricate CS record.",
+    "Context from AC active must reach Error regardless of Logging mode.",
+    "Buffers N=1 retain newest, N=0 retain all without silent cap.",
+    "Error library and minimum Logger must have no source import cycle.",
+    "Sink error does not hide original CS failure."
+  ]
+}

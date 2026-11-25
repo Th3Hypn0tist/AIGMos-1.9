@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**25 Nov Error System Lib next pass:** [interface and Buffer candidate](contracts/AIGMos_1.9_Error_Library_And_Buffers_v0.1.0.json), [CW v0.1.2](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.2.json), [36 scenarios](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.1.json) and [handover](memos/2026-11-25_errors_logging_library_buffers.md). Ownership and Error->Logging are **unconfirmed proposals**, not locked choices. No runtime changes or official validator pass.
+
 **25 Nov correction — Error is a LIBRARY:** [Error Library placement delta](contracts/AIGMos_1.9_Error_Library_Placement_Delta_v0.1.0.json) and [revised CW candidate v0.1.1](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.1.json). Shared Error must work in BOOT before CS; HC.CS consumes the library and maps Error into CSo, not vice versa. Remaining G02 covers exact 1.9 file path and early buffer startup. UNLOCKED.
 
 **25 Nov Errors/Logging CW formalization:** [canonical candidate](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.0.json), [26-case acceptance matrix](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.0.json), [local preflight](audits/AIGMos_1.9_Errors_Logging_CW_Preflight_2026-11-25_v0.1.0.json), [handover](memos/2026-11-25_errors_logging_cw_formalization.md). Nine semantics remain explicit Gaps; NOT official CW validation.
