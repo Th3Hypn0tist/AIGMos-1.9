@@ -1,0 +1,902 @@
+{
+  "format": {
+    "contract_format": "CANONICAL_CONTRACT",
+    "format_version": "2.1"
+  },
+  "identity": {
+    "id": "AIGMOS19_ERRORS_LOGGING_CW_CANDIDATE",
+    "name": "AIGMos 1.9 Errors, CSo and Logging",
+    "type": "AIGMOS19_DEVELOPMENT_MODEL",
+    "version": "0.1.1"
+  },
+  "specification_ref": "git-blob:Th3Hypn0tist/CW/spec_sets/CW_CORE_v1.6.0.json@3b712798e8a21a15c4981119188f340a335334b7",
+  "status": "unlocked",
+  "purpose": "Model AIGMos 1.9 Error as a shared boot-safe internal LIBRARY, not an HC.CS-owned Error engine, with logging and CSo semantics modeled explicitly; open gaps remain.",
+  "scope": {
+    "owns": [
+      "CS input / CSo output semantics",
+      "off/cs/ac Logging mode and dependency selection",
+      "Error and Log Buffers count retention",
+      "mandatory Error-linked CS trace",
+      "Shared internal Error library semantics"
+    ],
+    "does_not_own": [
+      "new mandatory Hardcore mechanism",
+      "bot-training Audit mechanism",
+      "runtime implementation",
+      "CW Ruleset changes",
+      "Exact Error library file/module namespace and startup buffer backend implementation"
+    ]
+  },
+  "entities": [
+    {
+      "id": "A19.HC.CS",
+      "name": "CS input/CSo result",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "result",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CSO_RESULT",
+            "value": {
+              "input": "CS",
+              "success_no_data": "OK",
+              "success_data": "raw_command_result",
+              "failure": "ERROR",
+              "success_wrapper": false
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "failure_log",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CS_FAILURE_LOG",
+            "value": {
+              "always": true,
+              "include": [
+                "command",
+                "parameters"
+              ],
+              "dedupe_per": "invocation",
+              "mode_off_still_logs": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.CS",
+            "properties": {}
+          }
+        },
+        {
+          "id": "depends_error_library",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.CS",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.ERROR",
+      "name": "Unified Error — boot-safe shared internal library",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "library_class",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.SHARED_INTERNAL_LIBRARY",
+            "value": {
+              "classification": "internal_shared_library",
+              "not_hardcore_mechanism": true,
+              "not_cs_owned": true,
+              "usable_by": [
+                "BOOT",
+                "HC.INPUT",
+                "HC.STATE",
+                "HC.TER",
+                "HC.CS",
+                "HC.EXPOSE",
+                "CORE_MODULES",
+                "SYSTEM_MODULES",
+                "USER_MODULES"
+              ],
+              "no_runtime_dependency_on": [
+                "HC.CS",
+                "HC.EXPOSE",
+                "AccessCore",
+                "Q",
+                "UI",
+                "Logger continuous modes"
+              ],
+              "source_reference": "new/system/lib/contracts/errors.py",
+              "physical_1_9_import_path": "UNRESOLVED",
+              "before_cs_boot_available": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "user_correction_and_new.zip_library_evidence"
+          }
+        },
+        {
+          "id": "scope",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.ERROR_SCOPE",
+            "value": {
+              "all_components": true,
+              "including": [
+                "BOOT",
+                "INPUT",
+                "STATE",
+                "TER",
+                "CS",
+                "EXPOSE",
+                "Core",
+                "System",
+                "User"
+              ],
+              "works_before_CS": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "ac_context",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.ERROR_ACTOR",
+            "value": {
+              "if_AC_active": true,
+              "include_available_identity": true,
+              "independent_of_logging_mode": true,
+              "no_fabricated_actor": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "cs_context",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.ERROR_CS_CONTEXT",
+            "value": {
+              "when_CS_invocation_exists": true,
+              "log_command_and_parameters": true,
+              "no_duplicate": true,
+              "without_CS": "no_invented_command"
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "legacy_field_candidate",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.ERROR_SCHEMA_CANDIDATE",
+            "value": {
+              "from": "new.zip AIGMOS_ERROR_V1",
+              "fields": [
+                "kind",
+                "protocol",
+                "code",
+                "message",
+                "severity",
+                "source",
+                "operation",
+                "target",
+                "correlation_id",
+                "recoverable",
+                "details"
+              ],
+              "status": "not_accepted_as_exact_1_9_ABI"
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "legacy_candidate"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.LOGGING",
+      "name": "Logging selection (not separate Audit subsystem)",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "mode",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.LOGGING_MODE_ENUM",
+            "value": {
+              "values": [
+                "off",
+                "cs",
+                "ac"
+              ],
+              "default": "off",
+              "exclusive": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "error_exception",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.LOGGING_ERROR_POLICY",
+            "value": {
+              "all_modes": "one_failed_CS_trace",
+              "failures_never_silenced": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "boundary",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.NO_SEPARATE_AUDIT",
+            "value": {
+              "audit_subsystem_in_1_9": false,
+              "bot_training_excluded": true,
+              "Q_runtime_parity_still_required": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.ERROR_BUFFER",
+      "name": "Error Buffer",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "capacity",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.COUNT_RETENTION",
+            "value": {
+              "from": "config.json",
+              "positive_N": "last_N",
+              "zero": "all",
+              "independent_from": "A19.LOG_BUFFER",
+              "field_name": "open",
+              "default": "open"
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "records",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "records_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.ERROR_BUFFER",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.LOG_BUFFER",
+      "name": "Log Buffer",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "capacity",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.COUNT_RETENTION",
+            "value": {
+              "from": "config.json",
+              "positive_N": "last_N",
+              "zero": "all",
+              "independent_from": "A19.ERROR_BUFFER",
+              "field_name": "open",
+              "default": "open"
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "records",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "records_cs_trace",
+            "parent_ref": "A19.HC.CS",
+            "child_ref": "A19.LOG_BUFFER",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.LOG_MODE_OFF",
+      "name": "off",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "selection",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.LOG_MODE",
+            "value": {
+              "mode": "off",
+              "default": true,
+              "normal_CS": false,
+              "failed_CS": true,
+              "dependencies": []
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.LOG_MODE_CS",
+      "name": "cs",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "selection",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.LOG_MODE",
+            "value": {
+              "mode": "cs",
+              "normal_CS": true,
+              "record": [
+                "command",
+                "parameters"
+              ],
+              "failed_CS": true,
+              "dependencies": [
+                "A19.HC.CS"
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "dependency_cs",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "A19.HC.CS",
+            "child_ref": "A19.LOG_MODE_CS",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.LOG_MODE_AC",
+      "name": "ac",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "selection",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.LOG_MODE",
+            "value": {
+              "mode": "ac",
+              "normal_CS": true,
+              "record": [
+                "command",
+                "parameters",
+                "AC_actor"
+              ],
+              "failed_CS": true,
+              "dependencies": [
+                "A19.HC.CS",
+                "A19.ACCESS_CORE"
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "dependency_cs",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "A19.HC.CS",
+            "child_ref": "A19.LOG_MODE_AC",
+            "properties": {}
+          }
+        },
+        {
+          "id": "dependency_ac",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "A19.ACCESS_CORE",
+            "child_ref": "A19.LOG_MODE_AC",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.ACCESS_CORE",
+      "name": "Optional AccessCore",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "scope",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.AC_CAPABILITY",
+            "value": {
+              "build_optional": true,
+              "runtime_activation_separate": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.BOOT",
+      "name": "BOOT",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.BOOT",
+            "properties": {}
+          }
+        },
+        {
+          "id": "depends_error_library",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.BOOT",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.HC.INPUT",
+      "name": "INPUT",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.INPUT",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.HC.STATE",
+      "name": "STATE",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.STATE",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.HC.TER",
+      "name": "TER",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.TER",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.HC.EXPOSE",
+      "name": "EXPOSE",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.HC.EXPOSE",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.CORE_MODULE_CLASS",
+      "name": "Core Modules",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "category",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.MODULE_CLASS",
+            "value": {
+              "is_template": true,
+              "not_instance": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.CORE_MODULE_CLASS",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.SYSTEM_MODULE_CLASS",
+      "name": "System Modules",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "category",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.MODULE_CLASS",
+            "value": {
+              "is_template": true,
+              "not_instance": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.SYSTEM_MODULE_CLASS",
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "A19.USER_MODULE_CLASS",
+      "name": "User Modules",
+      "entity_type_ref": "component",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "category",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.MODULE_CLASS",
+            "value": {
+              "is_template": true,
+              "not_instance": true
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "source": "confirmed"
+          }
+        },
+        {
+          "id": "shared_error_contract",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "uses_unified_error",
+            "parent_ref": "A19.ERROR",
+            "child_ref": "A19.USER_MODULE_CLASS",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "invariants": [
+      {
+        "id": "I01",
+        "rule": "One shared Error semantics across BOOT and all modules; no sixth mandatory Hardcore mechanism."
+      },
+      {
+        "id": "I02",
+        "rule": "Successful CSo is plain OK or command result, without compulsory wrapper; failure uses unified ERROR."
+      },
+      {
+        "id": "I03",
+        "rule": "Every failed CS execution creates one log entry containing command and parameters, even in logging mode off."
+      },
+      {
+        "id": "I04",
+        "rule": "Normal Logging modes off/cs/ac have default off; Logging cannot silence Errors or error-triggered CS records."
+      },
+      {
+        "id": "I05",
+        "rule": "Available AC actor identity is included in every Error whenever AC is active, independent of logging mode."
+      },
+      {
+        "id": "I06",
+        "rule": "Each Buffer has its own config.json count N; N>=1 retains last N, N=0 retains all entries."
+      },
+      {
+        "id": "I07",
+        "rule": "Selected logging mode cs depends on CS; ac depends on CS+AccessCore; off avoids continuous logging dependencies."
+      },
+      {
+        "id": "I08",
+        "rule": "No standalone Audit/bot-training subsystem is included in AIGMos 1.9."
+      }
+    ]
+  },
+  "references": [],
+  "gaps": [
+    {
+      "gap_id": "G01",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.HC.CS",
+      "description": "CSo outcome/wire distinction for success payload equal to literal OK/ERROR; exact Error ABI."
+    },
+    {
+      "gap_id": "G02",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.ERROR",
+      "description": "Error is an internal shared library, NOT owned by CS or a sixth Hardcore mechanism (resolved classification). Exact boot-safe initialization/API, buffer ownership/storage and 1.9 import path remain unresolved.",
+      "resolution_hint": "Keep common Error library usable from BOOT before CS and from modules without dependency on CS; specify startup buffer initialization and owner."
+    },
+    {
+      "gap_id": "G03",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.ERROR_BUFFER",
+      "description": "Error Buffer config.json key/default, MEM/FILE persistence, memory risks of 0=all."
+    },
+    {
+      "gap_id": "G04",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.LOG_BUFFER",
+      "description": "Log Buffer key/default, MEM/FILE persistence, access and export rights."
+    },
+    {
+      "gap_id": "G05",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.LOGGING",
+      "description": "Build versus runtime logging mode selection, runtime-disabled AC under selected ac mode."
+    },
+    {
+      "gap_id": "G06",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.ERROR",
+      "description": "Parameter visibility/redaction, secret classification, read/export access."
+    },
+    {
+      "gap_id": "G07",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.HC.CS",
+      "description": "Invocation correlation/deduplication when nested or repeated commands execute."
+    },
+    {
+      "gap_id": "G08",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.LOGGING",
+      "description": "Selected mode variant/profile binding and exactly-one constraint must be enforced by actual validator."
+    },
+    {
+      "gap_id": "G09",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "A19.ERROR",
+      "description": "Error Buffer or Log Buffer failures and nonrecursive reporting without losing original Error."
+    }
+  ],
+  "prose": {
+    "summary": "Shared internal Error LIBRARY is used by BOOT, HC.CS and modules without a CS dependency. CSo returns OK/command result/ERROR; buffers and logging modes are separately specified.",
+    "notes": "Correction: new.zip implements an Error helper library at new/system/lib/contracts/errors.py; adapting it as common Error library avoids putting Error ownership in CS. Exact 1.9 path and startup storage still OPEN. UNLOCKED and not formally CW validated."
+  },
+  "metadata": {
+    "date": "2026-11-25",
+    "source_authority": "user-confirmed 2026-11-23 session",
+    "cw_bundle": {
+      "name": "CW_CORE",
+      "version": "1.6.0",
+      "status": "unlocked",
+      "blob": "3b712798e8a21a15c4981119188f340a335334b7",
+      "ccf": "2.6.0",
+      "nodetypes": "1.19.0",
+      "rules": "4.4.0"
+    },
+    "legacy_reference": "new.zip, AIGMos 2.0 QA",
+    "previous_candidate": "developer/canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.0.json",
+    "supersedes_candidate_version": "0.1.0",
+    "correction": "Error library classification confirmed; exact physical 1.9 file location and buffer initialization remain open"
+  }
+}

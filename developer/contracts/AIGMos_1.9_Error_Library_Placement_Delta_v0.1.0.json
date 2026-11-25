@@ -1,0 +1,25 @@
+{
+  "document_type": "AIGMOS_1_9_DEVELOPMENT_DECISION_DELTA",
+  "document_version": "0.1.0",
+  "date": "2026-11-25",
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "authority": "User correction: Error is a library",
+  "supersedes_inference": "Errors & Logging handover tentative HC.CS common-interface ownership",
+  "confirmed": {
+    "error_type": "Shared internal AIGMos library, available to BOOT, Hardcore, and User Modules; not an additional sixth Hardcore mechanism",
+    "boundary": "Error library cannot depend on HC.CS because BOOT must report failures before CS initialization; CS uses the library and maps failures into CSo.",
+    "source_reference": "new.zip/new/system/lib/contracts/errors.py",
+    "impact": "The former G02 library-classification question is resolved, but physical 1.9 path, startup buffering and persistence still open."
+  },
+  "not_confirmed": [
+    "Exact Python import path in AIGMos 1.9",
+    "API/constructor signatures and record shape",
+    "Which component owns ERROR buffer memory lifecycle and config parsing",
+    "Whether Logger implementation is the same library or a separate one"
+  ],
+  "links": [
+    "developer/canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.1.json",
+    "developer/contracts/AIGMos_1.9_Unified_Errors_CSo_v0.1.0.json"
+  ]
+}

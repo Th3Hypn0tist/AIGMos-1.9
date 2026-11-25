@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**25 Nov correction — Error is a LIBRARY:** [Error Library placement delta](contracts/AIGMos_1.9_Error_Library_Placement_Delta_v0.1.0.json) and [revised CW candidate v0.1.1](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.1.json). Shared Error must work in BOOT before CS; HC.CS consumes the library and maps Error into CSo, not vice versa. Remaining G02 covers exact 1.9 file path and early buffer startup. UNLOCKED.
+
 **25 Nov Errors/Logging CW formalization:** [canonical candidate](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.0.json), [26-case acceptance matrix](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.0.json), [local preflight](audits/AIGMos_1.9_Errors_Logging_CW_Preflight_2026-11-25_v0.1.0.json), [handover](memos/2026-11-25_errors_logging_cw_formalization.md). Nine semantics remain explicit Gaps; NOT official CW validation.
 
 **23 Nov Errors & Logging decisions:** [handover](memos/2026-11-23_errors_logging_handover.md), [Unified Errors / CSo](contracts/AIGMos_1.9_Unified_Errors_CSo_v0.1.0.json), [CS Logging](contracts/AIGMos_1.9_CS_Logging_v0.1.0.json). These user-confirmed rules supersede older speculative audit notes. CW Core v1.6.0 opt-in (CCF 2.6.0, NodeTypes 1.19.0, Rulesets 4.4.0) remains UNLOCKED while CW/AIGMos develop together.
