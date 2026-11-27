@@ -1,0 +1,32 @@
+{
+  "type": "AIGMOS19_LOGIC_LOCAL_PREFLIGHT",
+  "version": "0.1.0",
+  "date": "2026-11-27",
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "official_validator": false,
+  "checks": [
+    "NodeType code exists in selected NodeTypes",
+    "RULESET_DATA/FUNCTION/LINK/LINK_DEPENDENCY in selected Rulesets",
+    "Entity IDs unique",
+    "Property IDs unique within Entity",
+    "Function inputs/outputs resolve to owner-local Data Properties",
+    "All Link endpoints resolve",
+    "Dependency Link property owned by consumer",
+    "No false Error->Logging source dependency",
+    "Known hard-fail primitive gap explicit"
+  ],
+  "findings": [],
+  "stats": {
+    "entities": 4,
+    "function_properties": 5,
+    "data_properties": 12,
+    "links": 3,
+    "gaps": 6
+  },
+  "not_checked": [
+    "Actual cw_validate.py and cw_spec_lint.py execution",
+    "CodeMarkup implementation or source-to-Code identity",
+    "Execution, MP compatibility and memory",
+    "Function.logic normalized behavior and actual abort primitive support"
+  ]
+}

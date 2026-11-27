@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**27 Nov #LOGIC stage started:** [typed LOGIC nodes](canonical/AIGMos_1.9_Errors_Logging_LOGIC_v0.1.0.json), [structural preflight](audits/AIGMos_1.9_Errors_Logging_LOGIC_Preflight_2026-11-27_v0.1.0.json), [handover](memos/2026-11-27_errors_logging_logic_start.md). Four code Nodes / Function interfaces defined, normalized behavior NOT invented; CW_LOGIC_PRIMITIVES lacks explicit fail/abort semantics (open L-G01). UNLOCKED; no official validation or runtime coding.
+
 **27 Nov ERROR always HARD FAIL:** [confirmed delta](contracts/AIGMos_1.9_Error_Always_Hard_Fail_Delta_v0.1.0.json), [Error record v0.1.2](contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.2.json), [CW v0.1.5](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.5.json), [65 test cases](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.4.json), [handover](memos/2026-11-27_error_always_hard_fail.md). Error can NEVER be soft/recoverable/warning/OK. Aborts originating execution; G11 tracks per-owner wider failure scope. UNLOCKED.
 
 **27 Nov confirmed CSo internal status:** [decision](contracts/AIGMos_1.9_CSo_Internal_Outcome_Delta_v0.1.0.json), [record contract v0.1.1](contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.1.json), [CW v0.1.4](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.4.json), [57 tests](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.3.json), [handover](memos/2026-11-27_cso_internal_outcome.md). G01 internal status resolved, G10 external transport mapping remains open; UNLOCKED. No runtime code or CW ruleset changes.
