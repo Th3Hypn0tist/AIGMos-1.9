@@ -1,0 +1,33 @@
+{
+  "document_type": "AIGMOS_1_9_CW_LOCAL_PREFLIGHT",
+  "identity": {
+    "id": "A19_ERRORS_LOGGING_HARD_FAIL_PREFLIGHT",
+    "version": "0.1.5",
+    "date": "2026-11-27"
+  },
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "official_CW_validator_executed": false,
+  "runtime_tests_executed": false,
+  "counts": {
+    "entities": 17,
+    "properties": 47,
+    "tests": 65,
+    "gaps_open": 10,
+    "gaps_resolved": 1
+  },
+  "checks": [
+    "CCF-shaped required root",
+    "owner-local property identity",
+    "Link endpoints",
+    "Specialized Link Property ownership",
+    "Acceptance test IDs",
+    "Hard-fail invariant and propagation-scope Gap present"
+  ],
+  "findings": [],
+  "not_verified": [
+    "Full CCF/CW validation",
+    "Runtime exception/failure propagation",
+    "MP hardware limits",
+    "Transport adapters"
+  ]
+}

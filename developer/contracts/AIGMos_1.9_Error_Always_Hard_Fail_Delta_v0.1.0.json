@@ -1,0 +1,66 @@
+{
+  "document_type": "AIGMOS_1_9_CONFIRMED_DECISION_DELTA",
+  "identity": {
+    "id": "AIGMOS19_ERROR_ALWAYS_HARD_FAIL",
+    "version": "0.1.0",
+    "date": "2026-11-27"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "runtime_implemented": false,
+  "authority": "User explicitly confirmed: 'error on aina hard fail' (ERROR is always hard fail).",
+  "confirmed": [
+    {
+      "id": "HF-01",
+      "rule": "ERROR always denotes a HARD FAILURE of the current operation/execution context. There is no soft, recoverable, warning or advisory outcome represented as ERROR."
+    },
+    {
+      "id": "HF-02",
+      "rule": "An execution producing ERROR MUST NOT continue on the same success path, return OK, or silently downgrade ERROR to a successful payload, no-op, warning or retry-success."
+    },
+    {
+      "id": "HF-03",
+      "rule": "A CS operation in ERROR status aborts the current command execution and returns the canonical ERROR semantics to its caller. Logging/reporting a failure does not change its status."
+    },
+    {
+      "id": "HF-04",
+      "rule": "The shared Error System Lib applies the same hard-fail semantics across BOOT, Hardcore, Core/System/User Modules. Earlier confirmed BOOT rules that make a boot failure abort initialization remain applicable."
+    },
+    {
+      "id": "HF-05",
+      "rule": "The Error record must not advertise recoverable=true. A legacy 'recoverable' field, if supported for compatibility, MUST be false for ERROR or omitted; a variable severity that could classify ERROR as advisory is not an accepted 1.9 semantic."
+    },
+    {
+      "id": "HF-06",
+      "rule": "The internal tagged CS status is authoritative. A successful command whose unwrapped data is literal 'ERROR' remains status OK and must NOT trigger a hard fail. Conversely ERROR status cannot become OK based on its message."
+    },
+    {
+      "id": "HF-07",
+      "rule": "All ERROR events continue to be recorded via the Error library's Error Buffer and, if a real CS invocation exists, one failure-linked CS entry via Logging's Log Buffer regardless of off/cs/ac mode."
+    }
+  ],
+  "scope_boundary": {
+    "hard_fail_scope": "The originating operation/execution path must fail, not be treated as successful. The broader lifecycle effect of a failure is separately defined per owner/operation.",
+    "global_shutdown_not_implied": "This decision alone does not assert that every User Module/CS/TER ERROR must halt the entire AIGMos instance or reboot hardware.",
+    "rollback_not_implied": "The decision does not claim rollback of already completed external/physical effects.",
+    "no_exception_swallowing": "Exception handlers may preserve/propagate/report the Error but not recast a failed execution as successful.",
+    "legacy_reconciliation": "Historical AIGMOS_ERROR_V1 contains optional 'recoverable' and severity fields; those cannot weaken this confirmed AIGMos 1.9 invariant."
+  },
+  "tests_to_add": [
+    "Any canonical ERROR is hard failure and cannot be downgraded to warning or OK.",
+    "A recoverable=true ERROR, if accepted by a compatibility parser, is rejected or normalized to a hard failure; silent acceptance as recoverable is forbidden.",
+    "A caller handling ERROR must preserve a failure outcome and cannot resume the failed CS command as success.",
+    "BOOT error aborts BOOT per previously established BOOT contract; does not require fictitious CS input.",
+    "Error in a User Module fails that module's execution, but whole-instance shutdown is not inferred without a separate lifecycle rule.",
+    "A literal 'ERROR' returned as successful data does not trigger Error Buffer or hard fail."
+  ],
+  "open": [
+    "Exact failure propagation/abort boundaries for each TER/Event/Runner and background task owner; do not invent whole-instance shutdown.",
+    "Error record required fields, code taxonomy and exception transport.",
+    "Exact errors/reporter API, early BOOT/Logger sink failure fallback, buffer persistence."
+  ],
+  "sources": [
+    "developer/contracts/AIGMos_1.9_CSo_Internal_Outcome_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.1.json"
+  ]
+}
