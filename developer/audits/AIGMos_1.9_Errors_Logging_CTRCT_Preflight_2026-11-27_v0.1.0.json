@@ -1,0 +1,36 @@
+{
+  "type": "AIGMOS19_LOCAL_CW_CTRCT_PREFLIGHT",
+  "identity": {
+    "id": "AIGMOS19_ERRORS_LOGGING_CTRCT_PREFLIGHT",
+    "version": "0.1.0",
+    "date": "2026-11-27"
+  },
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "full_cw_validator_executed": false,
+  "counts": {
+    "contracts": 4,
+    "logic_nodes": 4,
+    "entities": 8,
+    "properties": 28,
+    "requirements": 22,
+    "gaps_open": 10,
+    "findings": 0
+  },
+  "checks": [
+    "#CTRCT uses NodeType contract with members",
+    "Normative member refs resolve within combined artifact",
+    "#LOGIC retains code NodeType",
+    "No duplicate Entity or owner-local Property IDs",
+    "Link endpoints and dependency direction",
+    "Function local inputs/outputs",
+    "Gap targets resolve"
+  ],
+  "findings": [],
+  "not_claimed": [
+    "Official cw_validate.py result",
+    "Source/code parity",
+    "Normalized Function.logic behavior",
+    "Runtime test pass",
+    "Design READY/LOCKED"
+  ]
+}

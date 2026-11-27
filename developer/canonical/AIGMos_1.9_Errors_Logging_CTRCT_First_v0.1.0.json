@@ -1,0 +1,841 @@
+{
+  "format": {
+    "contract_format": "CANONICAL_CONTRACT",
+    "format_version": "2.1"
+  },
+  "identity": {
+    "id": "AIGMOS19_ERRORS_LOGGING_CTRCT_FIRST_PACKAGE",
+    "name": "AIGMos 1.9 Error/Logging — #CTRCT before #LOGIC",
+    "type": "AIGMOS19_CW_CONTRACT_LOGIC_PACKAGE",
+    "version": "0.1.0"
+  },
+  "specification_ref": "git-blob:Th3Hypn0tist/CW/spec_sets/CW_CORE_v1.6.0.json@3b712798e8a21a15c4981119188f340a335334b7",
+  "status": "unlocked",
+  "purpose": "Reorder canonical development by defining normative #CTRCT Contracts first, followed by pre-existing #LOGIC function skeletons; keep the contracts and modeled implementations in one resolvable canonical artifact.",
+  "scope": {
+    "owns": [
+      "Four normative Error, Logging, CS/CSo, BOOT #CTRCT Nodes",
+      "Normative contract.members scope over corresponding #LOGIC Nodes",
+      "Existing #LOGIC function/data/link candidate projections retained to avoid duplicate incompatible truth"
+    ],
+    "does_not_own": [
+      "Approval of previously open Error record fields",
+      "Final Error.report Python ABI",
+      "NEW fail/abort CW primitive",
+      "Source-file implementation correspondence",
+      "Runtime/MP test evidence",
+      "Source import direction ERROR->LOGGING"
+    ]
+  },
+  "entities": [
+    {
+      "id": "#CTRCT:AIGMOS19:ERROR",
+      "name": "Unified Error Contract",
+      "entity_type_ref": "contract",
+      "status": "unlocked",
+      "members": [
+        "#LOGIC:AIGMOS19:ERROR"
+      ],
+      "properties": [
+        {
+          "id": "CONTRACT_RULES",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CONTRACT_REQUIREMENT_SET",
+            "value": {
+              "requirements": [
+                {
+                  "id": "ERROR-01",
+                  "rule": "Every actual ERROR is a hard failure of its originating execution; no soft, warning or recoverable ERROR.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "ERROR-02",
+                  "rule": "One shared Error System Lib serves BOOT, Hardcore, Core, System and User Modules, without HC.CS or AC runtime import dependency.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "ERROR-03",
+                  "rule": "Error System Lib owns Error Buffer; successful data equal to the literal ERROR is not an Error event.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "ERROR-04",
+                  "rule": "Canonical Error during actual CS invocation causes one corresponding CS+parameters trace; non-CS errors never fabricate CS input.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "ERROR-05",
+                  "rule": "An ERROR carries available AC actor identity whenever AC is runtime-active, independently of Logging mode.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "ERROR-06",
+                  "rule": "Failure propagates out of the originating operation; whole-instance shutdown is not implied without the owning lifecycle contract.",
+                  "authority": "user_confirmed_semantics"
+                }
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "user_confirmed_decisions",
+            "source": "2026-11-23..2026-11-27 AIGMos 1.9 development session"
+          }
+        },
+        {
+          "id": "CONTRACT_SCOPE",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.DECLARED_NORMATIVE_SCOPE",
+            "value": {
+              "declared_member_ref": "#LOGIC:AIGMOS19:ERROR",
+              "scope_rule": "Contract.members declares the explicit normative scope; later implementation file affiliation is a distinct relation."
+            },
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "#CTRCT:AIGMOS19:LOGGING",
+      "name": "Logging & Buffer Contract",
+      "entity_type_ref": "contract",
+      "status": "unlocked",
+      "members": [
+        "#LOGIC:AIGMOS19:LOGGING"
+      ],
+      "properties": [
+        {
+          "id": "CONTRACT_RULES",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CONTRACT_REQUIREMENT_SET",
+            "value": {
+              "requirements": [
+                {
+                  "id": "LOG-01",
+                  "rule": "Logging owns Log Buffer; Error owns its separate Error Buffer. The owner identities are not #SYSTEM.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "LOG-02",
+                  "rule": "Normal CS logging modes are off (default), cs and ac. off suppresses routine successful CS logging, not mandatory failure traces.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "LOG-03",
+                  "rule": "A failed CS invocation contributes exactly one command+parameter log entry whether off, cs or ac; never duplicate one invocation.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "LOG-04",
+                  "rule": "Mode cs requires HC.CS capability; mode ac requires HC.CS plus AccessCore; these capability requirements do not imply Python import direction.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "LOG-05",
+                  "rule": "Both Buffer lengths come from protected config.json; positive N retains newest N, zero retains all; limits independent.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "LOG-06",
+                  "rule": "No separate bot-training Audit subsystem is included as a mandatory AIGMos 1.9 component.",
+                  "authority": "user_confirmed_semantics"
+                }
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "user_confirmed_decisions",
+            "source": "2026-11-23..2026-11-27 AIGMos 1.9 development session"
+          }
+        },
+        {
+          "id": "CONTRACT_SCOPE",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.DECLARED_NORMATIVE_SCOPE",
+            "value": {
+              "declared_member_ref": "#LOGIC:AIGMOS19:LOGGING",
+              "scope_rule": "Contract.members declares the explicit normative scope; later implementation file affiliation is a distinct relation."
+            },
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "#CTRCT:AIGMOS19:CSO",
+      "name": "CS / CSo Outcome Contract",
+      "entity_type_ref": "contract",
+      "status": "unlocked",
+      "members": [
+        "#LOGIC:AIGMOS19:HC.CS"
+      ],
+      "properties": [
+        {
+          "id": "CONTRACT_RULES",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CONTRACT_REQUIREMENT_SET",
+            "value": {
+              "requirements": [
+                {
+                  "id": "CSO-01",
+                  "rule": "CS is input; internal result tag status is OK or ERROR and is authoritative, not inferred from returned content.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "CSO-02",
+                  "rule": "When OK and payload absent, CSo returns plain OK; when OK with payload, CSo returns original command feedback unwrapped.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "CSO-03",
+                  "rule": "Payload presence is separate from value; literal ERROR, literal OK, null, false, zero and empty string may be successful returned data.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "CSO-04",
+                  "rule": "Internal status ERROR always hard-fails the current CS execution and is represented through shared Error System Lib.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "CSO-05",
+                  "rule": "If actual CS execution fails, the Error Buffer records the failure and the Log Buffer records one invocation trace.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "CSO-06",
+                  "rule": "The external transport representation must preserve the internal status, even when the text output alone is ambiguous.",
+                  "authority": "user_confirmed_semantics"
+                }
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "user_confirmed_decisions",
+            "source": "2026-11-23..2026-11-27 AIGMos 1.9 development session"
+          }
+        },
+        {
+          "id": "CONTRACT_SCOPE",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.DECLARED_NORMATIVE_SCOPE",
+            "value": {
+              "declared_member_ref": "#LOGIC:AIGMOS19:HC.CS",
+              "scope_rule": "Contract.members declares the explicit normative scope; later implementation file affiliation is a distinct relation."
+            },
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "#CTRCT:AIGMOS19:BOOT",
+      "name": "BOOT Failure Contract",
+      "entity_type_ref": "contract",
+      "status": "unlocked",
+      "members": [
+        "#LOGIC:AIGMOS19:BOOT"
+      ],
+      "properties": [
+        {
+          "id": "CONTRACT_RULES",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.CONTRACT_REQUIREMENT_SET",
+            "value": {
+              "requirements": [
+                {
+                  "id": "BOOT-01",
+                  "rule": "BOOT can report canonical Errors before HC.CS or optional Logging capture modes initialize.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "BOOT-02",
+                  "rule": "A BOOT ERROR hard-fails BOOT initialization; reporting does not convert failure to success.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "BOOT-03",
+                  "rule": "BOOT errors without real CS execution must not cause a fabricated CS log or fake actor.",
+                  "authority": "user_confirmed_semantics"
+                },
+                {
+                  "id": "BOOT-04",
+                  "rule": "Shared Error format/behavior is used; any early temporary buffer/config application strategy is an explicit unresolved implementation decision.",
+                  "authority": "user_confirmed_semantics"
+                }
+              ]
+            },
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "user_confirmed_decisions",
+            "source": "2026-11-23..2026-11-27 AIGMos 1.9 development session"
+          }
+        },
+        {
+          "id": "CONTRACT_SCOPE",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "A19.DECLARED_NORMATIVE_SCOPE",
+            "value": {
+              "declared_member_ref": "#LOGIC:AIGMOS19:BOOT",
+              "scope_rule": "Contract.members declares the explicit normative scope; later implementation file affiliation is a distinct relation."
+            },
+            "properties": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "#LOGIC:AIGMOS19:ERROR",
+      "name": "Error shared System Lib",
+      "entity_type_ref": "code",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "DATA_FAILURE_INPUT",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:error_input",
+            "value": null,
+            "properties": {
+              "semantic_role": "Real source failure, with context if available"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_ERROR_RECORD",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:error_record",
+            "value": null,
+            "properties": {
+              "semantic_role": "Shared Error record; exact field schema open"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_ERROR_BUFFER",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:error_buffer",
+            "value": null,
+            "properties": {
+              "semantic_role": "Buffer owned by Error System Lib; N>0 newest N, N=0 all"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_HARD_FAIL_POLICY",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:hard_fail_policy",
+            "value": null,
+            "properties": {
+              "semantic_role": "ERROR denotes hard fail of current execution, never warning/recoverable"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "FUNCTION_REPORT_ERROR",
+          "property_type_ref": "function",
+          "ruleset_ref": "RULESET_FUNCTION",
+          "status": "unlocked",
+          "value": {
+            "function_type_ref": "a19:report_unified_error",
+            "input_refs": [
+              "DATA_FAILURE_INPUT",
+              "DATA_HARD_FAIL_POLICY"
+            ],
+            "output_refs": [
+              "DATA_ERROR_RECORD",
+              "DATA_ERROR_BUFFER"
+            ],
+            "properties": {
+              "failure_disposition": "HARD_FAIL",
+              "no_cs_import": true,
+              "no_ac_import": true,
+              "boot_safe": true,
+              "record_once": true,
+              "normalized_logic_body": "UNRESOLVED",
+              "runtime_symbol": "UNRESOLVED"
+            }
+          },
+          "metadata": {
+            "authority": "semantics_confirmed_runtime_symbol_open"
+          }
+        },
+        {
+          "id": "LINK_ERROR_TRACE_SINK",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "failed_cs_trace_sink",
+            "parent_ref": "#LOGIC:AIGMOS19:LOGGING",
+            "child_ref": "#LOGIC:AIGMOS19:ERROR",
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "confirmed_semantic_flow_NOT_source_dependency"
+          }
+        }
+      ],
+      "required_links": []
+    },
+    {
+      "id": "#LOGIC:AIGMOS19:LOGGING",
+      "name": "Logging shared library",
+      "entity_type_ref": "code",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "DATA_CS_LOG_INPUT",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:cs_log_input",
+            "value": null,
+            "properties": {
+              "semantic_role": "Real CS invocation command/parameters, or available AC identity in selected ac mode"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_LOG_BUFFER",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:log_buffer",
+            "value": null,
+            "properties": {
+              "semantic_role": "Buffer owned by Logging library; N>0 newest N, N=0 all"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_LOG_MODE",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:log_mode",
+            "value": null,
+            "properties": {
+              "semantic_role": "off / cs / ac; mode off still traces failed CS"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "FUNCTION_RECORD_CS",
+          "property_type_ref": "function",
+          "ruleset_ref": "RULESET_FUNCTION",
+          "status": "unlocked",
+          "value": {
+            "function_type_ref": "a19:record_cs_invocation",
+            "input_refs": [
+              "DATA_CS_LOG_INPUT",
+              "DATA_LOG_MODE"
+            ],
+            "output_refs": [
+              "DATA_LOG_BUFFER"
+            ],
+            "properties": {
+              "one_trace_per_failed_invocation": true,
+              "mode_off_failed_cs_trace": true,
+              "no_separate_audit": true,
+              "parameter_redaction": "OPEN",
+              "normalized_logic_body": "UNRESOLVED",
+              "runtime_symbol": "UNRESOLVED"
+            }
+          },
+          "metadata": {
+            "authority": "semantics_confirmed_runtime_symbol_open"
+          }
+        }
+      ],
+      "required_links": []
+    },
+    {
+      "id": "#LOGIC:AIGMOS19:HC.CS",
+      "name": "HC.CS execution and CSo projection",
+      "entity_type_ref": "code",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "DATA_CS_INPUT",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:cs_input",
+            "value": null,
+            "properties": {
+              "semantic_role": "Command input CSi"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_EXECUTION_OUTCOME",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:cs_internal_outcome",
+            "value": null,
+            "properties": {
+              "semantic_role": "Internal status OK/ERROR, separate payload_present and payload"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_CSO_OUTPUT",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:cso_output",
+            "value": null,
+            "properties": {
+              "semantic_role": "Public CSo: OK / original command feedback / unified ERROR"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "DATA_CS_CONTEXT",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:cs_invocation_context",
+            "value": null,
+            "properties": {
+              "semantic_role": "Command and parameters plus available invocation/AC actor context"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "FUNCTION_EXECUTE_CS",
+          "property_type_ref": "function",
+          "ruleset_ref": "RULESET_FUNCTION",
+          "status": "unlocked",
+          "value": {
+            "function_type_ref": "a19:execute_cs",
+            "input_refs": [
+              "DATA_CS_INPUT",
+              "DATA_CS_CONTEXT"
+            ],
+            "output_refs": [
+              "DATA_EXECUTION_OUTCOME"
+            ],
+            "properties": {
+              "status_values": [
+                "OK",
+                "ERROR"
+              ],
+              "ERROR_means": "hard_fail",
+              "success_payload_not_status": true,
+              "normalized_logic_body": "UNRESOLVED",
+              "runtime_symbol": "UNRESOLVED"
+            }
+          },
+          "metadata": {
+            "authority": "semantics_confirmed_runtime_symbol_open"
+          }
+        },
+        {
+          "id": "FUNCTION_PROJECT_CSO",
+          "property_type_ref": "function",
+          "ruleset_ref": "RULESET_FUNCTION",
+          "status": "unlocked",
+          "value": {
+            "function_type_ref": "a19:project_cso",
+            "input_refs": [
+              "DATA_EXECUTION_OUTCOME"
+            ],
+            "output_refs": [
+              "DATA_CSO_OUTPUT"
+            ],
+            "properties": {
+              "status_discriminator": "internal",
+              "unwrapped_success": true,
+              "raw_string_ERROR_is_valid_success_data": true,
+              "external_transport_status": "OPEN",
+              "normalized_logic_body": "UNRESOLVED",
+              "runtime_symbol": "UNRESOLVED"
+            }
+          },
+          "metadata": {
+            "authority": "functional_role_derived_not_exact_API"
+          }
+        },
+        {
+          "id": "LINK_CS_USES_ERROR",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "#LOGIC:AIGMOS19:ERROR",
+            "child_ref": "#LOGIC:AIGMOS19:HC.CS",
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "confirmed_dependency"
+          }
+        }
+      ],
+      "required_links": []
+    },
+    {
+      "id": "#LOGIC:AIGMOS19:BOOT",
+      "name": "BOOT bootstrap and Error reporting",
+      "entity_type_ref": "code",
+      "status": "unlocked",
+      "properties": [
+        {
+          "id": "DATA_BOOT_STATUS",
+          "property_type_ref": "data",
+          "ruleset_ref": "RULESET_DATA",
+          "status": "unlocked",
+          "value": {
+            "data_type_ref": "a19:boot_status",
+            "value": null,
+            "properties": {
+              "semantic_role": "Boot initialization result, fatal when canonical ERROR"
+            }
+          },
+          "metadata": {
+            "authority": "confirmed_behavior"
+          }
+        },
+        {
+          "id": "FUNCTION_BOOT_FAILURE_REPORT",
+          "property_type_ref": "function",
+          "ruleset_ref": "RULESET_FUNCTION",
+          "status": "unlocked",
+          "value": {
+            "function_type_ref": "a19:report_boot_failure",
+            "input_refs": [],
+            "output_refs": [
+              "DATA_BOOT_STATUS"
+            ],
+            "properties": {
+              "must_work_before_CS": true,
+              "uses_shared_ERROR": true,
+              "error_aborts_BOOT": true,
+              "bootstrap_storage": "OPEN",
+              "normalized_logic_body": "UNRESOLVED",
+              "runtime_symbol": "UNRESOLVED"
+            }
+          },
+          "metadata": {
+            "authority": "functional_role_derived_not_exact_API"
+          }
+        },
+        {
+          "id": "LINK_BOOT_USES_ERROR",
+          "property_type_ref": "link",
+          "ruleset_ref": "RULESET_LINK_DEPENDENCY",
+          "status": "unlocked",
+          "value": {
+            "link_type_ref": "dependency",
+            "parent_ref": "#LOGIC:AIGMOS19:ERROR",
+            "child_ref": "#LOGIC:AIGMOS19:BOOT",
+            "properties": {}
+          },
+          "metadata": {
+            "authority": "confirmed_dependency"
+          }
+        }
+      ],
+      "required_links": []
+    }
+  ],
+  "constraints": {
+    "invariants": [
+      {
+        "id": "C2L-01",
+        "rule": "Semantic normative requirements are declared under #CTRCT:... contract nodes. Function implementations and Data/Link realization are modeled under #LOGIC:... code nodes."
+      },
+      {
+        "id": "C2L-02",
+        "rule": "Each #CTRCT.members explicitly lists the #LOGIC node governed by that contract; implementation file affiliation remains a separate relation."
+      },
+      {
+        "id": "C2L-03",
+        "rule": "No unresolved implementation behavior is silently promoted to a verified Function.logic body."
+      },
+      {
+        "id": "C2L-04",
+        "rule": "An actual ERROR always hard-fails the originating execution, but the scope of whole-instance shutdown is owner-specific, not inferred."
+      },
+      {
+        "id": "C2L-05",
+        "rule": "This combined package supersedes the separate #LOGIC candidate as a canonical working artifact; do not compose both as active simultaneous source of truth."
+      }
+    ]
+  },
+  "references": [],
+  "gaps": [
+    {
+      "gap_id": "L-G01",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:ERROR",
+      "description": "The CW_LOGIC_PRIMITIVES v1.0.0 list in Rulesets 4.4.0 has no explicit abort/fail/raise statement. Therefore normalized HARD FAIL cannot be faithfully expressed as a Function.logic.body without resolving primitive mapping; no guessed primitive included."
+    },
+    {
+      "gap_id": "L-G02",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:ERROR",
+      "description": "Error record mandatory field set, Error.report API spelling, and exact normalized Function body still open."
+    },
+    {
+      "gap_id": "L-G03",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:LOGGING",
+      "description": "Error->Logging physical binding/import or sink injection, CS parameter redaction and exact-once correlation remain open; generic relation is not a source dependency."
+    },
+    {
+      "gap_id": "L-G04",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:BOOT",
+      "description": "Before-config BOOT Error buffer initialization/early sink lifecycle and runtime function name not established."
+    },
+    {
+      "gap_id": "L-G05",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:HC.CS",
+      "description": "Exact public CSo status transport framing and internal runtime implementation/Function.logic bodies remain unresolved."
+    },
+    {
+      "gap_id": "L-G06",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#LOGIC:AIGMOS19:LOGGING",
+      "description": "config.json buffer keys/defaults, optional FILE persistence and ac-mode with AC runtime disabled remain open."
+    },
+    {
+      "gap_id": "C2L-G01",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#CTRCT:AIGMOS19:ERROR",
+      "description": "Exact mandatory ERROR record fields, machine-readable stable error code taxonomy and safe secret handling are not yet approved."
+    },
+    {
+      "gap_id": "C2L-G02",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#CTRCT:AIGMOS19:LOGGING",
+      "description": "Exact config.json field names/default Error/Log capacities, optional FILE persistence, and pre-config BOOT buffer lifecycle remain unsettled."
+    },
+    {
+      "gap_id": "C2L-G03",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#CTRCT:AIGMOS19:CSO",
+      "description": "External CSo status/result framing for text, OSC, HTTP and other adapters remains open; no implicit inference from literal ERROR."
+    },
+    {
+      "gap_id": "C2L-G04",
+      "type": "unresolved_semantics",
+      "status": "open",
+      "entity_ref": "#CTRCT:AIGMOS19:BOOT",
+      "description": "Exact bootstrap Error memory and error sink ownership before config loading are unsettled."
+    }
+  ],
+  "prose": {
+    "summary": "Normative #CTRCT layer first: four explicit Contract Nodes with members and typed rule properties, alongside four original #LOGIC candidate Nodes. No code generation or imaginary Function.logic bodies.",
+    "notes": "Canonical #CTRCT identity spelling is CTRCT, not CRTCT. CW Core 1.6.0 NodeTypes 1.19.0: contract exposes members, code exposes functions/data. RULESET_LINK_CONTRACT_AFFILIATION for actual implementation FILE identity has not been fabricated. New package supersedes the isolated #LOGIC artifact v0.1.0 for continuing modeling."
+  },
+  "metadata": {
+    "date": "2026-11-27",
+    "model_origin": "developer/canonical/AIGMos_1.9_Errors_Logging_LOGIC_v0.1.0.json",
+    "source_decisions": [
+      "developer/contracts/AIGMos_1.9_Error_Always_Hard_Fail_Delta_v0.1.0.json",
+      "developer/contracts/AIGMos_1.9_CSo_Internal_Outcome_Delta_v0.1.0.json",
+      "developer/contracts/AIGMos_1.9_Error_Log_Buffer_Ownership_Delta_v0.1.0.json"
+    ],
+    "cw_bundle": {
+      "id": "CW_CORE_v1.6.0",
+      "ccf": "2.6.0",
+      "nodeTypes": "1.19.0",
+      "rules": "4.4.0",
+      "status": "UNLOCKED"
+    },
+    "formal_validator_executed": false,
+    "source_code_verified": false
+  }
+}
