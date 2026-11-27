@@ -1,0 +1,103 @@
+{
+  "document_type": "AIGMOS_1_9_CONFIRMED_DECISION_DELTA",
+  "identity": {
+    "id": "AIGMOS19_CSO_INTERNAL_OUTCOME_DISCRIMINATOR",
+    "version": "0.1.0",
+    "date": "2026-11-27"
+  },
+  "status": "UNLOCKED",
+  "ccf_cw_validated": false,
+  "runtime_implemented": false,
+  "authority": "User accepted the proposal to distinguish success payloads from failures with an internal status tag.",
+  "confirmed": [
+    {
+      "id": "CSO-D01",
+      "rule": "Every CS execution produces an INTERNAL tagged outcome with a status of OK or ERROR. The tag is authoritative for success/failure; never infer status from the human-readable return value."
+    },
+    {
+      "id": "CSO-D02",
+      "rule": "On internal status OK, payload presence is represented independently from the payload's content. No payload means public CSo emits plain OK; an existing payload means public CSo emits that exact command response without a success envelope."
+    },
+    {
+      "id": "CSO-D03",
+      "rule": "An OK result whose payload is the literal string ERROR remains SUCCESS, not an ERROR. A returned literal OK is likewise a valid successful payload; even None/False/0/empty string must not be mistaken for missing payload."
+    },
+    {
+      "id": "CSO-D04",
+      "rule": "On internal status ERROR, the outcome carries one Error record/reference from the shared Error System Lib. Public CSo reports failure according to that unified ERROR semantic contract, independently of text."
+    },
+    {
+      "id": "CSO-D05",
+      "rule": "Error Buffer and mandatory failure-linked CS logging depend on the INTERNAL status ERROR and real execution context, never on string matching the CSo display payload."
+    },
+    {
+      "id": "CSO-D06",
+      "rule": "BOOT and non-CS component Errors still use Error System Lib; this does not require fabricating a CS result or command."
+    }
+  ],
+  "canonical_minimum": {
+    "status": "OK | ERROR",
+    "payload_present": "boolean, meaningful for OK",
+    "value": "original command result, present iff OK and payload_present=true",
+    "error": "shared Error record/reference, present iff ERROR",
+    "examples": [
+      {
+        "case": "success_no_return",
+        "internal": {
+          "status": "OK",
+          "payload_present": false
+        },
+        "public_CSo": "OK"
+      },
+      {
+        "case": "success_return_ERROR",
+        "internal": {
+          "status": "OK",
+          "payload_present": true,
+          "value": "ERROR"
+        },
+        "public_CSo": "ERROR",
+        "semantic_result": "SUCCESS"
+      },
+      {
+        "case": "success_return_OK",
+        "internal": {
+          "status": "OK",
+          "payload_present": true,
+          "value": "OK"
+        },
+        "public_CSo": "OK",
+        "semantic_result": "SUCCESS"
+      },
+      {
+        "case": "success_return_null",
+        "internal": {
+          "status": "OK",
+          "payload_present": true,
+          "value": null
+        },
+        "public_CSo": null,
+        "semantic_result": "SUCCESS"
+      },
+      {
+        "case": "failure",
+        "internal": {
+          "status": "ERROR",
+          "error": "ErrorRecordRef"
+        },
+        "public_CSo": "ERROR (unified failure)",
+        "semantic_result": "FAILURE"
+      }
+    ]
+  },
+  "boundaries": {
+    "internal_envelope_not_public_success_wrapper": true,
+    "transport_text_only": "A text-only projection of success data ERROR is visually ambiguous with error text; any machine-readable CSo interface must preserve the internal status on a separate channel or typed representation. Exact transport mapping remains OPEN.",
+    "unrelated_open": "Exact Error-record fields, Error.report API, invocation correlation and logging sink/FILE details stay OPEN.",
+    "no_new_hardcore": "Result typing remains internal to HC.CS; Error is still shared System Lib."
+  },
+  "supersedes": [
+    "developer/canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.3.json#G01 (internal part only)",
+    "developer/contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.0.json#proposed_not_confirmed.cso_semantics"
+  ]
+}

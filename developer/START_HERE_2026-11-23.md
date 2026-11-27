@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**27 Nov confirmed CSo internal status:** [decision](contracts/AIGMos_1.9_CSo_Internal_Outcome_Delta_v0.1.0.json), [record contract v0.1.1](contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.1.json), [CW v0.1.4](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.4.json), [57 tests](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.3.json), [handover](memos/2026-11-27_cso_internal_outcome.md). G01 internal status resolved, G10 external transport mapping remains open; UNLOCKED. No runtime code or CW ruleset changes.
+
 **25 Nov confirmed Buffer owners & Error record:** [ownership](contracts/AIGMos_1.9_Error_Log_Buffer_Ownership_Delta_v0.1.0.json), [Error/CSo context](contracts/AIGMos_1.9_Unified_Error_Record_CSo_Context_v0.1.0.json), [CW v0.1.3](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.3.json), [48 scenarios](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.2.json), [handover](memos/2026-11-25_error_record_cs_context.md). Ownership confirmed, exact Error fields remain candidate. UNLOCKED.
 
 **25 Nov Error System Lib next pass:** [interface and Buffer candidate](contracts/AIGMos_1.9_Error_Library_And_Buffers_v0.1.0.json), [CW v0.1.2](canonical/AIGMos_1.9_Errors_Logging_CW_Candidate_v0.1.2.json), [36 scenarios](tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.1.json) and [handover](memos/2026-11-25_errors_logging_library_buffers.md). Buffer ownership is **user confirmed**; Error->Logging physical source import remains an **unconfirmed proposal**. No runtime changes or official validator pass.

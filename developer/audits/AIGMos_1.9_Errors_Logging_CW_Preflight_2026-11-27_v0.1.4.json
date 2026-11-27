@@ -1,0 +1,25 @@
+{
+  "document_type": "AIGMOS_1_9_CW_LOCAL_PREFLIGHT",
+  "identity": {
+    "id": "AIGMOS19_ERRORS_LOGGING_PREFLIGHT",
+    "version": "0.1.4",
+    "date": "2026-11-27"
+  },
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "official_CW_validator_executed": false,
+  "runtime_tests_executed": false,
+  "counts": {
+    "entities": 17,
+    "properties": 45,
+    "tests": 57,
+    "gaps_total": 10,
+    "gaps_open": 9,
+    "gaps_resolved": 1
+  },
+  "findings": [],
+  "not_checked": [
+    "Actual CW validator semantic readiness",
+    "CSo transport adapters",
+    "Runtime behavior and target RAM"
+  ]
+}
