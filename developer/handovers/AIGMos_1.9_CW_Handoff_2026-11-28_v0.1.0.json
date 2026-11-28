@@ -1,0 +1,194 @@
+{
+  "type": "AIGMOS19_CW_SESSION_HANDOFF",
+  "version": "0.1.0",
+  "created_at": "2026-11-28",
+  "timezone": "Europe/Helsinki",
+  "repo": "Th3Hypn0tist/AIGMos-1.9",
+  "branch": "main",
+  "source_head_before_handoff": "30c04ac492224c5f0d727583bfefe054a56cf4f8",
+  "status": "UNLOCKED",
+  "canonical": {
+    "root": "Model/model.cw",
+    "model_id": "AIGMOS19_CW_MODEL",
+    "model_version": "0.1.0",
+    "specification_ref": "git-blob:Th3Hypn0tist/CW/spec_sets/CW_CORE_v1.6.0.json@3b712798e8a21a15c4981119188f340a335334b7",
+    "shards": 67,
+    "contract_nodes": 63,
+    "logic_nodes": 4,
+    "decision_requirements": 110,
+    "classified_exclusions": 7,
+    "unclassified": 0,
+    "root_gaps": [
+      {
+        "id": "G-001",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:BUILD:CODEMARKUP_SOURCE_CONTRACT",
+        "description": "Pinned CodeMarkup target/header migration from earlier MP/CP headers to MP/CP/BOTH must remain versioned and validated before execution."
+      },
+      {
+        "id": "G-002",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:CONFIG:PROTECTED_CONFIG_ACCESS",
+        "description": "Protected config paths, actual config schema, #SYSTEM projection and pre-config Error buffer still require reconciliation."
+      },
+      {
+        "id": "G-003",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:ERROR:HARD_FAIL",
+        "description": "CW_LOGIC_PRIMITIVES 1.0 under Rulesets 4.4.0 lacks an explicit hard-fail/abort/raise primitive; no Function.logic body is fabricated."
+      },
+      {
+        "id": "G-004",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:CS:UNWRAPPED_CSO",
+        "description": "CSo transport status must distinguish the success payload literal ERROR from actual hard fail, without wrapping success."
+      },
+      {
+        "id": "G-005",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:TER:RUNNER_CONTROL",
+        "description": "Source-backed Runner once/cycle/loop stop/start/flush parity and propagation semantics remain open."
+      },
+      {
+        "id": "G-006",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:MODULES:ONE_EIGHT_PARITY",
+        "description": "The union of valid 1.9 feature-selected builds must retain 1.8 parity; source audit and executable tests are not completed."
+      },
+      {
+        "id": "G-007",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:BOOT:EARLY_BOOT_ERROR",
+        "description": "Early BOOT Error storage/loading before config/CS initialization unresolved."
+      },
+      {
+        "id": "G-008",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:ERROR:SHARED_ERROR_LIBRARY",
+        "description": "Exact Error record schema, Error library APIs, actor/secret handling and failure propagation paths not yet approved."
+      },
+      {
+        "id": "G-009",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:LOGGING:BUFFER_CAPACITY",
+        "description": "Exact config.json keys and buffer defaults, resource policy for N=0, persistence and access remain open."
+      },
+      {
+        "id": "G-010",
+        "status": "open",
+        "entity_ref": "#CTRCT:AIGMOS19:MODULES:MODULE_DEPENDENCY_CLASSES",
+        "description": "System→System imports/dependency authorization, lifecycle and module registry not yet final."
+      }
+    ]
+  },
+  "validation": {
+    "local_preflight": "LOCAL_PREFLIGHT_PASS",
+    "local_findings": 0,
+    "official_validator_executed": false,
+    "runtime_tests_executed": false,
+    "parity_verified": false,
+    "test_matrix": "developer/tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.4.json",
+    "test_scenarios": 65
+  },
+  "source_refs": [
+    "Model/model.cw",
+    "Model/README.md",
+    "developer/audits/AIGMos_1.9_CW_Model_Inventory_Preflight_2026-11-27_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+    "developer/contracts/AIGMos_1.9_Config_Ownership_Parity_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Build_CodeMarkup_Integration_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Error_Always_Hard_Fail_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_CSo_Internal_Outcome_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Error_Log_Buffer_Ownership_Delta_v0.1.0.json",
+    "developer/canonical/AIGMos_1.9_Errors_Logging_CTRCT_First_v0.1.0.json",
+    "developer/tests/AIGMos_1.9_Errors_Logging_Contract_Tests_v0.1.4.json"
+  ],
+  "excluded_source_decisions": [
+    {
+      "id": "A19-046",
+      "status": "historical_reference",
+      "reason": "AIGMos 2.0 REST reference semantics; v1.9 divergence is modeled elsewhere."
+    },
+    {
+      "id": "A19-048",
+      "status": "superseded",
+      "reason": "Earlier source-header wording; revised header/markup are versioned separately."
+    },
+    {
+      "id": "A19-069",
+      "status": "versioned_prior_header",
+      "reason": "Prior MP/CP header model, later target migration to MP/CP/BOTH is UNLOCKED and must not rewrite previous interpretation."
+    },
+    {
+      "id": "A19-076",
+      "status": "recommended_not_confirmed",
+      "reason": "Activation rollback on atomic-write failure not explicitly adopted."
+    },
+    {
+      "id": "A19-077",
+      "status": "reconciliation_pending",
+      "reason": "Historical config projection to #SYSTEM conflicts with more recent protected config policy; need precise visibility model."
+    },
+    {
+      "id": "A19-079",
+      "status": "legacy_observation",
+      "reason": "Observation about 1.8 implementation, not a 1.9 normative requirement."
+    },
+    {
+      "id": "CLEAN-009",
+      "status": "future_out_of_scope",
+      "reason": "Encrypted direct instance link is a future concern outside current 1.9 implementation."
+    }
+  ],
+  "nonnegotiables": [
+    "Actual .cw shards under Model are active; old developer/canonical JSON files are historical drafts.",
+    "Use #CTRCT, not #CRTCT; #CTRCT before #LOGIC.",
+    "AIGM platform-independent; AIGMos reference implementation and zero external deps in runtime.",
+    "Exactly five Hardcore mechanisms: INPUT STATE TER CS EXPOSE.",
+    "Error always HARD FAIL of current operation; whole-instance shutdown not implied.",
+    "Error System Lib owns Error Buffer; Logging library owns Log Buffer; buffers N>=1 newest N and N=0 all.",
+    "Logging modes off/cs/ac; CS failure one command+params trace even in off; actor from active AC when available.",
+    "CSo internal status OK/ERROR with independent payload presence; public success return is unwrapped.",
+    "No invention of normalized fail/abort primitive absent from pinned CW set.",
+    "No claim of LOCKED until validator pass and implementation acceptance evidence."
+  ],
+  "immediate_next": [
+    {
+      "priority": 1,
+      "task": "Run official cw_spec_lint.py and cw_validate.py on Model directory with pinned CW_CORE_v1.6.0; capture exact findings."
+    },
+    {
+      "priority": 2,
+      "task": "Review all 63 #CTRCT for atomicity, source authority, missing features and overlap; refine with identities/provenance."
+    },
+    {
+      "priority": 3,
+      "task": "Build #CTRCT to #LOGIC traceability, owner-local Function interfaces, dependency closure using source evidence."
+    },
+    {
+      "priority": 4,
+      "task": "Resolve CW normalized HARD FAIL primitive and versioned standard mapping without unapproved CW mutation."
+    },
+    {
+      "priority": 5,
+      "task": "After canonical validation, implement source correspondence and verify 1.8 parity, target MP/CP and ESP32-C6."
+    }
+  ],
+  "read_order": [
+    "developer/handovers/AIGMos_1.9_CW_Handoff_2026-11-28_v0.1.0.md",
+    "Model/README.md",
+    "Model/model.cw",
+    "developer/audits/AIGMos_1.9_CW_Model_Inventory_Preflight_2026-11-27_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Decision_Baseline_v0.3.0.json",
+    "developer/contracts/AIGMos_1.9_Config_Ownership_Parity_Delta_v0.1.0.json",
+    "developer/contracts/AIGMos_1.9_Build_CodeMarkup_Integration_v0.1.0.json"
+  ],
+  "validator_commands": [
+    "cd ../CW",
+    "python3 linter/cw_spec_lint.py --spec-set spec_sets/CW_CORE_v1.6.0.json --coverage",
+    "python3 linter/cw_validate.py ../AIGMos-1.9/Model --spec-set spec_sets/CW_CORE_v1.6.0.json --json"
+  ],
+  "handoff_markdown": "developer/handovers/AIGMos_1.9_CW_Handoff_2026-11-28_v0.1.0.md",
+  "handoff_json": "developer/handovers/AIGMos_1.9_CW_Handoff_2026-11-28_v0.1.0.json",
+  "notes": "This file is a handoff state snapshot, not a validated canonical contract or code implementation. Fetch fresh main; do not assume source_head_before_handoff is the latest commit after writing this handoff."
+}

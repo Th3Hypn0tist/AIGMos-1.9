@@ -1,5 +1,7 @@
 # AIGMos 1.9 Canonical Wireframe
 
+**2026-11-28 CURRENT SESSION HANDOFF:** [read the complete CW handoff](../developer/handovers/AIGMos_1.9_CW_Handoff_2026-11-28_v0.1.0.md) or [machine-readable JSON](../developer/handovers/AIGMos_1.9_CW_Handoff_2026-11-28_v0.1.0.json). The sharded Model is UNLOCKED; official CW validation not run.
+
 This is the first **actual sharded CW project** in the AIGMos-1.9 repository. Before this commit the repository had **zero .cw files**: only development JSON documents, candidate CCF-shaped drafts, architecture notes and audits. Those are historical evidence, not the active CW composition.
 
 ## Canonical entry point
