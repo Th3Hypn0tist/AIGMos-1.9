@@ -2,6 +2,8 @@
 
 **Development architecture remains UNLOCKED; no CCF/CW or runtime parity pass is claimed.**
 
+**27 Nov REAL SHARDED CW MODEL:** [Model/model.cw](../../Model/model.cw), [Model README](../../Model/README.md), [CW inventory & structural preflight](audits/AIGMos_1.9_CW_Model_Inventory_Preflight_2026-11-27_v0.1.0.json). Earlier this repo had 0 .cw files. Now 63 #CTRCT + 4 #LOGIC .cw shards, 110 source-traced requirements and 7 explicitly classified exclusions. This is the active CW candidate; the old developer/canonical JSON files remain historical drafts. Formal validator NOT executed, still UNLOCKED.
+
 **27 Nov order corrected — #CTRCT before #LOGIC:** [combined canonical contract+logic package](canonical/AIGMos_1.9_Errors_Logging_CTRCT_First_v0.1.0.json), [structural preflight](audits/AIGMos_1.9_Errors_Logging_CTRCT_Preflight_2026-11-27_v0.1.0.json), [handover](memos/2026-11-27_errors_logging_ctrct_first.md). #CTRCT is the correct spelling. Four normative Contract Nodes now scope the previous four LOGIC nodes. Use combined artifact, not the old standalone LOGIC simultaneously. UNLOCKED.
 
 **27 Nov #LOGIC stage started:** [typed LOGIC nodes](canonical/AIGMos_1.9_Errors_Logging_LOGIC_v0.1.0.json), [structural preflight](audits/AIGMos_1.9_Errors_Logging_LOGIC_Preflight_2026-11-27_v0.1.0.json), [handover](memos/2026-11-27_errors_logging_logic_start.md). Four code Nodes / Function interfaces defined, normalized behavior NOT invented; CW_LOGIC_PRIMITIVES lacks explicit fail/abort semantics (open L-G01). UNLOCKED; no official validation or runtime coding.

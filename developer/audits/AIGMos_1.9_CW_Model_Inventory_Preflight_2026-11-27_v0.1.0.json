@@ -1,0 +1,38 @@
+{
+  "document_type": "AIGMOS19_CW_SHARDED_MODEL_PREFLIGHT",
+  "identity": {
+    "id": "AIGMOS19_FIRST_REAL_CW_SHARD_AUDIT",
+    "version": "0.1.0",
+    "date": "2026-11-27"
+  },
+  "status": "LOCAL_PREFLIGHT_PASS",
+  "official_validator_executed": false,
+  "runtime_verified": false,
+  "count": {
+    "cw_shards": 67,
+    "contract_nodes": 63,
+    "logic_nodes": 4,
+    "decisions_mapped": 110,
+    "decisions_explicitly_excluded": 7,
+    "source_decisions_total": 117,
+    "unclassified": 0,
+    "model_gaps_open": 10,
+    "source_files": 4
+  },
+  "checks": [
+    "Every decision source classified once",
+    "Each #CTRCT has own .cw direct Entity",
+    "Each selected #LOGIC has own .cw direct Entity",
+    "Sharded root closure references all and only expected identities",
+    "References and owner-local Properties unique",
+    "Contract members and Link endpoints resolve",
+    "No unsupported generated implementation claims"
+  ],
+  "findings": [],
+  "not_claimed": [
+    "Official cw_validate.py or cw_spec_lint.py result",
+    "Complete machine-executable semantics from inert RULESET_DATA values",
+    "StructureTree import in Structure app",
+    "Runtime parity, build or MP hardware acceptance"
+  ]
+}
